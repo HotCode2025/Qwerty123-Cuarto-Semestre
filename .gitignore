@@ -1,0 +1,103 @@
+# ==============================================================================
+# .GITIGNORE UNIVERSAL - FULL STACK (Python, Java, JS)
+# ==============================================================================
+# Este archivo protege el repo de archivos pesados, temporales y datos privados.
+
+# ==========================================
+# 1. SEGURIDAD Y PRIVACIDAD (CRÍTICO)
+# ==========================================
+# Archivos que contienen claves, usuarios o configuraciones sensibles.
+.env
+auth.json
+secrets.txt
+
+# ==========================================
+# 2. PYTHON (ENTORNOS Y COMPILACIÓN)
+# ==========================================
+# Entornos virtuales: No se suben, se recrean con pip install.
+venv/
+.venv/
+env/
+ENV/
+lib/
+bin/
+Include/
+
+# Bytecode: Archivos que Python genera para correr más rápido.
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribución y Construcción (Empaquetado)
+dist/
+build/
+*.egg-info/
+
+# ==========================================
+# 3. JAVA (NETBEANS, INTELLIJ, ECLIPSE)
+# ==========================================
+# Archivos de compilación y caché de NetBeans/Gradle
+/.cache/
+/.nb-gradle-properties
+/.nb-gradle-version
+/build/
+/nbproject/private/
+
+# Metadatos de Eclipse
+.classpath
+.project
+.settings/
+
+# Archivos específicos de tu estructura de estudio (Tecnicatura)
+**/nbproject/private/
+**/build/
+
+# ==========================================
+# 4. JAVASCRIPT (NODE.JS Y HERRAMIENTAS)
+# ==========================================
+# node_modules/: Nunca se sube (se recupera con npm install).
+node_modules/
+
+# Herramientas de desarrollo y testing
+.quokka/
+.npm/
+.cache/
+coverage/
+
+# ==========================================
+# 5. CONFIGURACIÓN DE EDITORES (IDE)
+# ==========================================
+# Configuraciones personales de cada desarrollador.
+.idea/
+.vscode/
+*.swp
+*.sublime-
+.project
+
+# ==========================================
+# 6. BASES DE DATOS
+# ==========================================
+# Evita subir bases de datos locales o archivos de recuperación.
+*.db
+*.sqlite3
+*.bak
+*.sql.bak
+.temp/
+
+# ==========================================
+# 7. SISTEMA OPERATIVO Y EXTRAS
+# ==========================================
+# Basura del sistema que ensucia el proyecto.
+desktop.ini
+Thumbs.db
+ehthumbs.db
+.DS_Store
+.directory
+*~
+
+# Archivos comprimidos: El código debe subirse "suelto".
+*.zip
+*.rar
+*.7z
+*.log
+tmp/
