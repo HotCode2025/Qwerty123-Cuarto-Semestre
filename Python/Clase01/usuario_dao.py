@@ -1,6 +1,6 @@
-from cursor_del_pool import CursorDelPool
-from logger_base import logger
-from usuario import Usuario
+from capa_datos_persona.Usuario import Usuario
+from capa_datos_persona.cursor_del_pool import CursorDelPool
+from logger_base import log
 
 
 class UsuarioDao:
@@ -22,7 +22,7 @@ class UsuarioDao:
             cursor.execute(cls.SELECCIONAR)
             for id_usuario, username, password in cursor.fetchall():
                 usuarios.append(Usuario(id_usuario, username, password))
-        logger.debug(f'Se obtuvieron {len(usuarios)} usuarios')
+        log.debug(f'Se obtuvieron {len(usuarios)} usuarios')
         return usuarios
 
     @classmethod
@@ -30,7 +30,7 @@ class UsuarioDao:
         with CursorDelPool() as cursor:
             cursor.execute(cls.INSERTAR, (usuario.username, usuario.password))
             id_usuario = cursor.fetchone()[0]
-        logger.debug(f'Usuario insertado con id {id_usuario}')
+        log.debug(f'Usuario insertado con id {id_usuario}')
         return id_usuario
 
     @classmethod
@@ -38,7 +38,7 @@ class UsuarioDao:
         with CursorDelPool() as cursor:
             cursor.execute(cls.ACTUALIZAR, (usuario.username, usuario.password, usuario.id_usuario))
             filas_afectadas = cursor.rowcount
-        logger.debug(f'Se actualizaron {filas_afectadas} fila/s del usuario {usuario.id_usuario}')
+        log.debug(f'Se actualizaron {filas_afectadas} fila/s del usuario {usuario.id_usuario}')
         return filas_afectadas
 
     @classmethod
@@ -46,7 +46,7 @@ class UsuarioDao:
         with CursorDelPool() as cursor:
             cursor.execute(cls.ELIMINAR, (usuario.id_usuario,))
             filas_afectadas = cursor.rowcount
-        logger.debug(f'Se eliminaron {filas_afectadas} fila/s del usuario {usuario.id_usuario}')
+        log.debug(f'Se eliminaron {filas_afectadas} fila/s del usuario {usuario.id_usuario}')
         return filas_afectadas
 
 
