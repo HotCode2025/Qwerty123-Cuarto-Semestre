@@ -1,3 +1,8 @@
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 from psycopg2 import pool
 from logger_base import log
 import sys
@@ -6,7 +11,7 @@ import sys
 class Conexion:
     DATABASE = "postgres"
     USERNAME = "postgres"
-    PASSWORD = ""
+    PASSWORD = os.getenv("DB_PASSWORD", "")
     DB_PORT = "5432"
     HOST = "127.0.0.1"
     MIN_CON = 1
