@@ -1,5 +1,5 @@
-from capa_datos_persona.Usuario import Usuario
-from capa_datos_persona.cursor_del_pool import CursorDelPool
+from Clase_entidad_Usuario import Usuario
+from cursor_del_pool import CursorDelPool
 from logger_base import log
 
 

@@ -45,10 +45,9 @@ class Conexion:
 
             except Exception as e:
                 import traceback
-
                 traceback.print_exc()
                 log.error(f"Ocurrió un error al obtener el pool: {e}")
-                sys.exit()
+                raise #relanza la misma exepcion, sin matar el proceso
 
         return cls.pool
 

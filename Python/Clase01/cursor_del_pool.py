@@ -29,5 +29,5 @@ class CursorDelPool:
 if __name__ == "__main__":
     with CursorDelPool() as cursor:
         log.debug("Estamos dentro del bloque with")
-        cursor.execute("SELECT * FROM persona")
+        cursor.execute("SELECT * FROM usuario")
         log.debug(cursor.fetchall())

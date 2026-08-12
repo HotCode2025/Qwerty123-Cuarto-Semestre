@@ -1,4 +1,4 @@
-from usuario import Usuario
+from Clase_entidad_Usuario import Usuario
 from usuario_dao import UsuarioDao
 
 
