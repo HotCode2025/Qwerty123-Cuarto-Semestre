@@ -1,13 +1,13 @@
 package UTN.datos;
 
-import UTN.dominio.Estudiante;
-
-import static  UTN.conexion.Conexion.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import static UTN.conexion.Conexion.getConnection;
+import UTN.dominio.Estudiante;
 
 public class EstudianteDAO {
     //Métod listar
@@ -46,6 +46,36 @@ public class EstudianteDAO {
         }//Fin finally
         return estudiantes;
     }//Fin del Metodo Listar
+
+    //Método por id -> find by id
+    public boolean buscarEstudiantePorId(Estudiante estudiante){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = getConnection();
+        String sql = "SELECT * FROM estudiantes2022 WHERE idestudiantes2022=?";
+        try{
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, estudiante.getIdEstudiante2022());
+            rs = ps.executeQuery();
+            if(rs.next()){
+                estudiante.setNombre(rs.getString("nombre"));
+                estudiante.setApellido(rs.getString("apellido"));
+                estudiante.setTelefono(rs.getString("telefono"));
+                estudiante.setEmail(rs.getString("email"));
+                return true; //Se encontro un registro
+            }//Fin if   
+        } catch(Exception e){
+            System.out.println("Ocurrió un error al buscar un estudiante: "+e.getMessage());
+        }//Fin catch
+        finally{
+            try {
+                con.close();
+            } catch (Exception e) {
+                System.out.println("Ocurrió un error al cerrar la conexión: "+e.getMessage());
+            }//Fin catch
+        }//Fin finally
+        return false;
+    }
 
     public static void main(String[] args) {
         //Listar los estudiantes
