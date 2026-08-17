@@ -102,7 +102,34 @@ public class EstudianteDAO {
         }
     }
     return false;
-    }
+    }//Fin metodo agregarEstudiante
+
+    //Metodo para modificar estudiante
+    public boolean modificarEstudiante(Estudiante estudiante){
+        PreparedStatement ps;
+        Connection con = getConnection();
+        String sql = "UPDATE estudiantes2022 SET nombre=?, apellido=?, telefono=?, email=? WHERE idestudiantes2022=?";
+        try{
+            ps = con.prepareStatement(sql);
+            ps.setString(1, estudiante.getNombre());
+            ps.setString(2, estudiante.getApellido());
+            ps.setString(3, estudiante.getTelefono());
+            ps.setString(4, estudiante.getEmail());
+            ps.setInt(5, estudiante.getIdEstudiante2022());
+            ps.execute();
+            return true;
+        } catch (Exception e){
+            System.out.println("Error al modificar estudiante: "+ e.getMessage());
+        }//Fin cath
+        finally {
+            try {
+                con.close();
+            }catch (Exception e){
+                System.out.println("Error al cerrar la conexion: "+ e.getMessage());
+            }//Fin cath
+        }//Fin finally
+        return false;
+    }//Fin metodo modificarEstudiante
 
     public static void main(String[] args) {
         //Listar los estudiantes
@@ -112,12 +139,12 @@ public class EstudianteDAO {
         estudiantes.forEach(System.out::println);// Función lambda para imprimir
 
         // Agregar estudiante
-        var nuevoEstudiante = new Estudiante("Carlos","Lara","5495544223","carlosl@mail.com");
-        var agregado = estudianteDao.agregarEstudiante(nuevoEstudiante);
-        if (agregado)
-            System.out.println("Estudiante agregado: "+nuevoEstudiante);
-        else
-            System.out.println("No se ha agregado estudiante: "+nuevoEstudiante);
+        //var nuevoEstudiante = new Estudiante("Carlos","Lara","5495544223","carlosl@mail.com");
+        //var agregado = estudianteDao.agregarEstudiante(nuevoEstudiante);
+        //if (agregado)
+        //    System.out.println("Estudiante agregado: "+nuevoEstudiante);
+        //else
+        //    System.out.println("No se ha agregado estudiante: "+nuevoEstudiante);
 
         // Buscar por id
         //var estudiante1 = new Estudiante(1);
