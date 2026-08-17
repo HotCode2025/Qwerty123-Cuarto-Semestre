@@ -1,7 +1,7 @@
 package UTN.dominio;
 
 public class Estudiante {
-    private int idestudiante2026;
+    private int idEstudiante2022;
     private String nombre;
     private String apellido;
     private String email;
@@ -9,9 +9,8 @@ public class Estudiante {
 
     public Estudiante(){} //Constructor Vacio
 
-    public Estudiante(int idestudiante2026){ //Constructor para la llave primaria
-        this.idestudiante2026 = idestudiante2026;
-
+    public Estudiante(int idEstudiante2022){ //Constructor para la llave primaria
+        this.idEstudiante2022 = idEstudiante2022;
     }
 
     //Constructor para Ingresar un nuevo estudiante
@@ -23,20 +22,20 @@ public class Estudiante {
     }
 
     //Constructor para Modificar un estudiante
-    public Estudiante(int idestudiante2026, String nombre, String apellido, String email, String telefono){
-        this.idestudiante2026 = idestudiante2026;
+    public Estudiante(int idEstudiante2022, String nombre, String apellido, String email, String telefono){
+        this.idEstudiante2022 = idEstudiante2022;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.email = email;
     }
 
-    public int getIdestudiante2026() {
-        return idestudiante2026;
+    public int getIdEstudiante2022() {
+        return idEstudiante2022;
     }
 
-    public void setIdestudiante2026(int idestudiante2026) {
-        this.idestudiante2026 = idestudiante2026;
+    public void setIdEstudiante2022(int idEstudiante2022) {  // ✅ CORREGIDO
+        this.idEstudiante2022 = idEstudiante2022;
     }
 
     public String getNombre() {
@@ -74,7 +73,7 @@ public class Estudiante {
     @Override
     public String toString() {
         return "Estudiante{" +
-                "idestudiante2026=" + idestudiante2026 +
+                "idEstudiante2022=" + idEstudiante2022 +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 ", email='" + email + '\'' +
