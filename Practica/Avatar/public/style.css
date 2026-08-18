@@ -1,0 +1,468 @@
+:root {
+    --bg-dark: #0f172a;
+    --card-bg: #1e293b;
+    --fuego: #ef4444;
+    --agua: #3b82f6;
+    --aire: #a855f7;
+    --tierra: #10b981;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: #f8fafc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #f8fafc;
+    text-shadow: 0 0 10px rgba(0,0,0,0.4);
+    background: linear-gradient(90deg, #7c2d12, #0c4a6e);
+    padding: 16px 20px;
+    border-radius: 10px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #38bdf8;
+    letter-spacing: 0.5px;
+    margin: 24px auto 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1e293b;
+    max-width: 400px;
+}
+
+h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+    margin: 6px 0;
+}
+
+.oculto { display: none !important; }
+
+/* Contenedor de Selección */
+.contenedor-tarjetas {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+}
+
+.tarjeta-personaje {
+    background: var(--card-bg);
+    border: 3px solid #334155;
+    border-radius: 12px;
+    padding: 20px;
+    width: 150px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tarjeta-personaje input { display: none; }
+
+.tarjeta-personaje:hover {
+    transform: translateY(-5px);
+    border-color: #64748b;
+}
+
+/* Cambia de color al seleccionarse con el input radio */
+.tarjeta-personaje:has(input:checked) {
+    border-color: #38bdf8;
+    background: #0c4a6e;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+}
+
+.emoji-avatar { font-size: 3rem; display: block; margin-bottom: 10px; }
+.tarjeta-personaje h3 { margin: 5px 0; }
+.tarjeta-personaje p { font-size: 0.85rem; color: #94a3b8; margin: 0; }
+
+/* Arena de Combate */
+.campo-batalla {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin: 30px auto;
+    max-width: 700px;
+    flex-wrap: wrap;
+}
+
+.render-personaje {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 16px;
+    width: 200px;
+    border: 2px solid #334155;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.sprite { font-size: 4.5rem; display: block; margin-bottom: 15px; }
+
+.vs { font-size: 2rem; font-weight: bold; color: #64748b; }
+
+/* Barras de Vida Dinámicas */
+.barra-vida {
+    background: #475569;
+    width: 100%;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.vida-interior {
+    background: #22c55e;
+    width: 100%;
+    height: 100%;
+    transition: width 0.3s ease, background-color 0.3s;
+}
+
+/* Botones e Interfaces */
+.btn-principal {
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+}
+
+.btn-principal:hover { background: #0369a1; }
+
+.panel-ataques {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 500px;
+    margin: auto;
+    width: 100%;
+    flex: 1 1 100%;
+    text-align: center;
+}
+
+.botones-ataque { display: flex; justify-content: center; gap: 10px; }
+
+.btn-ataque {
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.fuego { background: var(--fuego); }
+.agua { background: var(--agua); }
+.aire { background: var(--aire); }
+.tierra { background: var(--tierra); }
+
+.consola-combate {
+    background: #020617;
+    border-left: 4px solid #38bdf8;
+    padding: 15px;
+    max-width: 600px;
+    margin: 20px auto;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+/* ANIMACIONES DE MOVIMIENTO POR CSS */
+.ataque-jugador { transform: translateX(50px) scale(1.05); }
+.ataque-enemigo { transform: translateX(-50px) scale(1.05); }
+
+.recibir-daño {
+    animation: vibrarDaño 0.2s linear 2;
+}
+
+@keyframes vibrarDaño {
+    0% { transform: translate(2px, 1px) rotate(0deg); background: #7f1d1d; }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    50% { transform: translate(-3px, 0px) rotate(1deg); }
+    100% { transform: translate(1px, 2px) rotate(0deg); }
+}
+
+.foto-render {
+    width: 120px;
+    max-width: 120px;
+    height: 160px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+.foto-seleccion {
+    width: 100%;
+    max-width: 150px;
+    height: 300px;
+    border-radius: 20px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+.button-group{
+    display: inline-flex;
+    gap: 0;
+}
+
+/* Botón de Reglas */
+.rules-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+    transition: all 0.2s ease;
+}
+
+.rules-btn:hover {
+    background: #991b1b;
+    box-shadow: 0 6px 15px rgba(220, 38, 38, 0.5);
+    transform: translateY(-2px);
+}
+
+.rules-btn:active {
+    background: #7f1d1d;
+    transform: translateY(0);
+}
+
+/* Modal de Reglas */
+.modal-reglas {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-reglas.activo {
+    display: flex;
+}
+
+.contenido-reglas {
+    background: rgba(30, 41, 59, 0.95);
+    border: 2px solid #dc2626;
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.contenido-reglas h2 {
+    color: #dc2626;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.contenido-reglas ol {
+    color: #cbd5e1;
+    font-size: 1rem;
+    line-height: 1.8;
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.contenido-reglas li {
+    margin-bottom: 15px;
+}
+
+.contenido-reglas .info-util {
+    background: rgba(220, 38, 38, 0.15);
+    border-left: 4px solid #dc2626;
+    padding: 15px;
+    margin-top: 25px;
+    border-radius: 6px;
+}
+
+.contenido-reglas .info-util h3 {
+    color: #fca5a5;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.contenido-reglas .info-util p {
+    margin: 8px 0;
+    color: #cbd5e1;
+}
+
+.btn-cerrar-reglas {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.btn-cerrar-reglas:hover {
+    background: #991b1b;
+}
+
+/* Posición del botón de Reglas durante el combate */
+.rules-btn-combate {
+    position: fixed !important;
+    right: 30px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 500 !important;
+}
+
+.barra-acciones-final {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .tarjeta-personaje {
+        width: 130px;
+        padding: 14px;
+    }
+
+    .foto-seleccion {
+        max-width: 100px;
+        height: 220px;
+    }
+
+    .campo-batalla {
+        gap: 20px;
+    }
+
+    .render-personaje {
+        width: 160px;
+        padding: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+        padding: 12px 14px;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+
+    .contenedor-tarjetas {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        justify-items: center;
+    }
+
+    .tarjeta-personaje {
+        width: 100%;
+        max-width: 150px;
+        padding: 10px;
+    }
+
+    .foto-seleccion {
+        max-width: 110px;
+        height: 200px;
+    }
+
+    .campo-batalla {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .render-personaje {
+        width: 90%;
+        max-width: 220px;
+    }
+
+    .vs {
+        font-size: 1.5rem;
+    }
+
+    .botones-ataque {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-ataque {
+        width: 100%;
+    }
+
+    .contenido-reglas {
+        padding: 20px;
+    }
+
+    .rules-btn-combate {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        transform: none !important;
+    }
+
+    .barra-acciones-final {
+        flex-wrap: wrap;
+        margin-top: 15px;
+        padding: 0 12px;
+    }
+
+    .barra-acciones-final .rules-btn,
+    .barra-acciones-final .btn-principal {
+        flex: 1 1 auto;
+        max-width: 200px;
+    }
+}
