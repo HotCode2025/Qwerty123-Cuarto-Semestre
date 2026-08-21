@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LA LEYENDA DE AANG: AVATAR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>AVATAR: COMBATE ELEMENTAL 🔥💧🌱🌪️</h1>
+
+    <section id="seccion-seleccionar">
+        <h2>Elige tu Maestro</h2>
+        <div class="contenedor-tarjetas">
+    
+    <label class="tarjeta-personaje">
+        <input type="radio" name="personaje" id="zuko" />
+        <div class="info-avatar">
+            <img src="./imagenes/Zuko.jpg" alt="Zuko" class="foto-seleccion">
+            <h3>Zuko</h3>
+            <p>Maestro Fuego</p>
+        </div>
+    </label>
+
+    <label class="tarjeta-personaje">
+        <input type="radio" name="personaje" id="katara" />
+        <div class="info-avatar">
+            <img src="./imagenes/Katara.jpg" alt="Katara" class="foto-seleccion">
+            <h3>Katara</h3>
+            <p>Maestra Agua</p>
+        </div>
+    </label>
+
+    <label class="tarjeta-personaje">
+        <input type="radio" name="personaje" id="aang" />
+        <div class="info-avatar">
+            <img src="./imagenes/Ang.jpg" alt="Aang" class="foto-seleccion">
+            <h3>Aang</h3>
+            <p>Avatar (Aire)</p>
+        </div>
+    </label>
+
+    <label class="tarjeta-personaje">
+        <input type="radio" name="personaje" id="toph" />
+        <div class="info-avatar">
+            <img src="./imagenes/toph.jpg" alt="Toph" class="foto-seleccion">
+            <h3>Toph</h3>
+            <p>Maestra Tierra</p>
+        </div>
+    </label>
+
+</div>
+</div> <button id="btn-personaje" class="btn-principal">Confirmar Selección</button>
+       <button id="show-rules" class="rules-btn">Reglas</button>
+        
+    </section>
+
+
+    <section id="seccion-combate" class="oculto">
+        <h2>Arena de Elementos</h2>
+        
+        <div class="campo-batalla">
+            <div id="visual-jugador" class="render-personaje">
+                <span id="emoji-jugador" class="sprite"></span>
+                <h3 id="nombre-jugador-pantalla">Jugador</h3>
+                <div class="barra-vida"><div id="barra-j" class="vida-interior"></div></div>
+                <p>Vidas: <span id="vidas-jugador">3</span>/3</p>
+            </div>
+
+            <div class="vs">VS</div>
+
+            <div id="visual-enemigo" class="render-personaje">
+                <span id="emoji-enemigo" class="sprite"></span>
+                <h3 id="nombre-enemigo-pantalla">Enemigo</h3>
+                <div class="barra-vida"><div id="barra-e" class="vida-interior"></div></div>
+                <p>Vidas: <span id="vidas-enemigo">3</span>/3</p>
+            </div>
+        <div class="panel-ataques">
+            <h3>Elige tu Movimiento</h3>
+            <div class="botones-ataque">
+                <button id="btn-puño" class="btn-ataque fuego">Puño 👊</button>
+                <button id="btn-patada" class="btn-ataque agua">Patada 🦶</button>
+                <button id="btn-barrida" class="btn-ataque tierra">Barrida 🧹</button>
+            </div>
+        </div>
+
+    </section>
+
+    <section id="seccion-mensajes" class="oculto">
+        <div class="consola-combate">
+            <p id="texto-resultado">¡La batalla ha comenzado!</p>
+        </div>
+    </section>
+
+    <section id="seccion-reiniciar" class="oculto barra-acciones-final">
+        <button id="show-rules-combat" class="rules-btn rules-btn-combate">Reglas</button>
+        <button id="btn-reiniciar" class="btn-principal reiniciar oculto">Volver a Jugar 🔄</button>
+    </section>
+
+    <!-- Modal de Reglas -->
+    <div id="modal-reglas" class="modal-reglas">
+        <div class="contenido-reglas">
+            <h2>📋 Reglas del Juego</h2>
+            <ol>
+                <li>Debes seleccionar 1 de los 4 personajes que se muestran y hacer click en el botón <strong>CONFIRMAR SELECCIÓN</strong>.</li>
+                <li>Se te dará la posibilidad de elegir entre tres ataques por personaje: <strong>PUÑO</strong>, <strong>PATADA</strong> y <strong>BARRIDA</strong>.</li>
+                <li>Tú y tu contrincante tendrán <strong>3 vidas</strong> respectivamente. El primero en perder todas sus vidas pierde el combate.</li>
+            </ol>
+            <div class="info-util">
+                <h3>⚡ Información Útil:</h3>
+                <p><strong>PUÑO</strong> gana a BARRIDA</p>
+                <p><strong>PATADA</strong> gana a PUÑO</p>
+                <p><strong>BARRIDA</strong> gana a PATADA</p>
+            </div>
+            <button class="btn-cerrar-reglas" id="btn-cerrar-reglas">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
