@@ -53,6 +53,23 @@ body {
     margin: 0 auto 1rem;
 }
 
+/* Botón carrito */
+.card-products button {
+    border: none;
+    outline: 0;
+    padding: 10px;
+    color: white;
+    background-color: #1bcb7f;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 15px;
+}
+
+.card-products button:hover {
+    opacity: 0.7;
+}
+
 /* Nombre del producto */
 .card-products > div h3 {
     color: #333;
@@ -78,4 +95,27 @@ body {
     .card-products {
         grid-template-columns: 1fr;
     }
+}
+
+/* Botón flotante del carrito */
+.cart-btn {
+    position: fixed; /* Lo fija en la pantalla aunque haga scroll */
+    bottom: 30px;    /* Distancia desde abajo */
+    right: 30px;     /* Distancia desde la derecha */
+    background-color: black; /* Fondo negro */
+    font-size: 25px; /* Tamaño del icono */
+    width: 60px;     /* Ancho del círculo */
+    height: 60px;    /* Alto del círculo */
+    border-radius: 50%; /* Lo convierte en un círculo perfecto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para que resalte */
+    z-index: 1000;   /* Asegura que siempre esté por encima de los productos */
+}
+
+.cart-btn:hover {
+    transform: scale(1.1); /* Pequeña animación al pasar el mouse */
+    transition: 0.2s ease-in-out;
 }
