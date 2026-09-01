@@ -66,10 +66,12 @@ const displayCart = () => {
     });
 
     //modal footer
+    const total = cart.reduce((acc, el) => acc + el.price * el.quanty, 0);
+    
     const modalFooter = document.createElement("div");
     modalFooter.className = "modal-footer";
     modalFooter.innerHTML = `
-        <div class="total-price">Total: </div>
+        <div class="total-price">Total: $${total} </div>
     `;
     modalContainer.append(modalFooter);
 };
