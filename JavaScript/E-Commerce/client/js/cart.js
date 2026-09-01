@@ -49,6 +49,14 @@ const displayCart = () => {
         `;
         modalContainer.append(modalContent);
     });
+
+    //modal footer
+    const modalFooter = document.createElement("div");
+    modalFooter.className = "modal-footer";
+    modalFooter.innerHTML = `
+        <div class="total-price">Total: </div>
+    `;
+    modalContainer.append(modalFooter);
 };
 
 cartBtn.addEventListener("click", displayCart)

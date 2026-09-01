@@ -84,6 +84,94 @@ body {
     font-weight: bold;
 }
 
+/* modal-body*/
+.modal-body {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.product img {
+    height: 80px;
+    margin-right: 20px;
+    width: 80px;
+}
+
+.product-info {
+    flex: 1;
+    text-align: left;
+}
+
+.product-info h4 {
+    margin-top: 35px;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-right: 4em;
+}
+
+.quantity-btn-decrease
+ .quantity-btn-increase {
+    color: #333333;
+    cursor: pointer;
+    font-size: 16px;
+    width: 28px;
+    font-weight: bold;
+ }
+
+ .quantity-input {
+    color: #333333;
+    font-size: 16px;
+    padding: 10px;
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+ }
+
+@media only screen and (nax-width: 500px){
+    .product-img{
+    display: none;
+}
+    .modal-body{
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.delete-product {
+    margin-top: 20px;
+    margin-left: 2em;
+    cursor: pointer;
+}
+
+.modal-footer {
+    text-align: center;
+}
+
+.total-price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+
 /* Responsive */
 @media (max-width: 1024px) {
     .card-products {
@@ -97,25 +185,3 @@ body {
     }
 }
 
-/* Botón flotante del carrito */
-.cart-btn {
-    position: fixed; /* Lo fija en la pantalla aunque haga scroll */
-    bottom: 30px;    /* Distancia desde abajo */
-    right: 30px;     /* Distancia desde la derecha */
-    background-color: black; /* Fondo negro */
-    font-size: 25px; /* Tamaño del icono */
-    width: 60px;     /* Ancho del círculo */
-    height: 60px;    /* Alto del círculo */
-    border-radius: 50%; /* Lo convierte en un círculo perfecto */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para que resalte */
-    z-index: 1000;   /* Asegura que siempre esté por encima de los productos */
-}
-
-.cart-btn:hover {
-    transform: scale(1.1); /* Pequeña animación al pasar el mouse */
-    transition: 0.2s ease-in-out;
-}
