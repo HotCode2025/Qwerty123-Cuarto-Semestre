@@ -4,13 +4,13 @@ const cartBtn = document.getElementById("cart-btn")
 
 
 const displayCart = () => {
-    modalContainer.innerHTML= "";
-    modalContainer.style.display ="block";
+    modalContainer.innerHTML = "";
+    modalContainer.style.display = "block";
     modalOverlay.style.display = "block";
 
     //modal Header
     const modalHeader = document.createElement("div");
-    
+
     const modalClose = document.createElement("div");
     modalClose.innerText = "✖️"
     modalClose.className = "modal-close";
@@ -18,7 +18,7 @@ const displayCart = () => {
 
     modalClose.addEventListener("click", () => {
         modalContainer.style.display = "none",
-        modalOverlay.style.display = "none"
+            modalOverlay.style.display = "none"
     })
 
     const modalTitle = document.createElement("div");
@@ -48,6 +48,21 @@ const displayCart = () => {
         <div class="delete-product">❌</div>
         `;
         modalContainer.append(modalContent);
+
+        const decrease = modalContent.querySelector(".quantity-btn-decrease");
+        decrease.addEventListener("click", () => {
+            if (product.quanty > 1) {
+                product.quanty--;
+                displayCart();
+            }
+
+        });
+
+        const increase = modalContent.querySelector(".quantity-btn-increase");
+        increase.addEventListener("click", () => {
+            product.quanty++;
+            displayCart();
+        });
     });
 
     //modal footer
