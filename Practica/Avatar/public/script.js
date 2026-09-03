@@ -1,24 +1,49 @@
 // 1. CLASE MAESTRA DE AVATARS (Programación Orientada a Objetos)
 // Modificamos el constructor para recibir la ruta de la imagen
 class Avatar {
-    constructor(nombre, rutaImagen, elemento) {
+    constructor(id, nombre, rutaImagen, elemento, alias) {
+        this.id = id;
         this.nombre = nombre;
         this.imagen = rutaImagen; // Guardamos la ruta del archivo
         this.elemento = elemento; 
+        this.alias = alias;
         this.vidas = 3;
     }
 }
 
-// Actualizamos el catálogo con las rutas de tus imágenes locales
-const personajesDisponibles = {
-    zuko: new Avatar("Zuko", "./imagenes/Zuko.jpg", "fuego"),
-    katara: new Avatar("Katara", "./imagenes/Katara.jpg", "agua"),
-    aang: new Avatar("Aang", "./imagenes/Ang.jpg", "aire"),
-    toph: new Avatar("Toph", "./imagenes/toph.jpg", "tierra")
-};
+// Arreglo dinámico de objetos. ¡Aquí puedes instanciar la cantidad que desees!
+const personajesDisponibles = [];
+personajesDisponibles.push(new Avatar("zuko", "Zuko", "./imagenes/Zuko.jpg", "fuego", "Maestro Fuego"));
+personajesDisponibles.push(new Avatar("katara", "Katara", "./imagenes/Katara.jpg", "agua", "Maestra Agua"));
+personajesDisponibles.push(new Avatar("aang", "Aang", "./imagenes/Ang.jpg", "aire", "Avatar (Aire)"));
+personajesDisponibles.push(new Avatar("toph", "Toph", "./imagenes/toph.jpg", "tierra", "Maestra Tierra"));
 
 let jugador;
 let enemigo;
+
+// Función para construir la interfaz
+function renderizarPersonajes() {
+    const contenedor = document.getElementById('contenedor-tarjetas');
+    let tarjetasHTML = "";
+
+    personajesDisponibles.forEach((personaje) => {
+        tarjetasHTML += `
+        <label class="tarjeta-personaje">
+            <input type="radio" name="personaje" id="${personaje.id}" value="${personaje.id}" />
+            <div class="info-avatar">
+                <img src="${personaje.imagen}" alt="${personaje.nombre}" class="foto-seleccion">
+                <h3>${personaje.nombre}</h3>
+                <p>${personaje.alias}</p>
+            </div>
+        </label>
+        `;
+    });
+
+    contenedor.innerHTML = tarjetasHTML;
+}
+
+// Ejecutar al inicio
+renderizarPersonajes();
 
 // Matriz de Ventajas e Inmunidades Elementales
 // "Clave" le gana a "Valor"
@@ -109,18 +134,18 @@ function seleccionarPersonajeJugador() {
         return;
     }
 
-    // Instanciar jugador clonando los datos base
-    const baseJ = personajesDisponibles[seleccionID];
-    jugador = new Avatar(baseJ.nombre, baseJ.imagen, baseJ.elemento);
+    // Buscar el personaje elegido en el arreglo
+    const baseJ = personajesDisponibles.find(p => p.id === seleccionID);
+    jugador = new Avatar(baseJ.id, baseJ.nombre, baseJ.imagen, baseJ.elemento, baseJ.alias);
 
-    // Automatización del enemigo (Selección Aleatoria)
-    const claves = Object.keys(personajesDisponibles);
-    const eleccionAzar = claves[Math.floor(Math.random() * claves.length)];
+    // Selección aleatoria del enemigo
+    const eleccionAzar = Math.floor(Math.random() * personajesDisponibles.length);
     const baseE = personajesDisponibles[eleccionAzar];
-    enemigo = new Avatar(baseE.nombre, baseE.imagen, baseE.elemento);
+    enemigo = new Avatar(baseE.id, baseE.nombre, baseE.imagen, baseE.elemento, baseE.alias);
 
     prepararPantallaArena();
 }
+
 
 function mostrarBotonesDeElemento(elemento) {
     BOTONES_POR_ELEMENTO[elemento].forEach((id) => {
