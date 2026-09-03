@@ -26,11 +26,13 @@ public class EstudianteServicio implements IEstudianteServicio {
 
     @Override
     public void guardarEstudiante(Estudiante estudiante) {
+        estudianteRepositorio.save(estudiante);
 
     }
 
     @Override
     public void eliminarEstudiante(Estudiante estudiante) {
+        estudianteRepositorio.delete(estudiante);
 
     }
 }
