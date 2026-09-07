@@ -152,3 +152,42 @@ code .
 ```
 
 ###  ¡Listo! Con esto el proyecto se abrirá correctamente.
+
+---
+
+## Ejecutar un archivo de Python
+
+Para ejecutar un archivo `.py` desde la terminal, primero hay que ubicarse en la carpeta donde se encuentra el archivo.
+
+### 1. Comprobar los archivos del directorio
+
+```bash
+ll
+```
+
+Este comando permite listar los archivos del directorio actual y verificar que se encuentre el archivo de Python que se desea ejecutar. En este caso, el archivo es `py-project.py`.
+
+### 2. Ejecutar el archivo con Python 3
+
+```bash
+python3 py-project.py
+```
+
+Este comando ejecuta el archivo `py-project.py` utilizando **Python 3**.
+
+En la clase, el programa mostró el siguiente resultado:
+
+```text
+Hola desde esta máquina
+```
+
+### Resumen
+
+```bash
+ll
+python3 py-project.py
+```
+
+Estos comandos permiten verificar que el archivo se encuentra en el directorio actual y luego ejecutarlo utilizando Python 3.
+
+---
