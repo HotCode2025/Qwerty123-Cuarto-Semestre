@@ -213,7 +213,7 @@ ll
 Luego vinculamos nuestro repositorio local con el repositorio remoto de GitHub:
 
 ```bash
-git remote add origin git@github.com:ArielBetancud22/python-project.git
+git remote add origin git@github.com:TuUsuarioDeGithub/python-project.git
 ```
 
 Para comprobar que el repositorio remoto fue agregado correctamente:
