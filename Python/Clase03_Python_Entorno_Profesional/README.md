@@ -191,3 +191,86 @@ python3 py-project.py
 Estos comandos permiten verificar que el archivo se encuentra en el directorio actual y luego ejecutarlo utilizando Python 3.
 
 ---
+
+# Crear un repositorio en GitHub desde la terminal
+
+Para crear un repositorio Git de forma local, primero se utiliza:
+
+```bash
+git init
+```
+
+> Si el repositorio ya fue creado en GitHub y lo traemos a nuestro equipo mediante `git clone`, **no es necesario ejecutar `git init`**.
+
+## Comandos utilizados
+
+Primero podemos listar los archivos del directorio actual:
+
+```bash
+ll
+```
+
+Luego vinculamos nuestro repositorio local con el repositorio remoto de GitHub:
+
+```bash
+git remote add origin git@github.com:ArielBetancud22/python-project.git
+```
+
+Para comprobar que el repositorio remoto fue agregado correctamente:
+
+```bash
+git remote -v
+```
+
+Agregamos los archivos al área de preparación (*staging area*):
+
+```bash
+git add *
+```
+
+Comprobamos el estado del repositorio:
+
+```bash
+git status
+```
+
+Creamos el primer commit:
+
+```bash
+git commit -m "Mi primer commit"
+```
+
+Volvemos a comprobar el estado:
+
+```bash
+git status
+```
+
+Consultamos las ramas existentes:
+
+```bash
+git branch
+```
+
+Finalmente, enviamos los cambios al repositorio remoto. Si la rama utilizada es `master`:
+
+```bash
+git push origin master
+```
+
+En caso de utilizar `main`:
+
+```bash
+git push origin main
+```
+
+Al realizar el `push`, Git puede solicitar la autenticación correspondiente.
+
+Para volver al directorio anterior y entrar nuevamente al proyecto:
+
+```bash
+cd ..
+cd py-project
+```
+
+---
