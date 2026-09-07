@@ -1,0 +1,187 @@
+/* Reset y estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f5f5f5;
+    min-height: 100vh;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Contenedor de productos */
+.card-products-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Título */
+.card-products-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+/* Grid de productos - 4 columnas */
+.card-products {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+/* Tarjeta de cada producto */
+.card-products > div {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+/* Imagen del producto */
+.card-products > div img {
+    width: 100%;
+    max-width: 150px;
+    height: 150px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 1rem;
+}
+
+/* Botón carrito */
+.card-products button {
+    border: none;
+    outline: 0;
+    padding: 10px;
+    color: white;
+    background-color: #1bcb7f;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 15px;
+}
+
+.card-products button:hover {
+    opacity: 0.7;
+}
+
+/* Nombre del producto */
+.card-products > div h3 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Precio del producto */
+.card-products > div p {
+    color: #e74c3c;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* modal-body*/
+.modal-body {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.product img {
+    height: 80px;
+    margin-right: 20px;
+    width: 80px;
+}
+
+.product-info {
+    flex: 1;
+    text-align: left;
+}
+
+.product-info h4 {
+    margin-top: 35px;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-right: 4em;
+}
+
+.quantity-btn-decrease
+ .quantity-btn-increase {
+    color: #333333;
+    cursor: pointer;
+    font-size: 16px;
+    width: 28px;
+    font-weight: bold;
+ }
+
+ .quantity-input {
+    color: #333333;
+    font-size: 16px;
+    padding: 10px;
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+ }
+
+@media only screen and (nax-width: 500px){
+    .product-img{
+    display: none;
+}
+    .modal-body{
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.delete-product {
+    margin-top: 20px;
+    margin-left: 2em;
+    cursor: pointer;
+}
+
+.modal-footer {
+    text-align: center;
+}
+
+.total-price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .card-products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .card-products {
+        grid-template-columns: 1fr;
+    }
+}
+

@@ -1,24 +1,49 @@
 // 1. CLASE MAESTRA DE AVATARS (Programación Orientada a Objetos)
 // Modificamos el constructor para recibir la ruta de la imagen
 class Avatar {
-    constructor(nombre, rutaImagen, elemento) {
+    constructor(id, nombre, rutaImagen, elemento, alias) {
+        this.id = id;
         this.nombre = nombre;
         this.imagen = rutaImagen; // Guardamos la ruta del archivo
         this.elemento = elemento; 
+        this.alias = alias;
         this.vidas = 3;
     }
 }
 
-// Actualizamos el catálogo con las rutas de tus imágenes locales
-const personajesDisponibles = {
-    zuko: new Avatar("Zuko", "./imagenes/Zuko.jpg", "fuego"),
-    katara: new Avatar("Katara", "./imagenes/Katara.jpg", "agua"),
-    aang: new Avatar("Aang", "./imagenes/Ang.jpg", "aire"),
-    toph: new Avatar("Toph", "./imagenes/toph.jpg", "tierra")
-};
+// Arreglo dinámico de objetos. ¡Aquí puedes instanciar la cantidad que desees!
+const personajesDisponibles = [];
+personajesDisponibles.push(new Avatar("zuko", "Zuko", "./imagenes/Zuko.jpg", "fuego", "Maestro Fuego"));
+personajesDisponibles.push(new Avatar("katara", "Katara", "./imagenes/Katara.jpg", "agua", "Maestra Agua"));
+personajesDisponibles.push(new Avatar("aang", "Aang", "./imagenes/Ang.jpg", "aire", "Avatar (Aire)"));
+personajesDisponibles.push(new Avatar("toph", "Toph", "./imagenes/toph.jpg", "tierra", "Maestra Tierra"));
 
 let jugador;
 let enemigo;
+
+// Función para construir la interfaz
+function renderizarPersonajes() {
+    const contenedor = document.getElementById('contenedor-tarjetas');
+    let tarjetasHTML = "";
+
+    personajesDisponibles.forEach((personaje) => {
+        tarjetasHTML += `
+        <label class="tarjeta-personaje">
+            <input type="radio" name="personaje" id="${personaje.id}" value="${personaje.id}" />
+            <div class="info-avatar">
+                <img src="${personaje.imagen}" alt="${personaje.nombre}" class="foto-seleccion">
+                <h3>${personaje.nombre}</h3>
+                <p>${personaje.alias}</p>
+            </div>
+        </label>
+        `;
+    });
+
+    contenedor.innerHTML = tarjetasHTML;
+}
+
+// Ejecutar al inicio
+renderizarPersonajes();
 
 // Matriz de Ventajas e Inmunidades Elementales
 // "Clave" le gana a "Valor"
@@ -28,6 +53,17 @@ const ventajas = {
     puño: "barrida",   // El puño interrumpe la agachada de la barrida
     barrida: "patada"  // La barrida derriba al que tira una patada alta
 };
+
+const MOVIMIENTOS = ['puño', 'patada', 'barrida'];
+
+// Mapeo elemento -> IDs de botones de ataque exclusivos
+const BOTONES_POR_ELEMENTO = {
+    fuego: ['btn-llamas', 'btn-explosion'],
+    agua: ['btn-tsunami', 'btn-tormenta'],
+    aire: ['btn-tornado', 'btn-huracan'],
+    tierra: ['btn-terremoto', 'btn-meteoritos']
+};
+
 // 2. CONFIGURACIÓN INICIAL DEL DOM
 const seccionSeleccionar = document.getElementById('seccion-seleccionar');
 const seccionCombate = document.getElementById('seccion-combate');
@@ -37,6 +73,15 @@ const seccionReiniciar = document.getElementById('seccion-reiniciar');
 const btnPersonaje = document.getElementById('btn-personaje');
 const btnReiniciar = document.getElementById('btn-reiniciar');
 const textoResultado = document.getElementById('texto-resultado');
+
+const visualJugador = document.getElementById('visual-jugador');
+const visualEnemigo = document.getElementById('visual-enemigo');
+const vidasJugador = document.getElementById('vidas-jugador');
+const vidasEnemigo = document.getElementById('vidas-enemigo');
+const barraJ = document.getElementById('barra-j');
+const barraE = document.getElementById('barra-e');
+const nombreJugadorPantalla = document.getElementById('nombre-jugador-pantalla');
+const nombreEnemigoPantalla = document.getElementById('nombre-enemigo-pantalla');
 
 // Botones de ataque
 document.getElementById('btn-puño').addEventListener('click', () => procesarTurno('puño'));
@@ -89,37 +134,33 @@ function seleccionarPersonajeJugador() {
         return;
     }
 
-    // Instanciar jugador clonando los datos base
-    const baseJ = personajesDisponibles[seleccionID];
-    jugador = new Avatar(baseJ.nombre, baseJ.imagen, baseJ.elemento);
+    // Buscar el personaje elegido en el arreglo
+    const baseJ = personajesDisponibles.find(p => p.id === seleccionID);
+    jugador = new Avatar(baseJ.id, baseJ.nombre, baseJ.imagen, baseJ.elemento, baseJ.alias);
 
-    // Automatización del enemigo (Selección Aleatoria)
-    const claves = Object.keys(personajesDisponibles);
-    const eleccionAzar = claves[Math.floor(Math.random() * claves.length)];
+    // Selección aleatoria del enemigo
+    const eleccionAzar = Math.floor(Math.random() * personajesDisponibles.length);
     const baseE = personajesDisponibles[eleccionAzar];
-    enemigo = new Avatar(baseE.nombre, baseE.imagen, baseE.elemento);
+    enemigo = new Avatar(baseE.id, baseE.nombre, baseE.imagen, baseE.elemento, baseE.alias);
 
     prepararPantallaArena();
 }
 
+
+function mostrarBotonesDeElemento(elemento) {
+    BOTONES_POR_ELEMENTO[elemento].forEach((id) => {
+        document.getElementById(id).classList.remove('oculto');
+    });
+}
+
+function ocultarTodosLosBotones() {
+    Object.values(BOTONES_POR_ELEMENTO).flat().forEach((id) => {
+        document.getElementById(id).classList.add('oculto');
+    });
+}
+
 function configurarBotonesDeAtaque() {
-    // Activación por elemento del jugador
-    if (jugador.elemento === 'fuego') {
-        document.getElementById('btn-llamas').classList.remove('oculto');
-        document.getElementById('btn-explosion').classList.remove('oculto');
-    }
-    if (jugador.elemento === 'agua') {
-        document.getElementById('btn-tsunami').classList.remove('oculto');
-        document.getElementById('btn-tormenta').classList.remove('oculto');
-    }
-    if (jugador.elemento === 'aire') {
-        document.getElementById('btn-tornado').classList.remove('oculto');
-        document.getElementById('btn-huracan').classList.remove('oculto');
-    }
-    if (jugador.elemento === 'tierra') {
-        document.getElementById('btn-terremoto').classList.remove('oculto');
-        document.getElementById('btn-meteoritos').classList.remove('oculto');
-    }
+    mostrarBotonesDeElemento(jugador.elemento);
 }
 
 function prepararPantallaArena() {
@@ -129,25 +170,20 @@ function prepararPantallaArena() {
     seccionReiniciar.classList.remove('oculto');
 
     // Render de la foto del Jugador
-    document.getElementById('visual-jugador').querySelector('.sprite').innerHTML = 
+    visualJugador.querySelector('.sprite').innerHTML = 
         `<img src="${jugador.imagen}" alt="${jugador.nombre}" class="foto-render">`;
-    document.getElementById('nombre-jugador-pantalla').textContent = jugador.nombre;
+    nombreJugadorPantalla.textContent = jugador.nombre;
     
     // Render de la foto del Enemigo (¡Corregido!)
-    document.getElementById('visual-enemigo').querySelector('.sprite').innerHTML = 
+    visualEnemigo.querySelector('.sprite').innerHTML = 
         `<img src="${enemigo.imagen}" alt="${enemigo.nombre}" class="foto-render">`;
-    document.getElementById('nombre-enemigo-pantalla').textContent = enemigo.nombre + " (Rival)";
+    nombreEnemigoPantalla.textContent = enemigo.nombre + " (Rival)";
 
     // Llamamos a la nueva función que configura tus ataques exclusivos
     configurarBotonesDeAtaque();
 
     // Ocultamos todos los botones de ataque primero
-    document.getElementById('boton-fuego').classList.add('oculto');
-    document.getElementById('boton-agua').classList.add('oculto');
-    document.getElementById('boton-aire').classList.add('oculto');
-    document.getElementById('boton-tierra').classList.add('oculto');
-
-    
+    ocultarTodosLosBotones();
 }
 
 // 4. LÓGICA DE COMBATE CON VENTAJAS Y ANIMACIONES
@@ -156,17 +192,14 @@ function procesarTurno(ataqueJugador) {
     if (jugador.vidas <= 0 || enemigo.vidas <= 0) return;
 
     // La máquina elige al azar uno de los 3 movimientos de combate
-    const movimientos = ['puño', 'patada', 'barrida'];
-    const ataqueEnemigo = movimientos[Math.floor(Math.random() * movimientos.length)];
+    const ataqueEnemigo = MOVIMIENTOS[Math.floor(Math.random() * MOVIMIENTOS.length)];
 
     // Animaciones visuales de las tarjetas (Se mantienen)
-    const cardJ = document.getElementById('visual-jugador');
-    const cardE = document.getElementById('visual-enemigo');
-    cardJ.classList.add('ataque-jugador');
-    cardE.classList.add('ataque-enemigo');
+    visualJugador.classList.add('ataque-jugador');
+    visualEnemigo.classList.add('ataque-enemigo');
     setTimeout(() => {
-        cardJ.classList.remove('ataque-jugador');
-        cardE.classList.remove('ataque-enemigo');
+        visualJugador.classList.remove('ataque-jugador');
+        visualEnemigo.classList.remove('ataque-enemigo');
     }, 200);
 
     // Resolución del Choque de Golpes
@@ -175,15 +208,15 @@ function procesarTurno(ataqueJugador) {
     } 
     else if (ventajas[ataqueJugador] === ataqueEnemigo) {
         enemigo.vidas--;
-        cardE.classList.add('recibir-daño');
-        setTimeout(() => cardE.classList.remove('recibir-daño'), 400);
+        visualEnemigo.classList.add('recibir-daño');
+        setTimeout(() => visualEnemigo.classList.remove('recibir-daño'), 400);
         
         textoResultado.innerHTML = `¡Tu <strong>${ataqueJugador.toUpperCase()}</strong> conectó con éxito contra la <strong>${ataqueEnemigo.toUpperCase()}</strong> del rival! <br>🏆 ¡Impacto limpio! Dañas al enemigo.`;
     } 
     else {
         jugador.vidas--;
-        cardJ.classList.add('recibir-daño');
-        setTimeout(() => cardJ.classList.remove('recibir-daño'), 400);
+        visualJugador.classList.add('recibir-daño');
+        setTimeout(() => visualJugador.classList.remove('recibir-daño'), 400);
 
         textoResultado.innerHTML = `Tu <strong>${ataqueJugador.toUpperCase()}</strong> fue anticipado por la <strong>${ataqueEnemigo.toUpperCase()}</strong> del rival. <br>💀 ¡Te han contragolpeado! Pierdes una vida.`;
     }
@@ -194,15 +227,12 @@ function procesarTurno(ataqueJugador) {
 
 function actualizarInterfazVidas() {
     // Números de vidas
-    document.getElementById('vidas-jugador').textContent = jugador.vidas;
-    document.getElementById('vidas-enemigo').textContent = enemigo.vidas;
+    vidasJugador.textContent = jugador.vidas;
+    vidasEnemigo.textContent = enemigo.vidas;
 
     // Modificación de barras de salud dinámicas (Porcentaje)
     const porcJ = (jugador.vidas / 3) * 100;
     const porcE = (enemigo.vidas / 3) * 100;
-
-    const barraJ = document.getElementById('barra-j');
-    const barraE = document.getElementById('barra-e');
 
     barraJ.style.width = `${porcJ}%`;
     barraE.style.width = `${porcE}%`;
