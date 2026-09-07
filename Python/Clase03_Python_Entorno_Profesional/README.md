@@ -274,3 +274,136 @@ cd py-project
 ```
 
 ---
+
+# Solucionar fallas de conexión con GitHub mediante SSH
+
+Si GitHub no permite realizar el `push` mediante SSH, podemos configurar una clave SSH siguiendo estos pasos.
+
+## Paso 1: Comprobar el directorio SSH
+
+```bash
+ls -al ~/.ssh
+```
+
+Este comando permite comprobar si ya existen claves SSH en el equipo.
+
+## Paso 2: Generar una nueva clave SSH
+
+```bash
+ssh-keygen -t ed25519 -C "tu_correo@mail.com"
+```
+
+El correo debe reemplazarse por el correo asociado a la cuenta de GitHub.
+
+## Paso 3: Elegir dónde guardar la clave
+
+La terminal mostrará algo similar a:
+
+```text
+Enter file in which to save the key (/root/.ssh/id_ed25519):
+```
+
+Si queremos utilizar la ubicación predeterminada, no escribimos nada y simplemente presionamos **Enter**.
+
+## Paso 4: Ingresar una contraseña para la clave
+
+La terminal mostrará:
+
+```text
+Enter passphrase (empty for no passphrase):
+```
+
+Podemos ingresar una contraseña para proteger la clave SSH.
+
+## Paso 5: Confirmar la contraseña
+
+```text
+Enter same passphrase again:
+```
+
+Ingresamos nuevamente la misma contraseña.
+
+## Paso 6: Verificar la creación de la clave
+
+Al finalizar, la terminal mostrará información de la nueva clave, incluyendo su *fingerprint*.
+
+## Paso 7: Iniciar el agente SSH
+
+```bash
+eval "$(ssh-agent -s)"
+```
+
+Este comando inicia `ssh-agent`, que permite administrar las claves SSH durante la sesión.
+
+## Paso 8: Agregar la clave privada al agente SSH
+
+```bash
+ssh-add ~/.ssh/id_ed25519
+```
+
+## Paso 9: Ingresar la contraseña de la clave
+
+Si configuramos una *passphrase* al crear la clave, `ssh-add` solicitará que la ingresemos.
+
+## Paso 10: Mostrar la clave pública
+
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+Debemos copiar **todo el contenido de la clave pública** que aparece en la terminal.
+
+## Paso 11: Agregar la clave en GitHub
+
+En GitHub ingresar a:
+
+**Perfil → Settings → SSH and GPG keys**
+
+## Paso 12: Crear una nueva clave SSH
+
+Seleccionar:
+
+**New SSH key**
+
+## Paso 13: Colocar un título
+
+Ingresar un título que permita identificar el equipo donde se generó la clave.
+
+## Paso 14: Pegar la clave pública
+
+Pegar el contenido obtenido mediante:
+
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+Luego guardar la nueva clave en GitHub.
+
+## Paso 15: Realizar nuevamente el push
+
+Si la rama es `master`:
+
+```bash
+git push origin master
+```
+
+Si la rama es `main`:
+
+```bash
+git push origin main
+```
+
+> Es importante verificar previamente el nombre de la rama con `git branch`. Si se hace `push` de una rama local diferente de la existente en GitHub, pueden terminar existiendo ambas ramas (`main` y `master`).
+
+---
+
+## Resumen de comandos para configurar SSH
+
+```bash
+ls -al ~/.ssh
+ssh-keygen -t ed25519 -C "tu_correo@mail.com"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+cat ~/.ssh/id_ed25519.pub
+git push origin master
+```
