@@ -1,6 +1,7 @@
 const modalContainer = document.getElementById("modal-container")
 const modalOverlay = document.getElementById("modal-overlay")
 const cartBtn = document.getElementById("cart-btn")
+const cartCounter = document.getElementById("cart-counter");
 
 
 const displayCart = () => {
@@ -31,13 +32,11 @@ const displayCart = () => {
     //modal body
     cart.forEach((product) => {
         const modalContent = document.createElement("div");
-        modalContent.className = "modal-content";
+        modalContent.className = "product";
         modalContent.innerHTML = `
+        <img class="product-img" src="${product.img}" />
         <div class="product-info">
-            <img class="product-img" src="${product.img}" />
-            <div class="product-info">
-                <h4>${product.productName}</h4>
-            </div>
+            <h4>${product.productName}</h4>
         </div>
         <div class="quantity">
             <span class="quantity-btn-decrease">-</span>
@@ -65,7 +64,7 @@ const displayCart = () => {
         });
 
         //delete
-        const deleteProduct = modalBody.querySelector(".delete-product");
+        const deleteProduct = modalContent.querySelector(".delete-product");
 
         deleteProduct.addEventListener("click", ()=> {
             deleteCartProduct(product.id)
@@ -81,6 +80,8 @@ const displayCart = () => {
         <div class="total-price">Total: $${total} </div>
     `;
     modalContainer.append(modalFooter);
+
+    displayCartCounter();
 };
 
 cartBtn.addEventListener("click", displayCart)
@@ -90,4 +91,14 @@ const deleteCartProduct =(id)=> {
     console.log(foundID);
     cart.splice(foundID, 1);
     displayCart();
+    displayCartCounter();
+}
+const displayCartCounter = () => {
+    const cartLength = cart.reduce((acc, el) => acc + el.quanty, 0);
+    if (cartLength > 0) {
+        cartCounter.style.display = "block";
+        cartCounter.innerText = cartLength;
+    } else {
+        cartCounter.style.display = "none";
+    }
 }
