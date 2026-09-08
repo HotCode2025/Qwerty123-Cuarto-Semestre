@@ -30,6 +30,7 @@ const displayCart = () => {
     modalContainer.append(modalHeader);
 
     //modal body
+    if (cart.length > 0) {
     cart.forEach((product) => {
         const modalContent = document.createElement("div");
         modalContent.className = "product";
@@ -73,13 +74,19 @@ const displayCart = () => {
 
     //modal footer
     const total = cart.reduce((acc, el) => acc + el.price * el.quanty, 0);
-    
+
     const modalFooter = document.createElement("div");
     modalFooter.className = "modal-footer";
     modalFooter.innerHTML = `
         <div class="total-price">Total: $${total} </div>
     `;
     modalContainer.append(modalFooter);
+    } else {
+        const modalText = document.createElement("h2");
+        modalText.className = "modal-body";
+        modalText.innerText = "Tu carrito está vacío";
+        modalContainer.append(modalText);
+    }
 
     displayCartCounter();
 };
