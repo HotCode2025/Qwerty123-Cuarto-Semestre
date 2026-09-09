@@ -72,24 +72,86 @@ const displayCart = () => {
         })
     })
 
-    //modal footer
-    const total = cart.reduce((acc, el) => acc + el.price * el.quanty, 0);
-
-    const modalFooter = document.createElement("div");
-    modalFooter.className = "modal-footer";
-    modalFooter.innerHTML = `
-        <div class="total-price">Total: $${total} </div>
+        //ModalFooter
+        const modalFooter = document.createElement("div");
+        modalFooter.className = "modal-footer";
+        modalFooter.innerHTML = `
+        <div class="modal-total">Total: ${totalPrice()}</div>
+        <button class="btn-primary" id="checkout-btn">Checkout</button>
+        <div class="mercadopago-button" id="button-checkout"></div>
     `;
-    modalContainer.append(modalFooter);
-    } else {
-        const modalText = document.createElement("h2");
-        modalText.className = "modal-body";
-        modalText.innerText = "Tu carrito está vacío";
-        modalContainer.append(modalText);
-    }
+        modalContainer.append(modalFooter);
 
-    displayCartCounter();
-};
+        //MERCADO PAGO BUTTON
+        const mercadopago = new MercadoPago("public_key", {
+            locale: "es-AR"
+        });
+
+
+        const checkoutButton = modalFooter.querySelector("#checkout-btn");
+
+        checkoutButton.addEventListener("click", function () {
+            checkoutButton.remove();
+
+            const orderData = {
+                quantity: 1,
+                description: "Compra de E-Commerce",
+                price: totalPrice(),
+            };
+
+            fetch("http://localhost:8080/create_preference", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderData),
+            })
+            //Agregue un bloque catch para manejar errores de red
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error("Error en la respuesta del servidor");
+                    }
+                    return response.json();
+                })
+                .then(function (preference) {
+                    createCheckoutButton(preference.id);
+                })
+                .catch(function (error) {
+                    console.error(error);
+                    alert("Error al generar la preferencia de pago");
+                });
+
+                
+            function createCheckoutButton(preferenceId) {
+                //Initialize the checkout
+                const brickBuilder = mercadopago.bricks();
+
+                const renderComponent = async (brickBuilder) => {
+                    //if (window.checkoutButton) checkoutButton.unmount(); 
+                    await brickBuilder.create("wallet", "button-checkout", {
+                        initialization: {
+                            preferenceId: preferenceId,
+                        },
+                        callbacks: {
+                            onError: (error) => { console.error(error) },
+                            onReady: () => { }
+                        }
+                    });
+                };
+
+                window.checkoutButton = renderComponent(brickBuilder);
+            }
+        });
+
+    } else {
+        const emptyCart = document.createElement("div");
+        emptyCart.className = "empty-cart";
+        emptyCart.innerHTML = `
+        <p>Your cart is empty</p>
+    `;
+        modalContainer.append(emptyCart);
+    }
+}
 
 cartBtn.addEventListener("click", displayCart)
 

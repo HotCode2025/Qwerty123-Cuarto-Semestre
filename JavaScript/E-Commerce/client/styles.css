@@ -9,7 +9,7 @@ body {
     background: #f5f5f5;
     min-height: 100vh;
     padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Contenedor de productos */
@@ -34,7 +34,7 @@ body {
 }
 
 /* Tarjeta de cada producto */
-.card-products > div {
+.card-products>div {
     background: white;
     border-radius: 15px;
     padding: 1.5rem;
@@ -44,7 +44,7 @@ body {
 }
 
 /* Imagen del producto */
-.card-products > div img {
+.card-products>div img {
     width: 100%;
     max-width: 150px;
     height: 150px;
@@ -145,14 +145,14 @@ body {
 }
 
 /* Nombre del producto */
-.card-products > div h3 {
+.card-products>div h3 {
     color: #333;
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
 }
 
 /* Precio del producto */
-.card-products > div p {
+.card-products>div p {
     color: #e74c3c;
     font-size: 1.5rem;
     font-weight: bold;
@@ -201,22 +201,60 @@ body {
     font-size: 16px;
     width: 28px;
     font-weight: bold;
- }
+}
 
- .quantity-input {
+.quantity-input {
     color: #333333;
     font-size: 16px;
     padding: 10px;
     width: 50px;
     text-align: center;
     font-weight: bold;
- }
-
-@media only screen and (max-width: 500px){
-    .product-img{
-    display: none;
 }
-    .modal-body{
+
+#checkout-btn {
+    background-color: #009ee3;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition:
+        background-color 0.2s ease,
+        transform 0.1s ease;
+    display: block;
+}
+
+#checkout-btn:hover {
+    background-color: #007eb5;
+}
+
+#checkout-btn:active {
+    transform: scale(0.99);
+}
+
+/* Contenedor del botón oficial de Mercado Pago (Brick) */
+#button-checkout {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Ajuste responsive para el iframe generado por Mercado Pago */
+#button-checkout iframe {
+    max-width: 100% !important;
+}
+
+@media only screen and (max-width: 500px) {
+    .product-img {
+        display: none;
+    }
+
+    .modal-body {
         margin-left: 5px;
         margin-right: 5px;
     }
@@ -245,7 +283,6 @@ body {
     margin-bottom: 10px;
 }
 
-
 /* Responsive */
 @media (max-width: 1024px) {
     .card-products {
@@ -258,4 +295,3 @@ body {
         grid-template-columns: 1fr;
     }
 }
-
