@@ -1,158 +1,250 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AVATAR: Combate Elemental</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="titulo-principal">
-        <h1>AVATAR</h1>
-        <p class="subtitulo-juego">Combate Elemental</p>
+      <h1>AVATAR</h1>
+      <p class="subtitulo-juego">Combate Elemental</p>
     </div>
 
     <section id="seccion-seleccionar">
-        <div id="contenedor-tarjetas" class="contenedor-tarjetas">
-
-            <div class="tarjeta-personaje" data-personaje="zuko">
-                <div class="info-avatar">
-                    <img src="./imagenes/Zuko.jpg" alt="Zuko" class="foto-seleccion">
-                    <h3>Zuko</h3>
-                    <p>Maestro Fuego</p>
-                </div>
-            </div>
-
-            <div class="tarjeta-personaje" data-personaje="katara">
-                <div class="info-avatar">
-                    <img src="./imagenes/Katara.jpg" alt="Katara" class="foto-seleccion">
-                    <h3>Katara</h3>
-                    <p>Maestra Agua</p>
-                </div>
-            </div>
-
-            <div class="tarjeta-personaje" data-personaje="aang">
-                <div class="info-avatar">
-                    <img src="./imagenes/Ang.jpg" alt="Aang" class="foto-seleccion">
-                    <h3>Aang</h3>
-                    <p>Avatar (Aire)</p>
-                </div>
-            </div>
-
-            <div class="tarjeta-personaje" data-personaje="toph">
-                <div class="info-avatar">
-                    <img src="./imagenes/toph.jpg" alt="Toph" class="foto-seleccion">
-                    <h3>Toph</h3>
-                    <p>Maestra Tierra</p>
-                </div>
-            </div>
-
+      <div id="contenedor-tarjetas" class="contenedor-tarjetas">
+        <div class="tarjeta-personaje" data-personaje="zuko">
+          <div class="info-avatar">
+            <img src="./imagenes/Zuko.jpg" alt="Zuko" class="foto-seleccion" />
+            <h3>Zuko</h3>
+            <p>Maestro Fuego</p>
+          </div>
         </div>
 
-        <div class="panel-seleccion">
-            <select id="select-personaje" class="select-personaje">
-                <option value="" disabled selected>— Elegí un personaje —</option>
+        <div class="tarjeta-personaje" data-personaje="katara">
+          <div class="info-avatar">
+            <img
+              src="./imagenes/Katara.jpg"
+              alt="Katara"
+              class="foto-seleccion"
+            />
+            <h3>Katara</h3>
+            <p>Maestra Agua</p>
+          </div>
+        </div>
+
+        <div class="tarjeta-personaje" data-personaje="aang">
+          <div class="info-avatar">
+            <img src="./imagenes/Ang.jpg" alt="Aang" class="foto-seleccion" />
+            <h3>Aang</h3>
+            <p>Avatar (Aire)</p>
+          </div>
+        </div>
+
+        <div class="tarjeta-personaje" data-personaje="toph">
+          <div class="info-avatar">
+            <img src="./imagenes/toph.jpg" alt="Toph" class="foto-seleccion" />
+            <h3>Toph</h3>
+            <p>Maestra Tierra</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-seleccion">
+        <div id="panel-filtros" class="panel-filtros">
+          <div class="filtros-cascada">
+            <select id="filtro-elemento" aria-label="Filtrar por elemento">
+              <option value="">Todos</option>
+              <option value="fuego">Fuego</option>
+              <option value="agua">Agua</option>
+              <option value="aire">Aire</option>
+              <option value="tierra">Tierra</option>
             </select>
+            <select id="filtro-alias" aria-label="Filtrar por alias">
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <span id="contador-resultados">0 personaje(s) encontrado(s)</span>
         </div>
+        <select id="select-personaje" class="select-personaje">
+          <option value="" disabled selected>— Elegí un personaje —</option>
+        </select>
+      </div>
 
-        <div class="grupo-botones-inicio">
-            <button id="btn-personaje" class="btn-principal">Confirmar Selección</button>
-            <button id="btn-crear" class="btn-principal btn-crear">Crear Personaje</button>
-            <button id="show-rules" class="rules-btn">Reglas</button>
-        </div>
-        
+      <div class="grupo-botones-inicio">
+        <button id="btn-personaje" class="btn-principal">
+          Confirmar Selección
+        </button>
+        <button id="btn-crear" class="btn-principal btn-crear">
+          Crear Personaje
+        </button>
+        <button id="show-rules" class="rules-btn">Reglas</button>
+        <button id="btn-reiniciar-todo" class="rules-btn">
+          Terminar el juego
+        </button>
+      </div>
     </section>
 
     <section id="seccion-crear" class="oculto">
-        <h2>Crear Personaje</h2>
-        <div class="formulario-crear">
-            <label for="input-nombre">Nombre
-                <input type="text" id="input-nombre" placeholder="Nombre del personaje" autocomplete="off">
-            </label>
-            <label for="select-elemento">Elemento
-                <select id="select-elemento">
-                    <option value="">Elegí un elemento</option>
-                    <option value="fuego">Fuego</option>
-                    <option value="agua">Agua</option>
-                    <option value="aire">Aire</option>
-                    <option value="tierra">Tierra</option>
-                </select>
-            </label>
-            <label for="input-alias">Alias
-                <input type="text" id="input-alias" placeholder="Maestro/a ..." autocomplete="off">
-            </label>
-            <div class="acciones-crear">
-                <button type="button" id="btn-crear-manual" class="btn-principal">Crear Manual</button>
-                <button type="button" id="btn-generar-aleatorio" class="btn-principal">Generar Aleatorio</button>
-            </div>
-            <button type="button" id="btn-volver-seleccion" class="btn-volver">← Volver</button>
+      <h2>Crear Personaje</h2>
+      <div class="formulario-crear">
+        <label for="input-nombre"
+          >Nombre
+          <input
+            type="text"
+            id="input-nombre"
+            placeholder="Nombre del personaje"
+            autocomplete="off"
+          />
+        </label>
+        <label for="select-elemento"
+          >Elemento
+          <select id="select-elemento">
+            <option value="">Elegí un elemento</option>
+            <option value="fuego">Fuego</option>
+            <option value="agua">Agua</option>
+            <option value="aire">Aire</option>
+            <option value="tierra">Tierra</option>
+          </select>
+        </label>
+        <label for="input-alias"
+          >Alias
+          <input
+            type="text"
+            id="input-alias"
+            placeholder="Maestro/a ..."
+            autocomplete="off"
+          />
+        </label>
+        <div class="acciones-crear">
+          <button type="button" id="btn-crear-manual" class="btn-principal">
+            Crear Manual
+          </button>
+          <button
+            type="button"
+            id="btn-generar-aleatorio"
+            class="btn-principal"
+          >
+            Generar Aleatorio
+          </button>
         </div>
+
+        <div class="generacion-masiva">
+          <h3>Generación masiva</h3>
+          <label for="input-cantidad-masiva"
+            >Cantidad
+            <input
+              type="number"
+              id="input-cantidad-masiva"
+              min="1"
+              max="1000"
+              value="50"
+            />
+          </label>
+          <button type="button" id="btn-generar-masivo" class="btn-principal">
+            Generar 50 personajes
+          </button>
+          <div
+            id="progreso-masivo"
+            class="progreso-masivo"
+            style="display: none"
+          >
+            <div class="barra-progreso-masivo">
+              <div
+                id="barra-progreso-relleno"
+                class="barra-progreso-relleno"
+              ></div>
+            </div>
+            <p id="texto-progreso-masivo">Generando... 0/0</p>
+          </div>
+        </div>
+
+        <button type="button" id="btn-volver-seleccion" class="btn-volver">
+          ← Volver
+        </button>
+      </div>
     </section>
 
-
     <section id="seccion-combate" class="oculto">
-        
-        <div class="campo-batalla">
-            <div id="visual-jugador" class="render-personaje">
-                <span id="emoji-jugador" class="sprite"></span>
-                <h3 id="nombre-jugador-pantalla">Jugador</h3>
-                <div class="barra-vida"><div id="barra-j" class="vida-interior"></div></div>
-                <p>Vidas: <span id="vidas-jugador">3</span>/3</p>
-            </div>
-
-            <div class="vs">VS</div>
-
-            <div id="visual-enemigo" class="render-personaje">
-                <span id="emoji-enemigo" class="sprite"></span>
-                <h3 id="nombre-enemigo-pantalla">Enemigo</h3>
-                <div class="barra-vida"><div id="barra-e" class="vida-interior"></div></div>
-                <p>Vidas: <span id="vidas-enemigo">3</span>/3</p>
-            </div>
+      <div class="campo-batalla">
+        <div id="visual-jugador" class="render-personaje">
+          <span id="emoji-jugador" class="sprite"></span>
+          <h3 id="nombre-jugador-pantalla">Jugador</h3>
+          <div class="barra-vida">
+            <div id="barra-j" class="vida-interior"></div>
+          </div>
+          <p>Vidas: <span id="vidas-jugador">3</span>/3</p>
         </div>
 
-        <div class="panel-ataques">
-            <h3>Elige tu Movimiento</h3>
-            <div class="botones-ataque">
-                <button id="btn-puño" class="btn-ataque fuego">Puño 👊</button>
-                <button id="btn-patada" class="btn-ataque agua">Patada 🦶</button>
-                <button id="btn-barrida" class="btn-ataque tierra">Barrida 🧹</button>
-            </div>
-        </div>
+        <div class="vs">VS</div>
 
+        <div id="visual-enemigo" class="render-personaje">
+          <span id="emoji-enemigo" class="sprite"></span>
+          <h3 id="nombre-enemigo-pantalla">Enemigo</h3>
+          <div class="barra-vida">
+            <div id="barra-e" class="vida-interior"></div>
+          </div>
+          <p>Vidas: <span id="vidas-enemigo">3</span>/3</p>
+        </div>
+      </div>
+
+      <div class="panel-ataques">
+        <h3>Elige tu Movimiento</h3>
+        <div class="botones-ataque">
+          <button id="btn-puño" class="btn-ataque fuego">Puño 👊</button>
+          <button id="btn-patada" class="btn-ataque agua">Patada 🦶</button>
+          <button id="btn-barrida" class="btn-ataque tierra">Barrida 🧹</button>
+        </div>
+      </div>
     </section>
 
     <section id="seccion-mensajes" class="oculto">
-        <div class="consola-combate">
-            <p id="texto-resultado">¡La batalla ha comenzado!</p>
-        </div>
+      <div class="consola-combate">
+        <p id="texto-resultado">¡La batalla ha comenzado!</p>
+      </div>
     </section>
 
     <section id="seccion-reiniciar" class="oculto barra-acciones-final">
-        <button id="show-rules-combat" class="rules-btn rules-btn-combate">Reglas</button>
-        <button id="btn-reiniciar" class="btn-principal reiniciar oculto">Volver a Jugar 🔄</button>
+      <button id="show-rules-combat" class="rules-btn rules-btn-combate">
+        Reglas
+      </button>
+      <button id="btn-reiniciar" class="btn-principal reiniciar">
+        Volver a Jugar 🔄
+      </button>
     </section>
 
     <!-- Modal de Reglas -->
     <div id="modal-reglas" class="modal-reglas">
-        <div class="contenido-reglas">
-            <h2>📋 Reglas del Juego</h2>
-            <ol>
-                <li>Debes seleccionar 1 de los 4 personajes que se muestran y hacer click en el botón <strong>CONFIRMAR SELECCIÓN</strong>.</li>
-                <li>Se te dará la posibilidad de elegir entre tres ataques por personaje: <strong>PUÑO</strong>, <strong>PATADA</strong> y <strong>BARRIDA</strong>.</li>
-                <li>Tú y tu contrincante tendrán <strong>3 vidas</strong> respectivamente. El primero en perder todas sus vidas pierde el combate.</li>
-            </ol>
-            <div class="info-util">
-                <h3>⚡ Información Útil:</h3>
-                <p><strong>PUÑO</strong> gana a BARRIDA</p>
-                <p><strong>PATADA</strong> gana a PUÑO</p>
-                <p><strong>BARRIDA</strong> gana a PATADA</p>
-            </div>
-            <button class="btn-cerrar-reglas" id="btn-cerrar-reglas">Cerrar</button>
+      <div class="contenido-reglas">
+        <h2>📋 Reglas del Juego</h2>
+        <ol>
+          <li>
+            Debes seleccionar 1 de los 4 personajes que se muestran y hacer
+            click en el botón <strong>CONFIRMAR SELECCIÓN</strong>.
+          </li>
+          <li>
+            Se te dará la posibilidad de elegir entre tres ataques por
+            personaje: <strong>PUÑO</strong>, <strong>PATADA</strong> y
+            <strong>BARRIDA</strong>.
+          </li>
+          <li>
+            Tú y tu contrincante tendrán
+            <strong>3 vidas</strong> respectivamente. El primero en perder todas
+            sus vidas pierde el combate.
+          </li>
+        </ol>
+        <div class="info-util">
+          <h3>⚡ Información Útil:</h3>
+          <p><strong>PUÑO</strong> gana a BARRIDA</p>
+          <p><strong>PATADA</strong> gana a PUÑO</p>
+          <p><strong>BARRIDA</strong> gana a PATADA</p>
         </div>
+        <button class="btn-cerrar-reglas" id="btn-cerrar-reglas">Cerrar</button>
+      </div>
     </div>
 
     <script src="crear-personaje.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

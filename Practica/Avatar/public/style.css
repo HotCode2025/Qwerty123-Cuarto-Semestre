@@ -252,6 +252,65 @@ h3 {
   margin: 10px auto 24px;
 }
 
+.panel-filtros {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.filtros-cascada {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 0;
+}
+
+#filtro-elemento,
+#filtro-alias {
+  box-sizing: border-box;
+  flex: 1 1 160px;
+  min-width: 140px;
+  padding: 10px 12px;
+  background: rgba(30, 41, 59, 0.85);
+  color: #f8fafc;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+#filtro-elemento:focus,
+#filtro-alias:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+}
+
+#contador-resultados {
+  display: inline-block;
+  margin: 0 auto;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.18);
+  border: 1px solid #38bdf8;
+  color: #e0f2fe;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+#contador-resultados.sin-resultados {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  color: #fecaca;
+}
+
 .label-select {
   font-weight: 700;
   color: #e2e8f0;
@@ -373,6 +432,52 @@ h3 {
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 8px;
+}
+
+.generacion-masiva {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #334155;
+}
+
+.generacion-masiva h3 {
+  margin: 0 0 12px;
+  color: #e2e8f0;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.generacion-masiva #btn-generar-masivo {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.progreso-masivo {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.barra-progreso-masivo {
+  width: 100%;
+  height: 12px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barra-progreso-relleno {
+  width: 0%;
+  height: 100%;
+  background: #22c55e;
+  border-radius: 999px;
+  transition: width 0.2s ease;
+}
+
+#texto-progreso-masivo {
+  margin: 8px 0 0;
+  color: #94a3b8;
+  font-size: 0.9rem;
 }
 
 .btn-volver {

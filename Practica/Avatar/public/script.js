@@ -145,27 +145,40 @@ let enemigo;
 // IDs de las 4 tarjetas decorativas fijas en el HTML
 const IDS_ORIGINALES = ["zuko", "katara", "aang", "toph"];
 
+// Cantidad mínima (exclusiva) de personajes para mostrar el filtro en cascada
+const UMBRAL_MOSTRAR_FILTRO = 8;
+
 
 // =============================================================================
 // RENDERIZADO DEL DROPDOWN DE SELECCIÓN
 // Las 4 tarjetas originales son solo visuales; la elección real sale del <select>.
 // =============================================================================
 
-function renderizarPersonajes(idSeleccionado) {
+/**
+ * Reconstruye las <option> del select a partir de una lista dada,
+ * conservando el placeholder de value="".
+ */
+function poblarOpcionesSelect(lista) {
     const select = document.getElementById('select-personaje');
-    if (!select) return; // Seguridad: si el DOM no está listo, no rompe
+    if (!select) return;
 
-    // Conservar el placeholder; solo se actualizan las opciones de personajes
     Array.from(select.options).forEach(opcion => {
         if (opcion.value !== "") opcion.remove();
     });
 
-    personajesDisponibles.forEach(personaje => {
+    lista.forEach(personaje => {
         const opcion = document.createElement("option");
         opcion.value = personaje.id;
         opcion.textContent = `${personaje.nombre} — ${personaje.alias}`;
         select.appendChild(opcion);
     });
+}
+
+function renderizarPersonajes(idSeleccionado) {
+    const select = document.getElementById('select-personaje');
+    if (!select) return; // Seguridad: si el DOM no está listo, no rompe
+
+    poblarOpcionesSelect(personajesDisponibles);
 
     if (idSeleccionado && personajesDisponibles.some(p => p.id === idSeleccionado)) {
         select.value = idSeleccionado;
@@ -242,10 +255,126 @@ document.getElementById('btn-patada').addEventListener('click',  () => procesarT
 document.getElementById('btn-barrida').addEventListener('click', () => procesarTurno('barrida'));
 
 btnPersonaje.addEventListener('click', seleccionarPersonajeJugador);
-btnReiniciar.addEventListener('click', () => location.reload());
+btnReiniciar.addEventListener('click', volverAJugar);
+
+document.getElementById('btn-reiniciar-todo').addEventListener('click', reiniciarTodo);
 
 const selectPersonaje = document.getElementById('select-personaje');
 selectPersonaje.addEventListener('change', actualizarTarjetaActiva);
+
+const filtroElemento = document.getElementById('filtro-elemento');
+const filtroAlias = document.getElementById('filtro-alias');
+const contadorResultados = document.getElementById('contador-resultados');
+
+/**
+ * Repuebla #filtro-alias según el elemento elegido.
+ * Con "Todos", une todos los alias de ALIAS_POR_ELEMENTO sin duplicados.
+ */
+function poblarSelectAlias(elemento) {
+    if (!filtroAlias) return;
+
+    filtroAlias.innerHTML = "";
+    const opcionTodos = document.createElement("option");
+    opcionTodos.value = "";
+    opcionTodos.textContent = "Todos";
+    filtroAlias.appendChild(opcionTodos);
+
+    let aliasLista = [];
+    if (!elemento) {
+        const unidos = new Set();
+        ELEMENTOS_DISPONIBLES.forEach(el => {
+            (ALIAS_POR_ELEMENTO[el] || []).forEach(alias => unidos.add(alias));
+        });
+        aliasLista = Array.from(unidos);
+    } else {
+        aliasLista = ALIAS_POR_ELEMENTO[elemento] || [];
+    }
+
+    aliasLista.forEach(alias => {
+        const opcion = document.createElement("option");
+        opcion.value = alias;
+        opcion.textContent = alias;
+        filtroAlias.appendChild(opcion);
+    });
+
+    filtroAlias.value = "";
+}
+
+/**
+ * Aplica los filtros de elemento/alias sobre el dropdown de personajes.
+ * No toca las tarjetas fijas.
+ */
+function aplicarFiltroPersonajes() {
+    const elemento = filtroElemento ? filtroElemento.value : "";
+    const alias = filtroAlias ? filtroAlias.value : "";
+    const select = document.getElementById('select-personaje');
+
+    const listaFiltrada = personajesDisponibles.filter(p => {
+        const okElemento = !elemento || p.elemento === elemento;
+        const okAlias = !alias || p.alias === alias;
+        return okElemento && okAlias;
+    });
+
+    poblarOpcionesSelect(listaFiltrada);
+
+    if (contadorResultados) {
+        if (listaFiltrada.length === 0) {
+            contadorResultados.textContent = "Sin resultados";
+            contadorResultados.classList.add("sin-resultados");
+        } else {
+            contadorResultados.textContent =
+                `${listaFiltrada.length} personaje(s) encontrado(s)`;
+            contadorResultados.classList.remove("sin-resultados");
+        }
+    }
+
+    if (listaFiltrada.length === 1) {
+        select.value = listaFiltrada[0].id;
+    } else {
+        select.value = "";
+    }
+}
+
+/**
+ * Muestra u oculta el panel de filtros según la cantidad de personajes.
+ * Por debajo del umbral, fuerza "Todos" y la lista completa en el select.
+ */
+function actualizarVisibilidadFiltro() {
+    const panelFiltros = document.getElementById('panel-filtros');
+    if (!panelFiltros) return;
+
+    if (personajesDisponibles.length > UMBRAL_MOSTRAR_FILTRO) {
+        panelFiltros.style.display = "";
+        return;
+    }
+
+    panelFiltros.style.display = "none";
+    resetearFiltrosCascada();
+
+    const select = document.getElementById('select-personaje');
+    const idActual = select ? select.value : "";
+    poblarOpcionesSelect(personajesDisponibles);
+
+    if (idActual && personajesDisponibles.some(p => p.id === idActual)) {
+        select.value = idActual;
+    } else if (select) {
+        select.value = "";
+    }
+}
+
+/** Resetea los filtros en cascada a "Todos" y repuebla alias + contador. */
+function resetearFiltrosCascada() {
+    if (filtroElemento) filtroElemento.value = "";
+    poblarSelectAlias("");
+    if (filtroAlias) filtroAlias.value = "";
+}
+
+filtroElemento.addEventListener('change', () => {
+    poblarSelectAlias(filtroElemento.value);
+    aplicarFiltroPersonajes();
+});
+
+filtroAlias.addEventListener('change', aplicarFiltroPersonajes);
 
 
 // =============================================================================
@@ -320,6 +449,15 @@ function prepararPantallaArena() {
     seccionMensajes.classList.remove('oculto');
     seccionReiniciar.classList.remove('oculto');
 
+    // Reset visual de vidas/barras al entrar a la arena
+    textoResultado.innerHTML = "¡La batalla ha comenzado!";
+    vidasJugador.textContent = jugador.vidas;
+    vidasEnemigo.textContent = enemigo.vidas;
+    barraJ.style.width = "100%";
+    barraE.style.width = "100%";
+    barraJ.style.backgroundColor = "#22c55e";
+    barraE.style.backgroundColor = "#22c55e";
+
     // Render de foto o emoji según el personaje
     renderizarSprite(visualJugador, jugador);
     nombreJugadorPantalla.textContent = jugador.nombre;
@@ -337,6 +475,63 @@ function prepararPantallaArena() {
             btn.className = `btn-ataque ${ataque.clase}`;
         }
     });
+}
+
+/**
+ * Sale del combate sin recargar la página y sin tocar el catálogo.
+ * Preselecciona el mismo personaje del jugador para una revancha rápida.
+ */
+function volverAJugar() {
+    const idJugadorActual = jugador ? jugador.id : "";
+
+    jugador = undefined;
+    enemigo = undefined;
+
+    vidasJugador.textContent = "3";
+    vidasEnemigo.textContent = "3";
+    barraJ.style.width = "100%";
+    barraE.style.width = "100%";
+    barraJ.style.backgroundColor = "#22c55e";
+    barraE.style.backgroundColor = "#22c55e";
+    textoResultado.innerHTML = "¡La batalla ha comenzado!";
+
+    visualJugador.classList.remove('ataque-jugador', 'recibir-daño');
+    visualEnemigo.classList.remove('ataque-enemigo', 'recibir-daño');
+
+    seccionCombate.classList.add('oculto');
+    seccionMensajes.classList.add('oculto');
+    seccionReiniciar.classList.add('oculto');
+
+    const seccionCrear = document.getElementById('seccion-crear');
+    if (seccionCrear) seccionCrear.classList.add('oculto');
+
+    resetearFiltrosCascada();
+
+    seccionSeleccionar.classList.remove('oculto');
+    renderizarPersonajes(idJugadorActual);
+    if (contadorResultados) {
+        contadorResultados.textContent =
+            `${personajesDisponibles.length} personaje(s) encontrado(s)`;
+    }
+}
+
+/**
+ * Restaura el catálogo a los 4 originales (acción destructiva).
+ * Mutamos el array const in-place para conservar la misma referencia global.
+ */
+function reiniciarTodo() {
+    const confirmar = confirm(
+        "¿Reiniciar el catálogo? Se perderán todos los personajes generados."
+    );
+    if (!confirmar) return;
+
+    personajesDisponibles.length = 0;
+    personajesDisponibles.push(...Avatar.generarDesdedatos(CATALOGO_PERSONAJES));
+
+    resetearFiltrosCascada();
+    renderizarPersonajes();
+    aplicarFiltroPersonajes();
+    actualizarVisibilidadFiltro();
 }
 
 
@@ -401,8 +596,6 @@ function actualizarInterfazVidas() {
 
 function verificarEstadoFinal() {
     if (!jugador.estaVivo() || !enemigo.estaVivo()) {
-        btnReiniciar.classList.remove('oculto');
-
         if (!jugador.estaVivo() && !enemigo.estaVivo()) {
             textoResultado.innerHTML = "🏁 <strong>¡MUTUO K.O.! Ambos guerreros han caído.</strong>";
         } else if (!jugador.estaVivo()) {
@@ -414,4 +607,7 @@ function verificarEstadoFinal() {
 }
 
 // Cargar el dropdown al iniciar (las tarjetas originales ya están en el HTML)
+resetearFiltrosCascada();
 renderizarPersonajes();
+aplicarFiltroPersonajes();
+actualizarVisibilidadFiltro();
