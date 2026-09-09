@@ -1,468 +1,895 @@
+@font-face {
+  font-family: "AvatarAirbender";
+  src: url("./fuentes/avatar-airbender.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Herculanum-Regular";
+  src: url("./fuentes/Herculanum-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-    --bg-dark: #0f172a;
-    --card-bg: #1e293b;
-    --fuego: #ef4444;
-    --agua: #3b82f6;
-    --aire: #a855f7;
-    --tierra: #10b981;
+  --bg-dark: #0f172a;
+  --card-bg: #1e293b;
+  --fuego: #ef4444;
+  --agua: #3b82f6;
+  --aire: #a855f7;
+  --tierra: #10b981;
 }
 
 body {
-    background-color: var(--bg-dark);
-    color: #f8fafc;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 20px;
+  background-image: url("./imagenes/fondo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #f8fafc;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 0;
+  pointer-events: none;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Contenedor transparente y alineado */
+.titulo-principal {
+  background: transparent;
+  padding: 12px 30px;
+  margin: 0 auto 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+}
+
+/* Título principal: Letras negras con aura blanca */
 h1 {
-    font-size: 2rem;
-    color: #f8fafc;
-    text-shadow: 0 0 10px rgba(0,0,0,0.4);
-    background: linear-gradient(90deg, #7c2d12, #0c4a6e);
-    padding: 16px 20px;
-    border-radius: 10px;
-    max-width: 700px;
-    margin: 0 auto;
+  font-family: "AvatarAirbender", cursive;
+  font-size: 7.5rem;
+  color: #111111;
+  margin: 0;
+  padding: 0;
+  line-height: 0.8; /* Junta el título con el subtítulo */
+  letter-spacing: 5px;
+  text-shadow:
+    0 0 15px rgba(255, 255, 255, 0.9),
+    0 0 30px rgba(255, 255, 255, 0.7),
+    0 0 50px rgba(255, 255, 255, 0.4);
+}
+
+/* Subtítulo: Tipografía Herculanum, letras negras muy espaciadas */
+.subtitulo-juego {
+  font-family: "Herculanum-Regular";
+  font-size: 3.4rem;
+  color: #111111;
+  letter-spacing: 12px; /* Espaciado ultra ancho característico */
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.9),
+    0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+.emojis-titulo {
+  font-size: 2.5rem; /* Ajusta el tamaño de los emojis aquí */
+  margin-top: 15px; /* Espacio respecto al subtítulo */
+  letter-spacing: 20px; /* Separación entre cada elemento */
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.6); /* Brillo de fondo opcional */
 }
 
 h2 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #38bdf8;
-    letter-spacing: 0.5px;
-    margin: 24px auto 12px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #1e293b;
-    max-width: 400px;
+  font-family: "Herculanum", cursive;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #38bdf8;
+  margin: 24px auto 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #1e293b;
+  max-width: 400px;
 }
 
 h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #94a3b8;
-    letter-spacing: 0.5px;
-    margin: 6px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin: 6px 0;
 }
 
-.oculto { display: none !important; }
+.oculto {
+  display: none !important;
+}
 
-/* Contenedor de Selección */
+#seccion-seleccionar {
+  padding-top: 6px;
+}
+
 .contenedor-tarjetas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin: 30px 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 28px;
 }
 
 .tarjeta-personaje {
-    background: var(--card-bg);
-    border: 3px solid #334155;
-    border-radius: 12px;
-    padding: 20px;
-    width: 150px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  position: relative;
+  background: var(--card-bg);
+  border: 3px solid #334155;
+  border-radius: 12px;
+  padding: 12px;
+  width: 135px;
+  cursor: default;
+  transition: all 0.2s ease;
 }
-
-.tarjeta-personaje input { display: none; }
 
 .tarjeta-personaje:hover {
-    transform: translateY(-5px);
-    border-color: #64748b;
+  transform: translateY(-5px);
+  border-color: #64748b;
 }
 
-/* Cambia de color al seleccionarse con el input radio */
-.tarjeta-personaje:has(input:checked) {
-    border-color: #38bdf8;
-    background: #0c4a6e;
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+.tarjeta-personaje.activo {
+  border-color: var(--agua);
+  background: #0c4a6e;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.55);
 }
 
-.emoji-avatar { font-size: 3rem; display: block; margin-bottom: 10px; }
-.tarjeta-personaje h3 { margin: 5px 0; }
-.tarjeta-personaje p { font-size: 0.85rem; color: #94a3b8; margin: 0; }
+.emoji-elemento {
+  position: absolute;
+  top: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3.2rem;
+  display: block;
+  z-index: 2;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
 
-/* Arena de Combate */
+@keyframes animFuego {
+  0% {
+    transform: translateX(-50%) rotate(-3deg) scale(1);
+  }
+  25% {
+    transform: translateX(-50%) rotate(3deg) scale(1.08);
+  }
+  50% {
+    transform: translateX(-50%) rotate(-2deg) scale(0.95);
+  }
+  75% {
+    transform: translateX(-50%) rotate(4deg) scale(1.05);
+  }
+  100% {
+    transform: translateX(-50%) rotate(-3deg) scale(1);
+  }
+}
+
+@keyframes animAgua {
+  0% {
+    transform: translateX(-50%) translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-50%) translateY(-4px) rotate(-5deg);
+  }
+  50% {
+    transform: translateX(-50%) translateY(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateX(-50%) translateY(4px) rotate(5deg);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes animAire {
+    0%   { transform: translateX(-50%) skewX(0deg)  scale(1);    }
+    20%  { transform: translateX(-58%) skewX(-8deg) scale(1.08); }
+    40%  { transform: translateX(-50%) skewX(0deg)  scale(1);    }
+    60%  { transform: translateX(-42%) skewX(8deg)  scale(1.08); }
+    80%  { transform: translateX(-50%) skewX(0deg)  scale(1);    }
+    100% { transform: translateX(-50%) skewX(0deg)  scale(1);    }
+}
+
+@keyframes animTierra {
+  0% {
+    transform: translateX(-50%) translateY(0px) scale(1);
+  }
+  20% {
+    transform: translateX(-50%) translateY(-3px) scale(1.1);
+  }
+  40% {
+    transform: translateX(-50%) translateY(1px) scale(0.95);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-2px) scale(1.05);
+  }
+  80% {
+    transform: translateX(-50%) translateY(1px) scale(0.98);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0px) scale(1);
+  }
+}
+
+.emoji-fuego {
+  animation: animFuego 1.2s ease-in-out infinite;
+}
+.emoji-agua {
+  animation: animAgua 2s ease-in-out infinite;
+}
+.emoji-aire {
+  animation: animAire 2s ease-in-out infinite;
+}
+.emoji-tierra {
+  animation: animTierra 2.5s ease-in-out infinite;
+}
+
+.panel-seleccion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin: 10px auto 24px;
+}
+
+.label-select {
+  font-weight: 700;
+  color: #e2e8f0;
+  letter-spacing: 0.4px;
+}
+
+.select-personaje {
+  min-width: 280px;
+  max-width: 90%;
+  padding: 10px 12px;
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid var(--card-bg);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.select-personaje:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+}
+
+#seccion-seleccionar select {
+  font-family: "Herculanum", "Herculanum-Regular", serif;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  padding: 10px 16px;
+  width: 320px;
+  background: rgba(30, 41, 59, 0.85);
+  color: #f8fafc;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 8px auto;
+  display: block;
+  transition: border-color 0.2s ease;
+}
+
+#seccion-seleccionar select:focus {
+  border-color: #38bdf8;
+  outline: none;
+}
+
+#seccion-seleccionar select option {
+  background: #1e293b;
+  color: #f8fafc;
+}
+
+.acciones-seleccion {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.grupo-botones-inicio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-crear {
+  background: #059669;
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+}
+
+.btn-crear:hover {
+  background: #047857;
+}
+
+#seccion-crear {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.formulario-crear {
+  background: var(--card-bg);
+  border: 3px solid #334155;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+}
+
+.formulario-crear label {
+  display: block;
+  margin-bottom: 14px;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.formulario-crear input,
+.formulario-crear select {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid var(--card-bg);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.formulario-crear input:focus,
+.formulario-crear select:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+}
+
+.acciones-crear {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.btn-volver {
+  display: block;
+  margin: 18px auto 0;
+  background: transparent;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-volver:hover {
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.emoji-avatar {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 10px;
+}
+.tarjeta-personaje h3 {
+  margin: 5px 0;
+}
+.tarjeta-personaje p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
 .campo-batalla {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    margin: 30px auto;
-    max-width: 700px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin: 20px auto;
+  max-width: 800px;
 }
 
 .render-personaje {
-    background: var(--card-bg);
-    padding: 20px;
-    border-radius: 16px;
-    width: 200px;
-    border: 2px solid #334155;
-    position: relative;
-    transition: transform 0.2s;
+  width: 240px;
+  padding: 20px;
+  background: rgba(30, 41, 59, 0.85);
+  border: 2px solid #334155;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  position: relative;
+  transition: transform 0.2s;
 }
 
-.sprite { font-size: 4.5rem; display: block; margin-bottom: 15px; }
+#visual-jugador {
+  border-color: #38bdf8;
+  box-shadow: 0 8px 32px rgba(56, 189, 248, 0.2);
+}
 
-.vs { font-size: 2rem; font-weight: bold; color: #64748b; }
+#visual-enemigo {
+  border-color: #ef4444;
+  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2);
+}
 
-/* Barras de Vida Dinámicas */
+.sprite {
+  font-size: 4.5rem;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.vs {
+  font-family: 'Herculanum', serif;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #f8fafc;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3),
+               0 0 40px rgba(255,200,0,0.2);
+  align-self: center;
+}
+
 .barra-vida {
-    background: #475569;
-    width: 100%;
-    height: 12px;
-    border-radius: 6px;
-    overflow: hidden;
-    margin: 10px 0;
+  background: #475569;
+  width: 100%;
+  height: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  margin: 12px 0 6px;
 }
 
 .vida-interior {
-    background: #22c55e;
-    width: 100%;
-    height: 100%;
-    transition: width 0.3s ease, background-color 0.3s;
+  background: #22c55e;
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+  transition:
+    width 0.3s ease,
+    background-color 0.3s;
 }
 
-/* Botones e Interfaces */
 .btn-principal {
-    background: #0284c7;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+  background: #0284c7;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
 }
 
-.btn-principal:hover { background: #0369a1; }
+.btn-principal:hover {
+  background: #0369a1;
+}
+
+.btn-principal.btn-crear {
+  background: #059669;
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+}
+
+.btn-principal.btn-crear:hover {
+  background: #047857;
+}
 
 .panel-ataques {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 12px;
-    max-width: 500px;
-    margin: auto;
-    width: 100%;
-    flex: 1 1 100%;
-    text-align: center;
+  background: rgba(30, 41, 59, 0.75);
+  backdrop-filter: blur(4px);
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 20px 30px;
+  margin-top: 16px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  text-align: center;
 }
 
-.botones-ataque { display: flex; justify-content: center; gap: 10px; }
+.panel-ataques h3 {
+  font-family: 'Herculanum', serif;
+  font-size: 1rem;
+  color: #94a3b8;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+.botones-ataque {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
 
 .btn-ataque {
-    border: none;
-    color: white;
-    padding: 10px 15px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
+  border: none;
+  color: white;
+  padding: 12px 22px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.fuego { background: var(--fuego); }
-.agua { background: var(--agua); }
-.aire { background: var(--aire); }
-.tierra { background: var(--tierra); }
+
+.btn-ataque:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+.fuego {
+  background: var(--fuego);
+}
+.agua {
+  background: var(--agua);
+}
+.aire {
+  background: var(--aire);
+}
+.tierra {
+  background: var(--tierra);
+}
 
 .consola-combate {
-    background: #020617;
-    border-left: 4px solid #38bdf8;
-    padding: 15px;
-    max-width: 600px;
-    margin: 20px auto;
-    border-radius: 4px;
-    font-family: monospace;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(4px);
+  border-left: 4px solid #38bdf8;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px auto 8px;
+  max-width: 640px;
+  min-height: 60px;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-family: monospace;
 }
 
-/* ANIMACIONES DE MOVIMIENTO POR CSS */
-.ataque-jugador { transform: translateX(50px) scale(1.05); }
-.ataque-enemigo { transform: translateX(-50px) scale(1.05); }
+.ataque-jugador {
+  transform: translateX(50px) scale(1.05);
+}
+.ataque-enemigo {
+  transform: translateX(-50px) scale(1.05);
+}
 
 .recibir-daño {
-    animation: vibrarDaño 0.2s linear 2;
+  animation: vibrarDaño 0.2s linear 2;
 }
 
 @keyframes vibrarDaño {
-    0% { transform: translate(2px, 1px) rotate(0deg); background: #7f1d1d; }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    50% { transform: translate(-3px, 0px) rotate(1deg); }
-    100% { transform: translate(1px, 2px) rotate(0deg); }
+  0% {
+    transform: translate(2px, 1px) rotate(0deg);
+    background: #7f1d1d;
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  50% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  100% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
 }
 
 .foto-render {
-    width: 120px;
-    max-width: 120px;
-    height: 160px;
-    border-radius: 8px;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
+  width: 150px;
+  max-width: 150px;
+  height: 200px;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
 }
+
 .foto-seleccion {
-    width: 100%;
-    max-width: 150px;
-    height: 300px;
-    border-radius: 20px;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 150px;
+  height: 220px;
+  border-radius: 20px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
 }
 
-.button-group{
-    display: inline-flex;
-    gap: 0;
+.button-group {
+  display: inline-flex;
+  gap: 0;
 }
 
-/* Botón de Reglas */
 .rules-btn {
-    background: #dc2626;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
-    transition: all 0.2s ease;
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+  transition: all 0.2s ease;
 }
 
 .rules-btn:hover {
-    background: #991b1b;
-    box-shadow: 0 6px 15px rgba(220, 38, 38, 0.5);
-    transform: translateY(-2px);
+  background: #991b1b;
+  box-shadow: 0 6px 15px rgba(220, 38, 38, 0.5);
+  transform: translateY(-2px);
 }
 
 .rules-btn:active {
-    background: #7f1d1d;
-    transform: translateY(0);
+  background: #7f1d1d;
+  transform: translateY(0);
 }
 
-/* Modal de Reglas */
 .modal-reglas {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-reglas.activo {
-    display: flex;
+  display: flex;
 }
 
 .contenido-reglas {
-    background: rgba(30, 41, 59, 0.95);
-    border: 2px solid #dc2626;
-    border-radius: 16px;
-    padding: 30px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    animation: slideIn 0.3s ease;
+  background: rgba(30, 41, 59, 0.95);
+  border: 2px solid #dc2626;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s ease;
 }
 
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .contenido-reglas h2 {
-    color: #dc2626;
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    text-align: center;
+  color: #dc2626;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .contenido-reglas ol {
-    color: #cbd5e1;
-    font-size: 1rem;
-    line-height: 1.8;
-    margin: 15px 0;
-    padding-left: 20px;
+  color: #cbd5e1;
+  font-size: 1rem;
+  line-height: 1.8;
+  margin: 15px 0;
+  padding-left: 20px;
 }
 
 .contenido-reglas li {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .contenido-reglas .info-util {
-    background: rgba(220, 38, 38, 0.15);
-    border-left: 4px solid #dc2626;
-    padding: 15px;
-    margin-top: 25px;
-    border-radius: 6px;
+  background: rgba(220, 38, 38, 0.15);
+  border-left: 4px solid #dc2626;
+  padding: 15px;
+  margin-top: 25px;
+  border-radius: 6px;
 }
 
 .contenido-reglas .info-util h3 {
-    color: #fca5a5;
-    margin-top: 0;
-    margin-bottom: 10px;
+  color: #fca5a5;
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
 .contenido-reglas .info-util p {
-    margin: 8px 0;
-    color: #cbd5e1;
+  margin: 8px 0;
+  color: #cbd5e1;
 }
 
 .btn-cerrar-reglas {
-    background: #dc2626;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 20px;
-    width: 100%;
-    transition: all 0.2s ease;
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 20px;
+  width: 100%;
+  transition: all 0.2s ease;
 }
 
 .btn-cerrar-reglas:hover {
-    background: #991b1b;
+  background: #991b1b;
 }
 
-/* Posición del botón de Reglas durante el combate */
 .rules-btn-combate {
-    position: fixed !important;
-    right: 30px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    z-index: 500 !important;
+  position: fixed !important;
+  right: 30px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 500 !important;
 }
 
 .barra-acciones-final {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
 }
 
-/* ===== RESPONSIVE ===== */
-
 @media (max-width: 768px) {
-    *, *::before, *::after {
-        box-sizing: border-box;
-    }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-    h1 {
-        font-size: 1.5rem;
-    }
+  h1 {
+    font-size: 5rem;
+  }
 
-    .tarjeta-personaje {
-        width: 130px;
-        padding: 14px;
-    }
+  .subtitulo-juego {
+    font-size: 1rem;
+    letter-spacing: 8px;
+  }
 
-    .foto-seleccion {
-        max-width: 100px;
-        height: 220px;
-    }
+  .tarjeta-personaje {
+    width: 130px;
+    padding: 14px;
+  }
 
-    .campo-batalla {
-        gap: 20px;
-    }
+  .foto-seleccion {
+    max-width: 100px;
+    height: 220px;
+  }
 
-    .render-personaje {
-        width: 160px;
-        padding: 14px;
-    }
+  .campo-batalla {
+    gap: 20px;
+  }
+
+  .render-personaje {
+    width: 160px;
+    padding: 14px;
+  }
 }
 
 @media (max-width: 480px) {
-    body {
-        padding: 12px;
-    }
+  body {
+    padding: 12px;
+  }
 
-    h1 {
-        font-size: 1.2rem;
-        padding: 12px 14px;
-    }
+  h1 {
+    font-size: 3.5rem;
+  }
 
-    h2 {
-        font-size: 1.1rem;
-    }
+  .subtitulo-juego {
+    font-size: 0.8rem;
+    letter-spacing: 5px;
+  }
 
-    .contenedor-tarjetas {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        justify-items: center;
-    }
+  h2 {
+    font-size: 1.1rem;
+  }
 
-    .tarjeta-personaje {
-        width: 100%;
-        max-width: 150px;
-        padding: 10px;
-    }
+  .contenedor-tarjetas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    justify-items: center;
+  }
 
-    .foto-seleccion {
-        max-width: 110px;
-        height: 200px;
-    }
+  .tarjeta-personaje {
+    width: 100%;
+    max-width: 150px;
+    padding: 10px;
+  }
 
-    .campo-batalla {
-        flex-direction: column;
-        gap: 15px;
-    }
+  .foto-seleccion {
+    max-width: 110px;
+    height: 200px;
+  }
 
-    .render-personaje {
-        width: 90%;
-        max-width: 220px;
-    }
+  .campo-batalla {
+    flex-direction: column;
+    gap: 15px;
+  }
 
-    .vs {
-        font-size: 1.5rem;
-    }
+  .render-personaje {
+    width: 90%;
+    max-width: 220px;
+  }
 
-    .botones-ataque {
-        flex-direction: column;
-        gap: 8px;
-    }
+  .vs {
+    font-size: 1.5rem;
+  }
 
-    .btn-ataque {
-        width: 100%;
-    }
+  .botones-ataque {
+    flex-direction: column;
+    gap: 8px;
+  }
 
-    .contenido-reglas {
-        padding: 20px;
-    }
+  .btn-ataque {
+    width: 100%;
+  }
 
-    .rules-btn-combate {
-        position: static !important;
-        top: auto !important;
-        right: auto !important;
-        transform: none !important;
-    }
+  .acciones-seleccion,
+  .acciones-crear,
+  .grupo-botones-inicio {
+    flex-direction: column;
+    width: 100%;
+  }
 
-    .barra-acciones-final {
-        flex-wrap: wrap;
-        margin-top: 15px;
-        padding: 0 12px;
-    }
+  .acciones-seleccion .btn-principal,
+  .acciones-crear .btn-principal,
+  .grupo-botones-inicio .btn-principal,
+  .grupo-botones-inicio .rules-btn {
+    width: 100%;
+  }
 
-    .barra-acciones-final .rules-btn,
-    .barra-acciones-final .btn-principal {
-        flex: 1 1 auto;
-        max-width: 200px;
-    }
+  .select-personaje {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .contenido-reglas {
+    padding: 20px;
+  }
+
+  .rules-btn-combate {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+  }
+
+  .barra-acciones-final {
+    flex-wrap: wrap;
+    margin-top: 15px;
+    padding: 0 12px;
+  }
+
+  .barra-acciones-final .rules-btn,
+  .barra-acciones-final .btn-principal {
+    flex: 1 1 auto;
+    max-width: 200px;
+  }
 }

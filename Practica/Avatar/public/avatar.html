@@ -3,25 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA LEYENDA DE AANG: AVATAR</title>
+    <title>AVATAR: Combate Elemental</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>AVATAR: COMBATE ELEMENTAL 🔥💧🌱🌪️</h1>
+    <div class="titulo-principal">
+        <h1>AVATAR</h1>
+        <p class="subtitulo-juego">Combate Elemental</p>
+    </div>
 
     <section id="seccion-seleccionar">
-        <h2>Elige tu Maestro</h2>
-        <div id="contenedor-tarjetas" class="contenedor-tarjetas"></div>
+        <div id="contenedor-tarjetas" class="contenedor-tarjetas">
 
-        <button id="btn-personaje" class="btn-principal">Confirmar Selección</button>
-        <button id="show-rules" class="rules-btn">Reglas</button>
+            <div class="tarjeta-personaje" data-personaje="zuko">
+                <div class="info-avatar">
+                    <img src="./imagenes/Zuko.jpg" alt="Zuko" class="foto-seleccion">
+                    <h3>Zuko</h3>
+                    <p>Maestro Fuego</p>
+                </div>
+            </div>
+
+            <div class="tarjeta-personaje" data-personaje="katara">
+                <div class="info-avatar">
+                    <img src="./imagenes/Katara.jpg" alt="Katara" class="foto-seleccion">
+                    <h3>Katara</h3>
+                    <p>Maestra Agua</p>
+                </div>
+            </div>
+
+            <div class="tarjeta-personaje" data-personaje="aang">
+                <div class="info-avatar">
+                    <img src="./imagenes/Ang.jpg" alt="Aang" class="foto-seleccion">
+                    <h3>Aang</h3>
+                    <p>Avatar (Aire)</p>
+                </div>
+            </div>
+
+            <div class="tarjeta-personaje" data-personaje="toph">
+                <div class="info-avatar">
+                    <img src="./imagenes/toph.jpg" alt="Toph" class="foto-seleccion">
+                    <h3>Toph</h3>
+                    <p>Maestra Tierra</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-seleccion">
+            <select id="select-personaje" class="select-personaje">
+                <option value="" disabled selected>— Elegí un personaje —</option>
+            </select>
+        </div>
+
+        <div class="grupo-botones-inicio">
+            <button id="btn-personaje" class="btn-principal">Confirmar Selección</button>
+            <button id="btn-crear" class="btn-principal btn-crear">Crear Personaje</button>
+            <button id="show-rules" class="rules-btn">Reglas</button>
+        </div>
         
+    </section>
+
+    <section id="seccion-crear" class="oculto">
+        <h2>Crear Personaje</h2>
+        <div class="formulario-crear">
+            <label for="input-nombre">Nombre
+                <input type="text" id="input-nombre" placeholder="Nombre del personaje" autocomplete="off">
+            </label>
+            <label for="select-elemento">Elemento
+                <select id="select-elemento">
+                    <option value="">Elegí un elemento</option>
+                    <option value="fuego">Fuego</option>
+                    <option value="agua">Agua</option>
+                    <option value="aire">Aire</option>
+                    <option value="tierra">Tierra</option>
+                </select>
+            </label>
+            <label for="input-alias">Alias
+                <input type="text" id="input-alias" placeholder="Maestro/a ..." autocomplete="off">
+            </label>
+            <div class="acciones-crear">
+                <button type="button" id="btn-crear-manual" class="btn-principal">Crear Manual</button>
+                <button type="button" id="btn-generar-aleatorio" class="btn-principal">Generar Aleatorio</button>
+            </div>
+            <button type="button" id="btn-volver-seleccion" class="btn-volver">← Volver</button>
+        </div>
     </section>
 
 
     <section id="seccion-combate" class="oculto">
-        <h2>Arena de Elementos</h2>
         
         <div class="campo-batalla">
             <div id="visual-jugador" class="render-personaje">
@@ -39,6 +109,8 @@
                 <div class="barra-vida"><div id="barra-e" class="vida-interior"></div></div>
                 <p>Vidas: <span id="vidas-enemigo">3</span>/3</p>
             </div>
+        </div>
+
         <div class="panel-ataques">
             <h3>Elige tu Movimiento</h3>
             <div class="botones-ataque">
@@ -80,8 +152,7 @@
         </div>
     </div>
 
+    <script src="crear-personaje.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
-
-
