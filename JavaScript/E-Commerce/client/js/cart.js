@@ -73,6 +73,8 @@ const displayCart = () => {
     })
 
         //ModalFooter
+        const totalPrice = cart.reduce((acc, el) => acc + el.price * el.quanty, 0);
+        
         const modalFooter = document.createElement("div");
         modalFooter.className = "modal-footer";
         modalFooter.innerHTML = `
@@ -91,6 +93,7 @@ const displayCart = () => {
         const checkoutButton = modalFooter.querySelector("#checkout-btn");
 
         checkoutButton.addEventListener("click", function () {
+            
             checkoutButton.remove();
 
             const orderData = {
@@ -134,8 +137,8 @@ const displayCart = () => {
                         },
                         callbacks: {
                             onError: (error) => { console.error(error) },
-                            onReady: () => { }
-                        }
+                            onReady: () => { },
+                        },
                     });
                 };
 

@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const { MercadoPagoConfig, Preference } = require("mercadopago");
+const mercadopago = require("mercadopago");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -23,15 +24,16 @@ const client = new MercadoPagoConfig({
     accessToken: process.env.MP_ACCESS_TOKEN,
 });
 
-app.use(cors());
+app.use(express.urlencoded({ extended: false}));
 app.use(express.json());
 
 // Sirve todo el frontend (carpeta client) como archivos estáticos
 app.use(express.static(path.join(__dirname, "../client")));
+app.use(cors());
 
 // Ruta principal -> muestra el index.html del front
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/index.html"));
+app.get("/", function () {
+    path.resolve(__dirname, "..", "client", "index.html");
 });
 
 // ---------------------------------------------------------
@@ -68,8 +70,20 @@ app.post("/create_preference", async (req, res) => {
                     failure: `http://localhost:${PORT}`,
                     pending: `http://localhost:${PORT}`,
                 },
+                auto_return: "approved",
             },
         });
+
+        mercadopago.preferences
+            .create(preference)
+            .then(function (response) {
+                res.json({
+                    id: response.body.id,
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
 
         // init_point: redirección de producción
         // sandbox_init_point: redirección para cuentas de PRUEBA (la que vas a usar ahora)
