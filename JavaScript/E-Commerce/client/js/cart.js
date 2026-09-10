@@ -18,7 +18,7 @@ const displayCart = () => {
     modalHeader.append(modalClose)
 
     modalClose.addEventListener("click", () => {
-        modalContainer.style.display = "none",
+        modalContainer.style.display = "none";
             modalOverlay.style.display = "none"
     })
 
@@ -78,10 +78,10 @@ const displayCart = () => {
         const modalFooter = document.createElement("div");
         modalFooter.className = "modal-footer";
         modalFooter.innerHTML = `
-        <div class="modal-total">Total: ${totalPrice()}</div>
-        <button class="btn-primary" id="checkout-btn">Checkout</button>
-        <div class="mercadopago-button" id="button-checkout"></div>
-    `;
+        <div class="modal-total">Total: ${totalPrice}</div>
+        <button class="btn-primary" id="checkout-btn">CHECKOUT</button>
+        <div id="button-checkout"></div>
+            `;
         modalContainer.append(modalFooter);
 
         //MERCADO PAGO BUTTON
@@ -97,9 +97,11 @@ const displayCart = () => {
             checkoutButton.remove();
 
             const orderData = {
-                quantity: 1,
-                description: "Compra de E-Commerce",
-                price: totalPrice(),
+                items: cart.map((product) => ({
+                    productName: product.productName,
+                    price: product.price,
+                    quanty: product.quanty,
+                })),
             };
 
             fetch("http://localhost:8080/create_preference", {

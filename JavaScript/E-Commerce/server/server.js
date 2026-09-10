@@ -60,30 +60,9 @@ app.post("/create_preference", async (req, res) => {
         const result = await preference.create({
             body: {
                 items: preferenceItems,
-                // Nota: en producción (con dominio propio) acá agregarías
-                // back_urls + auto_return: "approved" para redirigir solo
-                // automáticamente. En local, Mercado Pago no acepta
-                // localhost en back_urls, así que el comprador vuelve
-                // manualmente con el botón "Volver al sitio".
-                back_urls: {
-                    success: `http://localhost:${PORT}`,
-                    failure: `http://localhost:${PORT}`,
-                    pending: `http://localhost:${PORT}`,
-                },
-                auto_return: "approved",
+                
             },
         });
-
-        mercadopago.preferences
-            .create(preference)
-            .then(function (response) {
-                res.json({
-                    id: response.body.id,
-                })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
 
         // init_point: redirección de producción
         // sandbox_init_point: redirección para cuentas de PRUEBA (la que vas a usar ahora)
