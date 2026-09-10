@@ -139,7 +139,7 @@ h3 {
   border-radius: 12px;
   padding: 12px;
   width: 135px;
-  cursor: default;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 

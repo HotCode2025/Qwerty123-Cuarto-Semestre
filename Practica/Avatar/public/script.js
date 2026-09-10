@@ -262,6 +262,19 @@ document.getElementById('btn-reiniciar-todo').addEventListener('click', reinicia
 const selectPersonaje = document.getElementById('select-personaje');
 selectPersonaje.addEventListener('change', actualizarTarjetaActiva);
 
+// Permite seleccionar haciendo clic directamente en la tarjeta del personaje
+document.getElementById('contenedor-tarjetas').addEventListener('click', (e) => {
+    const tarjeta = e.target.closest('.tarjeta-personaje');
+    if (!tarjeta) return;
+
+    const id = tarjeta.dataset.personaje;
+    // Solo si ese personaje sigue disponible en el catálogo
+    if (personajesDisponibles.some(p => p.id === id)) {
+        selectPersonaje.value = id;
+        actualizarTarjetaActiva();
+    }
+});
+
 const filtroElemento = document.getElementById('filtro-elemento');
 const filtroAlias = document.getElementById('filtro-alias');
 const contadorResultados = document.getElementById('contador-resultados');
