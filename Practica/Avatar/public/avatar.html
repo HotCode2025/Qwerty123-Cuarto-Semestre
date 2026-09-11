@@ -7,11 +7,18 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- Título del juego -->
     <div class="titulo-principal">
       <h1>AVATAR</h1>
       <p class="subtitulo-juego">Combate Elemental</p>
     </div>
 
+    <!-- ==========================================================
+         PANTALLA 1: SELECCIÓN DE PERSONAJE
+         Tarjetas fijas (Zuko/Katara/Aang/Toph) + dropdown con
+         filtros, que se llena dinámicamente desde script.js con
+         los objetos Avatar disponibles (personajesDisponibles).
+    =========================================================== -->
     <section id="seccion-seleccionar">
       <div id="contenedor-tarjetas" class="contenedor-tarjetas">
         <div class="tarjeta-personaje" data-personaje="zuko">
@@ -51,6 +58,9 @@
         </div>
       </div>
 
+      <!-- Filtros en cascada (elemento -> alias) + dropdown real de selección.
+           Los filtros solo se muestran si hay muchos personajes generados
+           (ver UMBRAL_MOSTRAR_FILTRO en script.js). -->
       <div class="panel-seleccion">
         <div id="panel-filtros" class="panel-filtros">
           <div class="filtros-cascada">
@@ -86,6 +96,11 @@
       </div>
     </section>
 
+    <!-- ==========================================================
+         PANTALLA 2: CREAR PERSONAJE
+         Formulario manual + botones de generación aleatoria y
+         masiva (ver crear-personaje.js).
+    =========================================================== -->
     <section id="seccion-crear" class="oculto">
       <h2>Crear Personaje</h2>
       <div class="formulario-crear">
@@ -130,6 +145,7 @@
           </button>
         </div>
 
+        <!-- Generación masiva: crea muchos personajes de una, con barra de progreso -->
         <div class="generacion-masiva">
           <h3>Generación masiva</h3>
           <label for="input-cantidad-masiva"
@@ -166,6 +182,12 @@
       </div>
     </section>
 
+    <!-- ==========================================================
+         PANTALLA 3: ARENA DE COMBATE
+         Jugador vs. enemigo (instancias de Avatar) + botones de
+         ataque. Ver seleccionarPersonajeJugador() y procesarTurno()
+         en script.js.
+    =========================================================== -->
     <section id="seccion-combate" class="oculto">
       <div class="campo-batalla">
         <div id="visual-jugador" class="render-personaje">
@@ -199,12 +221,14 @@
       </div>
     </section>
 
+    <!-- Consola de texto con el resultado de cada turno -->
     <section id="seccion-mensajes" class="oculto">
       <div class="consola-combate">
         <p id="texto-resultado">¡La batalla ha comenzado!</p>
       </div>
     </section>
 
+    <!-- Botón para revanchar sin recargar la página -->
     <section id="seccion-reiniciar" class="oculto barra-acciones-final">
       <button id="show-rules-combat" class="rules-btn rules-btn-combate">
         Reglas
@@ -214,7 +238,7 @@
       </button>
     </section>
 
-    <!-- Modal de Reglas -->
+    <!-- Modal de Reglas (se abre/cierra agregando/sacando la clase "activo") -->
     <div id="modal-reglas" class="modal-reglas">
       <div class="contenido-reglas">
         <h2>📋 Reglas del Juego</h2>
@@ -244,6 +268,8 @@
       </div>
     </div>
 
+    <!-- crear-personaje.js va primero: define funciones y variables que
+         script.js usa al inicializar el juego -->
     <script src="crear-personaje.js"></script>
     <script src="script.js"></script>
   </body>

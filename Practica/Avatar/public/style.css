@@ -1,3 +1,6 @@
+/* ============================================================
+   FUENTES E IDENTIDAD VISUAL
+   ============================================================ */
 @font-face {
   font-family: "AvatarAirbender";
   src: url("./fuentes/avatar-airbender.ttf") format("truetype");
@@ -12,6 +15,7 @@
   font-style: normal;
 }
 
+/* Colores base y uno por elemento, reutilizados en botones/emojis */
 :root {
   --bg-dark: #0f172a;
   --card-bg: #1e293b;
@@ -21,6 +25,9 @@
   --tierra: #10b981;
 }
 
+/* ============================================================
+   FONDO GENERAL DE LA PÁGINA
+   ============================================================ */
 body {
   background-image: url("./imagenes/fondo.jpg");
   background-size: cover;
@@ -33,6 +40,7 @@ body {
   padding: 20px;
 }
 
+/* Capa oscura semitransparente sobre el fondo, para que el texto resalte */
 body::before {
   content: "";
   position: fixed;
@@ -47,7 +55,9 @@ body > * {
   z-index: 1;
 }
 
-/* Contenedor transparente y alineado */
+/* ============================================================
+   TÍTULO PRINCIPAL
+   ============================================================ */
 .titulo-principal {
   background: transparent;
   padding: 12px 30px;
@@ -58,7 +68,6 @@ body > * {
   gap: 0px;
 }
 
-/* Título principal: Letras negras con aura blanca */
 h1 {
   font-family: "AvatarAirbender", cursive;
   font-size: 7.5rem;
@@ -73,7 +82,6 @@ h1 {
     0 0 50px rgba(255, 255, 255, 0.4);
 }
 
-/* Subtítulo: Tipografía Herculanum, letras negras muy espaciadas */
 .subtitulo-juego {
   font-family: "Herculanum-Regular";
   font-size: 3.4rem;
@@ -114,10 +122,14 @@ h3 {
   margin: 6px 0;
 }
 
+/* Clase utilitaria: oculta cualquier sección/elemento (usada desde el JS) */
 .oculto {
   display: none !important;
 }
 
+/* ============================================================
+   PANTALLA 1: SELECCIÓN DE PERSONAJE (tarjetas + dropdown)
+   ============================================================ */
 #seccion-seleccionar {
   padding-top: 6px;
 }
@@ -148,12 +160,14 @@ h3 {
   border-color: #64748b;
 }
 
+/* Tarjeta resaltada cuando coincide con el personaje elegido en el dropdown */
 .tarjeta-personaje.activo {
   border-color: var(--agua);
   background: #0c4a6e;
   box-shadow: 0 0 18px rgba(56, 189, 248, 0.55);
 }
 
+/* Badge con el emoji del elemento, flotando arriba de cada tarjeta */
 .emoji-elemento {
   position: absolute;
   top: -70px;
@@ -165,6 +179,7 @@ h3 {
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
 }
 
+/* Animaciones de "vida" para cada emoji de elemento, una por elemento */
 @keyframes animFuego {
   0% {
     transform: translateX(-50%) rotate(-3deg) scale(1);
@@ -252,6 +267,7 @@ h3 {
   margin: 10px auto 24px;
 }
 
+/* Filtros en cascada (elemento -> alias), solo visibles con muchos personajes */
 .panel-filtros {
   width: 100%;
   max-width: 420px;
@@ -305,6 +321,7 @@ h3 {
   letter-spacing: 0.3px;
 }
 
+/* Variante en rojo cuando el filtro no encuentra resultados */
 #contador-resultados.sin-resultados {
   background: rgba(239, 68, 68, 0.18);
   border-color: #ef4444;
@@ -385,6 +402,9 @@ h3 {
   background: #047857;
 }
 
+/* ============================================================
+   PANTALLA 2: CREAR PERSONAJE (formulario + generación masiva)
+   ============================================================ */
 #seccion-crear {
   max-width: 480px;
   margin: 0 auto;
@@ -434,6 +454,7 @@ h3 {
   margin-top: 8px;
 }
 
+/* Bloque de generación masiva, con su propia barra de progreso */
 .generacion-masiva {
   margin-top: 24px;
   padding-top: 18px;
@@ -510,6 +531,9 @@ h3 {
   margin: 0;
 }
 
+/* ============================================================
+   PANTALLA 3: ARENA DE COMBATE
+   ============================================================ */
 .campo-batalla {
   display: flex;
   justify-content: center;
@@ -646,6 +670,8 @@ h3 {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
+
+/* Un color de botón/emoji por elemento, reutilizando las variables de :root */
 .fuego {
   background: var(--fuego);
 }
@@ -673,6 +699,7 @@ h3 {
   font-family: monospace;
 }
 
+/* Animaciones cortas de golpe y daño, disparadas desde script.js */
 .ataque-jugador {
   transform: translateX(50px) scale(1.05);
 }
@@ -725,6 +752,9 @@ h3 {
   gap: 0;
 }
 
+/* ============================================================
+   BOTÓN Y MODAL DE REGLAS
+   ============================================================ */
 .rules-btn {
   background: #dc2626;
   color: white;
@@ -749,6 +779,7 @@ h3 {
   transform: translateY(0);
 }
 
+/* Overlay oscuro; se activa/desactiva con la clase "activo" desde el JS */
 .modal-reglas {
   display: none;
   position: fixed;
@@ -861,6 +892,9 @@ h3 {
   margin-top: 20px;
 }
 
+/* ============================================================
+   RESPONSIVE: tablets (<=768px) y celulares (<=480px)
+   ============================================================ */
 @media (max-width: 768px) {
   *,
   *::before,
