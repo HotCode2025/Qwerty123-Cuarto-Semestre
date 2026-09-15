@@ -1,0 +1,28 @@
+{
+	"name": "PERN",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/index.js",
+	"scripts": {
+		"dev":"nodemon .",
+		"start": "node ."
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"cookie-parser": "^1.4.7",
+		"cors": "^2.8.6",
+		"express": "^5.2.1",
+		"express-promise-router": "^4.1.1",
+		"jsonwebtoken": "^9.0.3",
+		"md5": "^2.3.0",
+		"morgan": "^1.12.1",
+		"pg": "^8.23.0",
+		"zod": "^4.6.5"
+	},
+	"devDependencies": {
+		"eslint": "^10.10.0",
+		"nodemon": "^3.1.14"
+	}
+}
