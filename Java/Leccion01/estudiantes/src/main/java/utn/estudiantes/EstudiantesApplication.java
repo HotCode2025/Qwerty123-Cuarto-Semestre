@@ -24,7 +24,6 @@ public class EstudiantesApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         logger.info("iniciando la aplicación...");
-        // levantar la fábrica de Spring
         SpringApplication.run(EstudiantesApplication.class, args);
         logger.info("Aplicación finalizada!");
     }
@@ -38,7 +37,7 @@ public class EstudiantesApplication implements CommandLineRunner {
             mostrarMenu();
             salir = ejecutarOpciones(consola);
             logger.info(nl);
-        } // Fin del ciclo while
+        }
     }
 
     private void mostrarMenu() {
@@ -53,16 +52,27 @@ public class EstudiantesApplication implements CommandLineRunner {
 				Eliga una opción:""");
     }
 
+    /**
+     * Lee una línea de la consola y la convierte a número entero de forma segura.
+     * Si el texto no es un número válido, devuelve null en vez de lanzar excepción.
+     */
+    private Integer leerEntero(Scanner consola, String mensaje) {
+        if (!mensaje.isEmpty())
+            logger.info(mensaje);
+        try {
+            return Integer.parseInt(consola.nextLine().trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     private boolean ejecutarOpciones(Scanner consola) {
         var salir = false;
-        int opcion;
 
-        // NUEVO: manejamos la excepción si se ingresa algo que no es un número (ej. una letra)
-        try {
-            opcion = Integer.parseInt(consola.nextLine());
-        } catch (NumberFormatException e) {
+        Integer opcion = leerEntero(consola, "");
+        if (opcion == null) {
             logger.info("Opcion invalida. Intente nuevamente." + nl);
-            return salir; // corta acá y vuelve a mostrar el menú (salir sigue siendo false)
+            return salir;
         }
 
         switch (opcion) {
@@ -71,9 +81,12 @@ public class EstudiantesApplication implements CommandLineRunner {
                 List<Estudiantes2022> estudiantes = estudianteServicio.listarEstudiantes();
                 estudiantes.forEach((estudiante -> logger.info(estudiante.toString() + nl)));
             }
-            case 2 -> { // Buscar estudainte por id
-                logger.info("Digite el id estudiante a buscar: ");
-                var idEstudiante = Integer.parseInt(consola.nextLine());
+            case 2 -> { // Buscar estudiante por id
+                Integer idEstudiante = leerEntero(consola, "Digite el id estudiante a buscar: ");
+                if (idEstudiante == null) {
+                    logger.info("Id invalido, debe ser un número." + nl);
+                    break;
+                }
                 Estudiantes2022 estudiante = estudianteServicio.buscarEstudiantePorId(idEstudiante);
                 if (estudiante != null)
                     logger.info("Estudiante encontrado: " + estudiante + nl);
@@ -91,7 +104,6 @@ public class EstudiantesApplication implements CommandLineRunner {
                 var telefono = consola.nextLine();
                 logger.info("Email: ");
                 var email = consola.nextLine();
-                // Crear el objeto estudiante sin el id
                 var estudiante = new Estudiantes2022();
                 estudiante.setNombre(nombre);
                 estudiante.setApellido(apellido);
@@ -102,9 +114,11 @@ public class EstudiantesApplication implements CommandLineRunner {
             }
             case 4 -> { // Modificar estudiante
                 logger.info("Modificar estudiante: " + nl);
-                logger.info("Ingrese el id estudiante: ");
-                var idEstudiante = Integer.parseInt(consola.nextLine());
-                // buscamos el estudiante a modificar
+                Integer idEstudiante = leerEntero(consola, "Ingrese el id estudiante: ");
+                if (idEstudiante == null) {
+                    logger.info("Id invalido, debe ser un número." + nl);
+                    break;
+                }
                 Estudiantes2022 estudiante = estudianteServicio.buscarEstudiantePorId(idEstudiante);
                 if (estudiante != null) {
                     logger.info("Nombre: ");
@@ -124,19 +138,18 @@ public class EstudiantesApplication implements CommandLineRunner {
                 } else
                     logger.info("Estudiante NO encontrado con el id: " + idEstudiante + nl);
             }
-            //ELIMINAR ESTUDIANTE
-            case 5 -> {
-                logger.info("Digite el id del estudiante que quiere eliminar: "+nl);
-                var idEstudiante = Integer.parseInt(consola.nextLine());
-
-                var estudiante = estudianteServicio.buscarEstudiantePorId(idEstudiante);
-
-                if(estudiante != null){
-                    estudianteServicio.eliminarEstudiante(estudiante);
-                    logger.info("Estudiante eliminado: "+estudiante+nl);
+            case 5 -> { // Eliminar estudiante
+                Integer idEstudiante = leerEntero(consola, "Digite el id del estudiante que quiere eliminar: " + nl);
+                if (idEstudiante == null) {
+                    logger.info("Id invalido, debe ser un número." + nl);
+                    break;
                 }
-                else
-                    logger.info("Estudiante NO encontrado con id: "+idEstudiante+nl);
+                var estudiante = estudianteServicio.buscarEstudiantePorId(idEstudiante);
+                if (estudiante != null) {
+                    estudianteServicio.eliminarEstudiante(estudiante);
+                    logger.info("Estudiante eliminado: " + estudiante + nl);
+                } else
+                    logger.info("Estudiante NO encontrado con id: " + idEstudiante + nl);
             }
 
             case 6 -> {
