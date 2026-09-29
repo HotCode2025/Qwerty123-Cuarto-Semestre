@@ -5,12 +5,15 @@ import org.springframework.stereotype.Component;
 import utn.tienda_libros.servicio.LibroServicio;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 @Component
 public class LibroFrom extends JFrame {
     private JPanel panel;
+    private JTable tablaLibros;
     private final LibroServicio libroServicio;
+    private DefaultTableModel tablaModeloLibros;
 
     @Autowired
     public LibroFrom(LibroServicio libroServicio) {
@@ -28,5 +31,9 @@ public class LibroFrom extends JFrame {
         int x = (tamanioPantalla.width - getWidth()/2);
         int y = (tamanioPantalla.height - getHeight()/2);
         setLocation(x,y);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }
