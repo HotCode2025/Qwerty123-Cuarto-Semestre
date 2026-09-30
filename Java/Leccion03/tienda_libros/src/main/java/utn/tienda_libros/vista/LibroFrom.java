@@ -40,4 +40,22 @@ public class LibroFrom extends JFrame {
         // Instanciar el objeto de JTable
         this.tablaLibros = new JTable(tablaModeloLibros);
     }
+
+        private void listarLibros(){
+        //LIMPIAR TABLA
+        tablaModeloLibros.setRowCount(0);
+        //OBTENER LIBROS DE LA BASE DE DATOS
+        var libros = libroServicio.listarLibros();
+        //ITERAMOS EL LIBRO
+        libros.forEach((libro) -> {
+            Object [] renglonLibro = {
+                    libro.getIdLibro(),
+                    libro.getNombreLibro(),
+                    libro.getAutor(),
+                    libro.getPrecio(),
+                    libro.getExistencias()
+            };
+            this.tablaModeloLibros.addRow(renglonLibro);
+        });
+    }
 }
