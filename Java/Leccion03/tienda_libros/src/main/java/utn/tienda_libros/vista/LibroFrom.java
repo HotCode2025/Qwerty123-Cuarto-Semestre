@@ -19,6 +19,7 @@ public class LibroFrom extends JFrame {
     public LibroFrom(LibroServicio libroServicio) {
         this.libroServicio = libroServicio;
         iniciarForma();
+        listarLibros();
     }
 
     private void iniciarForma() {
