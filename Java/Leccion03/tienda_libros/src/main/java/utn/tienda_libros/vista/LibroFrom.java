@@ -7,6 +7,8 @@ import utn.tienda_libros.servicio.LibroServicio;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @Component
 public class LibroFrom extends JFrame {
@@ -16,6 +18,7 @@ public class LibroFrom extends JFrame {
     private JTextField autorTexto;
     private JTextField precioTexto;
     private JTextField existenciasTexto;
+    private JButton agregarButton;
     private final LibroServicio libroServicio;
     private DefaultTableModel tablaModeloLibros;
 
@@ -24,6 +27,9 @@ public class LibroFrom extends JFrame {
         this.libroServicio = libroServicio;
         iniciarForma();
         listarLibros();
+        agregarButton.addActionListener(e -> {
+
+        });
     }
 
     private void iniciarForma() {
