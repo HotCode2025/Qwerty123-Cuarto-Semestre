@@ -10,10 +10,9 @@ export const crearTarea = async(req,res, next)=> {
 
     
     try {   
-        throw new Error('Algo salió mal');
-        const {rows} = await pool.query('INSERT INTO tareas (titulo, descripcion) VALUES ($1, $2)', [titulo,descripcion]);
-        console.log(rows);
-        res.send(`creando tarea`);    
+        const result = await pool.query('INSERT INTO tareas (titulo, descripcion) VALUES ($1, $2) RETURNING *', [titulo,descripcion]);
+        res.json(result.rows[0]);
+        console.log(result.rows[0]);
     } catch (error) {
         if (error.code === '23505') {
             return res.send({ error: 'La tarea ya existe' });
