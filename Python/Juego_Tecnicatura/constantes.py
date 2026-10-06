@@ -9,4 +9,4 @@ SCREEN_HEIGHT = 600
 COLOR_LASER = (0,0,255) # azul
 
 # Ruta a la carpeta assets
-ASSETS_PATH = os.path.join(os.path.dirname(__file__), 'assets')
+ASSETS_PATH = os.path.join(os.path.dirname(__file__), 'assets_1')
