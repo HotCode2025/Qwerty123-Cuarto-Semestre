@@ -58,7 +58,7 @@ class Laser:
         self.rect = self.image.get_rect(center=(x, y))
 
     def mover(self):
-        self.rect.y -= 10  # Velocidad del láser
+        self.rect.y -= 5  # Velocidad del láser
 
     def dibujar(self, screen):
         screen.blit(self.image, self.rect.topleft)

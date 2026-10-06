@@ -9,8 +9,8 @@ class Explosion:
         self.index = 0
         self.image = self.images[self.index]
         self.rect = self.image.get_rect(center=(x, y))
-        self.frame_rate = 0
-        self.max_frames = 20
+        self.frame_rate = 0         # Contador de frames para la animación
+        self.max_frames = 20        # Frames por imagen de la animacion
 
     def actualizar(self):
         # Actualiza la animación
