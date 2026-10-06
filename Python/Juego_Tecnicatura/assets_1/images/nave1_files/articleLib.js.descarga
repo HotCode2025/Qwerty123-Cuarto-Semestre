@@ -1,0 +1,115 @@
+function openStore() {
+    var iWidth = 1100;
+    var iHeight = 700;
+    var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+    var position =
+        "width=" +
+        iWidth +
+        ",height=" +
+        iHeight +
+        ",top=" +
+        iTop +
+        ",left=" +
+        iLeft;
+    var url = "";
+
+    if (/Edg/.test(window.navigator.userAgent)) {
+        url =
+            "https://microsoftedge.microsoft.com/addons/detail/awesome-screenshot-scre/gpmljinohlbfgmeoaeceoajachkabijo";
+    } else {
+        url =
+            "https://chrome.google.com/webstore/detail/awesome-screenshot-screen/nlipoenfbbikpbjkfpfillcgkoblgpmj";
+    }
+
+    window.open(url, "Install Awesome Screenshot", position);
+}
+
+function gTag() {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(arguments);
+}
+
+function isEdgeBrowser() {
+    return /Edg/.test(window.navigator.userAgent);
+}
+
+function isChromeBrowser() {
+    return /Chrome/.test(window.navigator.userAgent);
+}
+
+function isCNArea() {
+    return (
+        window.navigator.languages
+            .map((lang) => lang.replace("-", "_").toLowerCase())
+            .includes("zh_cn") && new Date().getTimezoneOffset() == -480
+    );
+}
+
+function isMobile() {
+    var mobileRE =
+        /(android|bb\d+|meego).+mobile|armv7l|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series[46]0|samsungbrowser.*mobile|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i;
+    var notMobileRE = /CrOS/;
+
+    var tabletRE = /android|ipad|playbook|silk/i;
+    var ua = window.navigator.userAgent;
+
+    var result =
+        (mobileRE.test(ua) && !notMobileRE.test(ua)) || tabletRE.test(ua);
+
+    if (
+        !result &&
+        navigator &&
+        navigator.maxTouchPoints > 1 &&
+        ua.indexOf("Macintosh") !== -1 &&
+        ua.indexOf("Safari") !== -1
+    ) {
+        result = true;
+    }
+
+    return result;
+}
+
+function canReachGoogle() {
+    return new Promise((resolve) => {
+        const xhr = new XMLHttpRequest();
+        xhr.timeout = 1200;
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState > 2) {
+                resolve(true);
+            }
+        };
+        xhr.onerror = xhr.ontimeout = function () {
+            resolve(false);
+        };
+        xhr.open("GET", "https://google.com");
+        xhr.send();
+    });
+}
+
+function goToLandPage(source, p1, p2, isLearnMore) {
+    var url = "https://sider.ai/ad-land-redirect";
+    if (isLearnMore) {
+        url = "https://sider.ai";
+    } else if (
+        isMobile() ||
+        (!isEdgeBrowser() && isCNArea())
+    ) {
+        url = "https://sider.ai/app-download";
+    }
+
+    url = `${url}?source=${source}&p1=${p1}&p2=${p2}`;
+    window.open(url);
+}
+
+// (function () {
+//     if (/Edg/.test(window.navigator.userAgent)) {
+//         var adBtnsText = document.getElementsByClassName(
+//             "w-e-rich-ad-card-browser-name"
+//         );
+
+//         for (var i = 0; i < adBtnsText.length; i++) {
+//             adBtnsText[i].innerText = "Edge";
+//         }
+//     }
+// })();
