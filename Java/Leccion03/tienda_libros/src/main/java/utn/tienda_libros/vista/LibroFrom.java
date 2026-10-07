@@ -35,6 +35,14 @@ public class LibroFrom extends JFrame {
         agregarButton.addActionListener(e -> agregarLibro());
     }
 
+        tablaLibros.addMouseListener(new MouseAdapter() {
+             @Override
+             public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cargarLibroSeleccionado();
+    }
+});
+
     private void iniciarForma() {
         setContentPane(panel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,6 +79,10 @@ public class LibroFrom extends JFrame {
         mostrarMensaje("Se agrego el libro...");
         limpiarFormulario();
         listarLibros();
+    }
+
+    private void cargarLibroSeleccionado() {
+        //Los indices de las columnas inician en 0
     }
 
     private void limpiarFormulario() {
