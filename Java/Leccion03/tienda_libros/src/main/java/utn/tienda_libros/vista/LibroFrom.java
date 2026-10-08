@@ -120,6 +120,17 @@ public class LibroFrom extends JFrame {
                 return;
             }
             // si la caja del libro texto esta vacia le decimos que digite el nombre del libro
+            // Llenamos el objeto libro a actulizar
+            int idLibro = Integer.parseInt(idTexto.getText());
+            var nombreLibro = libroTexto.getText();
+            var autor = autorTexto.getText();
+            var precio = Double.parseDouble(precioTexto.getText());
+            var existencias = Integer.parseInt(existenciasTexto.getText());
+            var libro = new Libro(idLibro, nombreLibro, autor, precio, existencias);
+            libroServicio.guardarLibro(libro);
+            mostrarMensaje("Se modifico el libro...");
+            limpiarFormulario();;
+            listarLibros();
         }
     }
 
