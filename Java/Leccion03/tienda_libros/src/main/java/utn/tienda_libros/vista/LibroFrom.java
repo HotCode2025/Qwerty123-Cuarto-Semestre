@@ -10,6 +10,10 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Locale;
 
 @Component
@@ -34,15 +38,18 @@ public class LibroFrom extends JFrame {
         $$$setupUI$$$();
         iniciarForma();
         agregarButton.addActionListener(e -> agregarLibro());
-    }
+        modificarButton.addActionListener(e -> modificarLibro());
+
 
         tablaLibros.addMouseListener(new MouseAdapter() {
-             @Override
-             public void mouseClicked(MouseEvent e) {
+            @Override
+            public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 cargarLibroSeleccionado();
+            }
+        });
     }
-});
+
 
     private void iniciarForma() {
         setContentPane(panel);
@@ -98,6 +105,21 @@ public class LibroFrom extends JFrame {
             existenciasTexto.setText(existencias);
 
 
+        }
+    }
+
+    private void modificarLibro(){
+        if(this.idTexto.getText().equals("")){
+            mostrarMensaje(" debes seleccionar un registro un registro en la tabla");
+        }
+        else {
+            // Verificamos que nombre del libro no sea nulo
+            if(libroTexto.getText().equals("")){
+                mostrarMensaje("Digite el nombre del libro...");
+                libroTexto.requestFocusInWindow();
+                return;
+            }
+            // si la caja del libro texto esta vacia le decimos que digite el nombre del libro
         }
     }
 
