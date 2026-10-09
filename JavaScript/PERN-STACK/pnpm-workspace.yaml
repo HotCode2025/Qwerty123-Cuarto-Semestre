@@ -1,0 +1,2 @@
+allowBuilds:
+  bcrypt: set this to true or false
