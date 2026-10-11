@@ -9,4 +9,10 @@ SCREEN_HEIGHT = 600
 COLOR_LASER = (0,0,255) # azul
 
 # Ruta a la carpeta assets
-ASSETS_PATH = os.path.join(os.path.dirname(__file__), 'assets_1')
+ASSETS_PTAH = os.path.join(os.path.dirname(__file__), 'assets_1')
+
+#Rutas de Los archivos
+IMPERIAL_MARCH_PATH = f'{ASSETS_PTAH}/sounds/ Imperial March - kenobi.mp3'
+START_IMAGE_PATH = f'{ASSETS_PTAH}/images/inicio/star.png'
+ESTRELLA_PATH = f'{ASSETS_PTAH}/images/inicio/estrella'
+FONDO1_PATH =f'{ASSETS_PTAH}/images/fondo1.jpg'

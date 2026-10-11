@@ -88,13 +88,13 @@ def main() :
 
         keys = pygame.key.get_pressed ( )
         dx , dy = 0 , 0
-        if keys [ pygame.K_LEFT ] :
+        if keys [ pygame.K_LEFT ] : #Tecla hacia la derecha
             dx = -5
-        if keys [ pygame.K_RIGHT ] :
+        if keys [ pygame.K_RIGHT ] : #Tecla hacia la izquierda
             dx = 5
-        if keys [ pygame.K_UP ] :
+        if keys [ pygame.K_UP ] : #Tecla hacia arriba
             dy = -5
-        if keys [ pygame.K_DOWN ] :
+        if keys [ pygame.K_DOWN ] : #Tecla hacia abajo
             dy = 5
 
         personaje.mover ( dx , dy )
