@@ -21,6 +21,7 @@ class Personaje:
         laser = Laser(self.shape.centerx, self.shape.top)
         self.lasers.append(laser)
 
+# Si el enemigo lo toca va a disminuir la energia un 10%
     def recibir_dano(self):
         self.energia -= 10
         if self.energia <= 0:
