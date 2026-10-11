@@ -35,7 +35,6 @@ public class LibroFrom extends JFrame {
     @Autowired
     public LibroFrom(LibroServicio libroServicio) {
         this.libroServicio = libroServicio;
-        $$$setupUI$$$();
         iniciarForma();
         agregarButton.addActionListener(e -> agregarLibro());
         modificarButton.addActionListener(e -> modificarLibro());
@@ -166,6 +165,8 @@ public class LibroFrom extends JFrame {
         this.tablaModeloLibros.setColumnIdentifiers(cabecera);
         //Instanciar el objeto de JTable
         this.tablaLibros = new JTable(tablaModeloLibros);
+        // Evitamos que se seleccionen varios registros
+        tablaLibros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listarLibros();
     }
 
