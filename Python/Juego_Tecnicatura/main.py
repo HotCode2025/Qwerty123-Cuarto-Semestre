@@ -2,8 +2,9 @@ import pygame
 import sys
 import random
 import os
-from personaje import Personaje , Enemigo , Explosion
-from constantes import SCREEN_WIDTH , SCREEN_HEIGHT , ASSETS_PATH
+from personaje import Personaje, Enemigo
+from explosiones import Explosion
+from constantes import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH, IMPERIAL_MARCH_PATH
 
 
 def mostrar_imagen_inicial(screen, imagen_path, duracion):
@@ -46,6 +47,10 @@ def main() :
 
     # Definir la ruta a la imagen inicial
     imagen_inicial_path = os.path.join ( ASSETS_PATH , 'images' , 'inicio' , 'star.png' )
+
+    # Musica de inicio (Marcha Imperial) mientras se muestra la imagen
+    pygame.mixer.music.load(IMPERIAL_MARCH_PATH)
+    pygame.mixer.music.play()
 
     # Mostrar la imagen inicial durante 5 segundos
     mostrar_imagen_inicial ( screen , imagen_inicial_path , 5000 )
@@ -192,4 +197,4 @@ def main() :
 
 
 if __name__ == '__main__' :
-    main ( )
+    main ( ) 

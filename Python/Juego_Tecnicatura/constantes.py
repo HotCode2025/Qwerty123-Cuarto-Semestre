@@ -12,7 +12,7 @@ COLOR_LASER = (0,0,255) # azul
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), 'assets_1')
 
 #Rutas de Los archivos
-IMPERIAL_MARCH_PATH = f'{ASSETS_PATH}/sounds/ Imperial March - kenobi.mp3'
+IMPERIAL_MARCH_PATH = f'{ASSETS_PATH}/sounds/Imperial March - Kenobi.mp3'
 START_IMAGE_PATH = f'{ASSETS_PATH}/images/inicio/star.png'
 ESTRELLA_PATH = f'{ASSETS_PATH}/images/inicio/estrella'
 FONDO1_PATH =f'{ASSETS_PATH}/images/fondo1.jpg'
