@@ -192,9 +192,11 @@ def main() :
     # Actualizar la pantalla
     pygame.display.flip ( )
     pygame.time.wait ( 2000 )  # Mostrar GAME OVER durante 2 segundos
+
+    # Cierra todos los módulos de Pygame y finaliza el programa.
     pygame.quit ( )
     sys.exit ( )
 
-
+# Ejecuta la función principal solo si este archivo se ejecuta directamente.
 if __name__ == '__main__' :
     main ( ) 
