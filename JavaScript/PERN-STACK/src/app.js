@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import tareasRoutes from './router/tareas.routes.js';
 import authRoutes from './router/auth.routes.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -9,6 +10,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.json({ mensaje: 'Bienvenidos a mi proyecto' });
