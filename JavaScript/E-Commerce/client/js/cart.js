@@ -1,6 +1,7 @@
 const modalContainer = document.getElementById("modal-container")
 const modalOverlay = document.getElementById("modal-overlay")
 const cartBtn = document.getElementById("cart-btn")
+const cartCounter = document.getElementById("cart-counter");
 
 
 const displayCart = () => {
@@ -17,7 +18,7 @@ const displayCart = () => {
     modalHeader.append(modalClose)
 
     modalClose.addEventListener("click", () => {
-        modalContainer.style.display = "none",
+        modalContainer.style.display = "none";
             modalOverlay.style.display = "none"
     })
 
@@ -29,15 +30,14 @@ const displayCart = () => {
     modalContainer.append(modalHeader);
 
     //modal body
+    if (cart.length > 0) {
     cart.forEach((product) => {
         const modalContent = document.createElement("div");
-        modalContent.className = "modal-content";
+        modalContent.className = "product";
         modalContent.innerHTML = `
+        <img class="product-img" src="${product.img}" />
         <div class="product-info">
-            <img class="product-img" src="${product.img}" />
-            <div class="product-info">
-                <h4>${product.productName}</h4>
-            </div>
+            <h4>${product.productName}</h4>
         </div>
         <div class="quantity">
             <span class="quantity-btn-decrease">-</span>
@@ -65,23 +65,98 @@ const displayCart = () => {
         });
 
         //delete
-        const deleteProduct = modalBody.querySelector(".delete-product");
+        const deleteProduct = modalContent.querySelector(".delete-product");
 
         deleteProduct.addEventListener("click", ()=> {
             deleteCartProduct(product.id)
         })
     })
 
-    //modal footer
-    const total = cart.reduce((acc, el) => acc + el.price * el.quanty, 0);
-    
-    const modalFooter = document.createElement("div");
-    modalFooter.className = "modal-footer";
-    modalFooter.innerHTML = `
-        <div class="total-price">Total: $${total} </div>
+        //ModalFooter
+        const totalPrice = cart.reduce((acc, el) => acc + el.price * el.quanty, 0);
+        
+        const modalFooter = document.createElement("div");
+        modalFooter.className = "modal-footer";
+        modalFooter.innerHTML = `
+        <div class="modal-total">Total: ${totalPrice}</div>
+        <button class="btn-primary" id="checkout-btn">CHECKOUT</button>
+        <div id="button-checkout"></div>
+            `;
+        modalContainer.append(modalFooter);
+
+        //MERCADO PAGO BUTTON
+        const mercadopago = new MercadoPago("APP_USR-0fb259c8-cc8a-4dc5-b081-66cbd3b2da3d", {
+            locale: "es-AR"
+        });
+
+
+        const checkoutButton = modalFooter.querySelector("#checkout-btn");
+
+        checkoutButton.addEventListener("click", function () {
+            
+            checkoutButton.remove();
+
+            const orderData = {
+                items: cart.map((product) => ({
+                    productName: product.productName,
+                    price: product.price,
+                    quanty: product.quanty,
+                })),
+            };
+
+            fetch("http://localhost:8080/create_preference", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderData),
+            })
+            //Agregue un bloque catch para manejar errores de red
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error("Error en la respuesta del servidor");
+                    }
+                    return response.json();
+                })
+                .then(function (preference) {
+                    createCheckoutButton(preference.id);
+                })
+                .catch(function (error) {
+                    console.error(error);
+                    alert("Error al generar la preferencia de pago");
+                });
+
+                
+            function createCheckoutButton(preferenceId) {
+                //Initialize the checkout
+                const brickBuilder = mercadopago.bricks();
+
+                const renderComponent = async (brickBuilder) => {
+                    //if (window.checkoutButton) checkoutButton.unmount(); 
+                    await brickBuilder.create("wallet", "button-checkout", {
+                        initialization: {
+                            preferenceId: preferenceId,
+                        },
+                        callbacks: {
+                            onError: (error) => { console.error(error) },
+                            onReady: () => { },
+                        },
+                    });
+                };
+
+                window.checkoutButton = renderComponent(brickBuilder);
+            }
+        });
+
+    } else {
+        const emptyCart = document.createElement("div");
+        emptyCart.className = "empty-cart";
+        emptyCart.innerHTML = `
+        <p>Your cart is empty</p>
     `;
-    modalContainer.append(modalFooter);
-};
+        modalContainer.append(emptyCart);
+    }
+}
 
 cartBtn.addEventListener("click", displayCart)
 
@@ -90,4 +165,14 @@ const deleteCartProduct =(id)=> {
     console.log(foundID);
     cart.splice(foundID, 1);
     displayCart();
+    displayCartCounter();
+}
+const displayCartCounter = () => {
+    const cartLength = cart.reduce((acc, el) => acc + el.quanty, 0);
+    if (cartLength > 0) {
+        cartCounter.style.display = "block";
+        cartCounter.innerText = cartLength;
+    } else {
+        cartCounter.style.display = "none";
+    }
 }
