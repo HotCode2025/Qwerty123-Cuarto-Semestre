@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Locale;
 
 @Component
@@ -29,30 +31,49 @@ public class LibroFrom extends JFrame {
     private JButton agregarButton;
     private JButton modificarButton;
     private JButton eliminarButton;
+    private JButton limpiarButton;
+    private JButton salirButton;
     private DefaultTableModel tablaModeloLibros;
 
 
     @Autowired
     public LibroFrom(LibroServicio libroServicio) {
         this.libroServicio = libroServicio;
+        $$$setupUI$$$();
         iniciarForma();
         agregarButton.addActionListener(e -> agregarLibro());
         modificarButton.addActionListener(e -> modificarLibro());
         eliminarButton.addActionListener(e -> eliminarLibro());
+        limpiarButton.addActionListener(e -> limpiarFormulario());
+        salirButton.addActionListener(e -> salir());
+        // Al cerrar con la X tambien pedimos confirmacion
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                salir();
+            }
+        });
+        tablaLibros.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cargarLibroSeleccionado();
+            }
+        });
 
     }
 
 
     private void iniciarForma() {
         setContentPane(panel);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setVisible(true);
         setSize(900, 700);
         // Para obtener las dimenciones de la ventana
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension tamanioPantalla = toolkit.getScreenSize();
-        int x = (tamanioPantalla.width - getWidth() / 2);
-        int y = (tamanioPantalla.height - getHeight() / 2);
+        int x = (tamanioPantalla.width - getWidth()) / 2;
+        int y = (tamanioPantalla.height - getHeight()) / 2;
         setLocation(x, y);
     }
 
@@ -63,10 +84,14 @@ public class LibroFrom extends JFrame {
             libroTexto.requestFocusInWindow();
             return;
         }
+        // Validamos que precio y existencias sean numeros
+        if (!validarNumeros()) {
+            return;
+        }
         var nombreLibro = libroTexto.getText();
         var autor = autorTexto.getText();
-        var precio = Double.parseDouble(precioTexto.getText());
-        var existencias = Integer.parseInt(existenciasTexto.getText());
+        var precio = Double.parseDouble(precioTexto.getText().trim());
+        var existencias = Integer.parseInt(existenciasTexto.getText().trim());
 
         //Creamos el Objeto del Libro
 
@@ -84,7 +109,7 @@ public class LibroFrom extends JFrame {
     private void cargarLibroSeleccionado() {
         //Los indices de las columnas inician en 0
         var renglon = tablaLibros.getSelectedRow();
-        if (renglon != -1){
+        if (renglon != -1) {
             String idLibro = tablaLibros.getModel().getValueAt(renglon, 0).toString();
             idTexto.setText(idLibro);
             String nombreLibro = tablaLibros.getModel().getValueAt(renglon, 1).toString();
@@ -100,15 +125,18 @@ public class LibroFrom extends JFrame {
         }
     }
 
-    private void modificarLibro(){
-        if(this.idTexto.getText().equals("")){
+    private void modificarLibro() {
+        if (this.idTexto.getText().equals("")) {
             mostrarMensaje(" debes seleccionar un registro un registro en la tabla");
-        }
-        else {
+        } else {
             // Verificamos que nombre del libro no sea nulo
-            if(libroTexto.getText().equals("")){
+            if (libroTexto.getText().equals("")) {
                 mostrarMensaje("Digite el nombre del libro...");
                 libroTexto.requestFocusInWindow();
+                return;
+            }
+            // Validamos que precio y existencias sean numeros
+            if (!validarNumeros()) {
                 return;
             }
             // si la caja del libro texto esta vacia le decimos que digite el nombre del libro
@@ -116,48 +144,102 @@ public class LibroFrom extends JFrame {
             int idLibro = Integer.parseInt(idTexto.getText());
             var nombreLibro = libroTexto.getText();
             var autor = autorTexto.getText();
-            var precio = Double.parseDouble(precioTexto.getText());
-            var existencias = Integer.parseInt(existenciasTexto.getText());
+            var precio = Double.parseDouble(precioTexto.getText().trim());
+            var existencias = Integer.parseInt(existenciasTexto.getText().trim());
             var libro = new Libro(idLibro, nombreLibro, autor, precio, existencias);
             libroServicio.guardarLibro(libro);
             mostrarMensaje("Se modifico el libro...");
-            limpiarFormulario();;
+            limpiarFormulario();
+            ;
             listarLibros();
         }
     }
+
     private void eliminarLibro() {
         var renglon = tablaLibros.getSelectedRow();
-        if (renglon != -1){
+        if (renglon != -1) {
             String idLibro = tablaLibros.getModel().getValueAt(renglon, 0).toString();
+            String nombreLibro = tablaLibros.getModel().getValueAt(renglon, 1).toString();
+            // Pedimos confirmacion antes de eliminar
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    "¿Seguro que querés eliminar el libro \"" + nombreLibro + "\"?",
+                    "Eliminar libro", JOptionPane.YES_NO_OPTION);
+            if (respuesta != JOptionPane.YES_OPTION) {
+                return;
+            }
             var libro = new Libro();
             libro.setIdLibro(Integer.parseInt(idLibro));
             libroServicio.eliminarLibro(libro);
-            mostrarMensaje("Libro "+ idLibro + " ELIMINADO");
+            mostrarMensaje("Libro " + idLibro + " ELIMINADO");
             limpiarFormulario();
             listarLibros();
-        }
-        else {
+        } else {
             mostrarMensaje("No se seleccionado ningun libro de la tabla a eliminar");
         }
     }
 
     private void limpiarFormulario() {
+        idTexto.setText("");
         libroTexto.setText("");
         autorTexto.setText("");
         precioTexto.setText("");
         existenciasTexto.setText("");
+        tablaLibros.clearSelection();
+    }
+
+    private boolean validarNumeros() {
+        // El precio puede tener decimales, ej: 450.50
+        try {
+            var precio = Double.parseDouble(precioTexto.getText().trim());
+            if (precio < 0) {
+                mostrarError("El precio no puede ser negativo");
+                precioTexto.requestFocusInWindow();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("El precio debe ser un número.\nEjemplo: 450 o 450.50");
+            precioTexto.requestFocusInWindow();
+            return false;
+        }
+        // Las existencias solo pueden ser numeros enteros
+        try {
+            var existencias = Integer.parseInt(existenciasTexto.getText().trim());
+            if (existencias < 0) {
+                mostrarError("Las existencias no pueden ser negativas");
+                existenciasTexto.requestFocusInWindow();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("Las existencias deben ser un número entero.\nEjemplo: 30");
+            existenciasTexto.requestFocusInWindow();
+            return false;
+        }
+        return true;
+    }
+
+    private void salir() {
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "¿Seguro que querés salir de la aplicación?",
+                "Salir", JOptionPane.YES_NO_OPTION);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }
 
     private void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     private void createUIComponents() {
         idTexto = new JTextField("");
         idTexto.setVisible(false);
-        this.tablaModeloLibros = new DefaultTableModel(0, 5){
+        this.tablaModeloLibros = new DefaultTableModel(0, 5) {
             @Override
-            public boolean isCellEditable(int row, int column){
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
@@ -167,6 +249,8 @@ public class LibroFrom extends JFrame {
         this.tablaLibros = new JTable(tablaModeloLibros);
         // Evitamos que se seleccionen varios registros
         tablaLibros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        // Color de la cabecera de la tabla
+        tablaLibros.getTableHeader().setBackground(new Color(181, 212, 244));
         listarLibros();
     }
 
@@ -204,10 +288,14 @@ public class LibroFrom extends JFrame {
         final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
         panel.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
+        label1.setBackground(new Color(-15179867));
         Font label1Font = this.$$$getFont$$$(null, Font.BOLD, 28, label1.getFont());
         if (label1Font != null) label1.setFont(label1Font);
+        label1.setForeground(new Color(-1));
+        label1.setHorizontalAlignment(0);
+        label1.setOpaque(true);
         label1.setText("Tienda de Libros");
-        panel.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 5, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 60), null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer2 = new com.intellij.uiDesigner.core.Spacer();
         panel.add(spacer2, new com.intellij.uiDesigner.core.GridConstraints(1, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
@@ -251,17 +339,33 @@ public class LibroFrom extends JFrame {
         final com.intellij.uiDesigner.core.Spacer spacer3 = new com.intellij.uiDesigner.core.Spacer();
         panel.add(spacer3, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel6 = new JPanel();
-        panel6.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), 10, -1, true, false));
+        panel6.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 5, new Insets(0, 0, 0, 0), 10, -1, true, false));
         panel.add(panel6, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         agregarButton = new JButton();
+        agregarButton.setBackground(new Color(-12882671));
+        agregarButton.setForeground(new Color(-1));
         agregarButton.setText("Agregar");
         panel6.add(agregarButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         modificarButton = new JButton();
+        modificarButton.setBackground(new Color(-15179867));
+        modificarButton.setForeground(new Color(-1));
         modificarButton.setText("Modificar");
         panel6.add(modificarButton, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         eliminarButton = new JButton();
+        eliminarButton.setBackground(new Color(-6083283));
+        eliminarButton.setForeground(new Color(-1));
         eliminarButton.setText("Eliminar");
         panel6.add(eliminarButton, new com.intellij.uiDesigner.core.GridConstraints(1, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        limpiarButton = new JButton();
+        limpiarButton.setBackground(new Color(-8040693));
+        limpiarButton.setForeground(new Color(-1));
+        limpiarButton.setText("Limpiar");
+        panel6.add(limpiarButton, new com.intellij.uiDesigner.core.GridConstraints(1, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        salirButton = new JButton();
+        salirButton.setBackground(new Color(-10527142));
+        salirButton.setForeground(new Color(-1));
+        salirButton.setText("Salir");
+        panel6.add(salirButton, new com.intellij.uiDesigner.core.GridConstraints(1, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer4 = new com.intellij.uiDesigner.core.Spacer();
         panel6.add(spacer4, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer5 = new com.intellij.uiDesigner.core.Spacer();
