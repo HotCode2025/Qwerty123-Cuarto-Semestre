@@ -34,3 +34,5 @@ Cuando ejecutas python -m venv mi_entorno, Python crea una estructura física de
 • bin/ o Scripts/: Contiene los scripts de activación (activate) para diferentes terminales (Bash, PowerShell) y copias (o enlaces simbólicos) de los ejecutables python, pip, etc.
 • lib/ o Lib/site-packages/: Es el almacén aislado. Cada vez que haces pip install, los archivos del código fuente de esa librería se descargan y descomprimen estrictamente aquí.
 Al desactivar el entorno, la variable PATH de tu terminal simplemente se restaura a su estado original, devolviéndote al entorno global.
+
+
