@@ -34,16 +34,20 @@ function hablar(callBackHablar){
     }, 1000)
 }
 
-function adios(nombre,otroCallback){
-    setTimeout(function(){
-        console.log("Adios "+nombre);
-        otroCallback();
-    },1500)//AGREGAMOS 1,5 seg
-}
+function adios(nombre){
+    return new Promise((resolve, reject)=>{
+        setTimeout(function(){
+            console.log("Adios "+ nombre);
+            resolve();
+    },1000) ;//AGREGAMOS 1 seg
+ }) 
 
+}
+// Llamamos a la funcion 
 console.log("Iniciando proceso...")
 
 hola("Javier")
+    .then(adios)
     .then((nombre)=>{
         console.log("Terminando proceso");
     })
