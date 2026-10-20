@@ -1,6 +1,6 @@
 # Comandos usados por el profesor Ariel al crear un repositorio
 
-```sh
+```bash
 mkdir py-project
 cd py-project
 git clone httpps://...
@@ -27,3 +27,36 @@ which python3 #Donde esta la ruta
 which pip
 ```
 *No vamos a crear un repositorio nuevo,pero dejamos constancia de lo que hizo el profesor con WLS*
+
+## Mas comandos usados por el profesor
+
+```bash
+sudo apt install -y python3-venv #Esto es para crear el entorno en WLS o Linux
+cd app
+pwd
+python3 -m venv env #Creamos el entorno
+source env/bin/activate # Activacion del entorno
+deactivate #Desactivamos el entorno
+source env/bin/activate
+which python3
+```
+Aqui creado el entorno,nos va a retornar la ubicacion de la carpeta donde esta activada el entorno
+*Para esto sirven los entornos*
+
+```bash
+which pip3
+pip3 freeze
+pip3 install matplotlib
+source .venv/bin/activate
+```
+### ACLARACION
+Si se trabaja desde linux es asi como se activa
+
+Pero si se trabaja desde una terminal basada en bash en Windows
+```bash
+source .venv/Scripts/activate
+```
+*Terminal cmd o PowerShell*
+```sh
+.venv\Scripts\activate
+```
