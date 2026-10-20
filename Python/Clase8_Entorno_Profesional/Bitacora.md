@@ -1,4 +1,7 @@
 # Comandos usados por el profesor Ariel al crear un repositorio
+Estos comandos fueron usados para darles entornos virtuales a:
+
+## clase 05 -> Entornos Profesionales -> app
 
 ```bash
 mkdir py-project
@@ -59,4 +62,14 @@ source .venv/Scripts/activate
 *Terminal cmd o PowerShell*
 ```sh
 .venv\Scripts\activate
+```
+
+## Clase 04 -> Entornos Profesionales -> game
+
+```bash
+python3 -m venv env
+ll
+source env/bin/activate
+pip3 freeze #VEMOS LAS LIBRERIAS O MODULOS EN EL ENTORNO
+pip3 install matplotlib ==3.5.0 #INSTALAMOS UNA VERSION ESPECIFICA
 ```
