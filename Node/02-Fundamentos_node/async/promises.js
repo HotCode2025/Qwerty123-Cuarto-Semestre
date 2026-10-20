@@ -18,11 +18,13 @@ Para consumir o trabajar con el resultado de una promesa se utilizan varios mét
 */ 
 
 
-function hola(nombre,miCallback){
-    setTimeout(function(){
+function hola(nombre){
+    return new Promise(function(resolve, reject){
+        setTimeout(function(){
         console.log("Hola "+nombre)
-        miCallback(nombre)
-    }, 1000)//AGREGAMOS 1 seg 
+        resolve(nombre)
+    }, 1000);//AGREGAMOS 1 seg 
+});
 }
 
 function hablar(callBackHablar){
@@ -38,3 +40,10 @@ function adios(nombre,otroCallback){
         otroCallback();
     },1500)//AGREGAMOS 1,5 seg
 }
+
+console.log("Iniciando proceso...")
+
+hola("Javier")
+    .then((nombre)=>{
+        console.log("Terminando proceso");
+    })
