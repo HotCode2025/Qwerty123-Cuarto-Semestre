@@ -325,6 +325,12 @@ const seccionCombate     = document.getElementById('seccion-combate');
 const seccionMensajes    = document.getElementById('seccion-mensajes');
 const seccionReiniciar   = document.getElementById('seccion-reiniciar');
 
+// Mapa de encuentro: sección contenedora y el <canvas> donde se dibuja
+const sectionVerMapa = document.getElementById('ver-mapa');
+const mapa = document.getElementById('mapa');
+let lienzo = mapa.getContext("2d"); // vamos a trabajar en 2 dimensiones
+// el lienzo nos permite dibujar dentro del canvas
+
 const btnPersonaje  = document.getElementById('btn-personaje');
 const btnReiniciar  = document.getElementById('btn-reiniciar');
 const textoResultado = document.getElementById('texto-resultado');
@@ -599,9 +605,28 @@ function prepararPantallaArena() {
     seccionSeleccionar.classList.add('oculto');
     const seccionCrear = document.getElementById('seccion-crear');
     if (seccionCrear) seccionCrear.classList.add('oculto');
-    seccionCombate.classList.remove('oculto');
-    seccionMensajes.classList.remove('oculto');
+    // Por ahora, en lugar de la arena de combate mostramos el mapa
+    //seccionCombate.classList.remove('oculto');
+    //seccionMensajes.classList.remove('oculto');
     seccionReiniciar.classList.remove('oculto');
+    sectionVerMapa.style.display = 'flex';
+
+    // Primera prueba del canvas: un rectángulo en x=5, y=15, de 20 de ancho y 40 de alto
+    //lienzo.fillRect(5, 15, 20, 40);
+
+    // Dibujamos la imagen del personaje elegido dentro del canvas.
+    // Esperamos al onload para que la imagen esté cargada antes de dibujarla.
+    let imagenDelPersonaje = new Image();
+    imagenDelPersonaje.onload = () => {
+        lienzo.drawImage(
+            imagenDelPersonaje,
+            20,   // x
+            40,   // y
+            100,  // ancho
+            100   // alto
+        );
+    };
+    imagenDelPersonaje.src = jugador.imagen;
 
     // Reset visual de vidas/barras al entrar a la arena
     textoResultado.innerHTML = "¡La batalla ha comenzado!";
@@ -661,6 +686,8 @@ function volverAJugar() {
     seccionCombate.classList.add('oculto');
     seccionMensajes.classList.add('oculto');
     seccionReiniciar.classList.add('oculto');
+    sectionVerMapa.style.display = 'none';
+    lienzo.clearRect(0, 0, mapa.width, mapa.height);
 
     const seccionCrear = document.getElementById('seccion-crear');
     if (seccionCrear) seccionCrear.classList.add('oculto');
@@ -803,6 +830,7 @@ function verificarEstadoFinal() {
 // selección lista (dropdown poblado, filtros reseteados, panel de filtros
 // oculto o visible según la cantidad de personajes disponibles).
 // =============================================================================
+sectionVerMapa.style.display = 'none'; // el mapa arranca oculto
 resetearFiltrosCascada();
 renderizarPersonajes();
 aplicarFiltroPersonajes();
