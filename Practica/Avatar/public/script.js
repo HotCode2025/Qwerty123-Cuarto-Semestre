@@ -347,6 +347,11 @@ const mapa = document.getElementById('mapa');
 let lienzo = mapa.getContext("2d"); // vamos a trabajar en 2 dimensiones
 // el lienzo nos permite dibujar dentro del canvas
 let intervalo; // guarda el setInterval que repinta el mapa constantemente
+let personajeJugadorObjeto; // objeto Avatar del personaje elegido que se mueve en el mapa
+
+// Imagen de fondo del mapa (debe existir en la carpeta imagenes)
+let mapaBackground = new Image();
+mapaBackground.src = './imagenes/mapa.jpg';
 
 const btnPersonaje  = document.getElementById('btn-personaje');
 const btnReiniciar  = document.getElementById('btn-reiniciar');
@@ -626,11 +631,11 @@ function prepararPantallaArena() {
     //seccionCombate.classList.remove('oculto');
     //seccionMensajes.classList.remove('oculto');
     seccionReiniciar.classList.remove('oculto');
+    // Recién acá (con jugador y enemigo ya elegidos) mostramos e iniciamos el
+    // mapa, así las variables no quedan en undefined
     sectionVerMapa.style.display = 'flex';
 
-    // Repintamos el mapa cada 50 milisegundos para ver el movimiento
-    clearInterval(intervalo);
-    intervalo = setInterval(pintarPersonaje, 50);
+    iniciarMapa();
 
     // Reset visual de vidas/barras al entrar a la arena
     textoResultado.innerHTML = "¡La batalla ha comenzado!";
@@ -834,55 +839,126 @@ function verificarEstadoFinal() {
 // =============================================================================
 
 /**
- * Se ejecuta constantemente (setInterval). Actualiza la posición del jugador
- * según su velocidad, limpia el canvas y lo vuelve a dibujar.
+ * Prepara el mapa: define el tamaño del canvas, obtiene el objeto del
+ * personaje elegido, arranca el repintado cada 50 ms y escucha el teclado.
  */
-function pintarPersonaje() {
-    jugador.x = jugador.x + jugador.velocidadX; // actualizamos según la velocidad
-    jugador.y = jugador.y + jugador.velocidadY;
+function iniciarMapa() {
+    mapa.width = 320;  // ancho del canvas
+    mapa.height = 240; // alto del canvas
+
+    personajeJugadorObjeto = obtenerObjetoPersonaje();
+    // Lo ubicamos en la posición inicial y quieto (por si ya se usó antes)
+    personajeJugadorObjeto.x = 20;
+    personajeJugadorObjeto.y = 30;
+    personajeJugadorObjeto.velocidadX = 0;
+    personajeJugadorObjeto.velocidadY = 0;
+
+    clearInterval(intervalo);
+    intervalo = setInterval(pintarCanvas, 50);
+
+    window.addEventListener('keydown', sePresionoUnaTecla); // escucha cuando se presiona una tecla
+    window.addEventListener('keyup', detenerMovimiento);    // al soltarla, se detiene el movimiento
+}
+
+/**
+ * Recorre los personajes disponibles y retorna el objeto completo del
+ * personaje que coincide con el elegido por el jugador.
+ * @returns {Avatar} objeto del personaje seleccionado
+ */
+function obtenerObjetoPersonaje() {
+    for (let i = 0; i < personajesDisponibles.length; i++) {
+        if (jugador.id === personajesDisponibles[i].id) {
+            return personajesDisponibles[i];
+        }
+    }
+}
+
+/**
+ * Se ejecuta constantemente (setInterval). Actualiza la posición del
+ * personaje según su velocidad, limpia el canvas y vuelve a dibujar todo:
+ * primero el fondo del mapa y encima el personaje.
+ */
+function pintarCanvas() {
+    personajeJugadorObjeto.x = personajeJugadorObjeto.x + personajeJugadorObjeto.velocidadX; // actualizamos según la velocidad
+    personajeJugadorObjeto.y = personajeJugadorObjeto.y + personajeJugadorObjeto.velocidadY;
 
     lienzo.clearRect(0, 0, mapa.width, mapa.height); // limpiamos el canvas
 
+    // Fondo: arranca en la esquina superior izquierda (0, 0) y ocupa todo el canvas
+    if (mapaBackground.complete && mapaBackground.naturalWidth > 0) {
+        lienzo.drawImage(
+            mapaBackground,
+            0,
+            0,
+            mapa.width,
+            mapa.height
+        );
+    }
+
     // Si el personaje no tiene foto (creado a mano), dibujamos un rectángulo
-    if (!jugador.imagen) {
-        lienzo.fillRect(jugador.x, jugador.y, jugador.ancho, jugador.alto);
+    if (!personajeJugadorObjeto.imagen) {
+        lienzo.fillRect(personajeJugadorObjeto.x, personajeJugadorObjeto.y, personajeJugadorObjeto.ancho, personajeJugadorObjeto.alto);
         return;
     }
 
     lienzo.drawImage(
-        jugador.mapaFoto,
-        jugador.x,
-        jugador.y,
-        jugador.ancho,
-        jugador.alto
+        personajeJugadorObjeto.mapaFoto,
+        personajeJugadorObjeto.x,
+        personajeJugadorObjeto.y,
+        personajeJugadorObjeto.ancho,
+        personajeJugadorObjeto.alto
     );
 }
 
 // Las funciones de movimiento solo cambian la velocidad; el que mueve y
-// dibuja al personaje es pintarPersonaje(), que se ejecuta cada 50 ms.
+// dibuja al personaje es pintarCanvas(), que se ejecuta cada 50 ms.
 function moverDerecha() {
-    jugador.velocidadX = 5;
+    personajeJugadorObjeto.velocidadX = 5;
 }
 
 function moverIzquierda() {
-    jugador.velocidadX = -5;
+    personajeJugadorObjeto.velocidadX = -5;
 }
 
 function moverAbajo() {
-    jugador.velocidadY = 5;
+    personajeJugadorObjeto.velocidadY = 5;
 }
 
 function moverArriba() {
-    jugador.velocidadY = -5;
+    personajeJugadorObjeto.velocidadY = -5;
 }
 
 /**
- * Se ejecuta al soltar el botón: pasa la velocidad a cero y el personaje
- * se queda quieto.
+ * Se ejecuta al soltar el botón o la tecla: pasa la velocidad a cero y el
+ * personaje se queda quieto.
  */
 function detenerMovimiento() {
-    jugador.velocidadX = 0;
-    jugador.velocidadY = 0;
+    personajeJugadorObjeto.velocidadX = 0;
+    personajeJugadorObjeto.velocidadY = 0;
+}
+
+/**
+ * Recibe el evento del teclado (event.key dice qué tecla se presionó) y,
+ * según la flecha, llama a la función de movimiento correspondiente.
+ * @param {KeyboardEvent} event
+ */
+function sePresionoUnaTecla(event) {
+    switch (event.key) {
+        case 'ArrowUp':
+            moverArriba();
+            break;
+        case 'ArrowDown':
+            moverAbajo();
+            break;
+        case 'ArrowLeft':
+            moverIzquierda();
+            break;
+        case 'ArrowRight':
+            moverDerecha();
+            break;
+        default:
+            break;
+    }
 }
 
 // =============================================================================
