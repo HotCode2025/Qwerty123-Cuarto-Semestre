@@ -27,11 +27,13 @@ function hola(nombre){
 });
 }
 
-function hablar(callBackHablar){
-    setTimeout(function(){
-        console.log("bla bla bla bla")
-        callBackHablar();
-    }, 1000)
+function hablar(nombre) {
+    return new Promise((resolve, reject) => {
+        setTimeout(function () {
+            console.log("bla bla bla bla");
+            resolve(nombre);
+        }, 1000);
+    });
 }
 
 function adios(nombre){
@@ -43,11 +45,15 @@ function adios(nombre){
  }) 
 
 }
-// Llamamos a la funcion 
-console.log("Iniciando proceso...")
+// Llamamos a la funcion
+console.log("Iniciando proceso...");
 
 hola("Javier")
+    .then(hablar)
+    .then(hablar)
+    .then(hablar)
     .then(adios)
-    .then((nombre)=>{
+    .then((nombre) => {
         console.log("Terminando proceso");
-    })
+    });
+    
