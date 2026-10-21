@@ -423,6 +423,12 @@ h3 {
   border: 2px solid white;
 }
 
+.botones-movimiento {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
 .formulario-crear {
   background: var(--card-bg);
   border: 3px solid #334155;

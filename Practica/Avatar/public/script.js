@@ -66,6 +66,22 @@ class Avatar {
         // Si el elemento no existe en el catálogo, usamos "tierra" como resguardo
         // para que el juego nunca se rompa por datos faltantes.
         this.ataques  = Avatar.ATAQUES_POR_ELEMENTO[elemento] ?? Avatar.ATAQUES_POR_ELEMENTO["tierra"];
+
+        // Posición y tamaño del personaje dentro del mapa (canvas).
+        // Guardamos x e y para poder actualizarlas cuando se mueve.
+        this.x     = 20;  // valores por defecto
+        this.y     = 30;
+        this.ancho = 80;
+        this.alto  = 80;
+
+        // Imagen que se dibuja en el mapa (si el personaje tiene foto)
+        this.mapaFoto = new Image();
+        if (rutaImagen) this.mapaFoto.src = rutaImagen;
+
+        // Velocidad de movimiento: mientras sea distinta de 0, el personaje
+        // se sigue desplazando en cada repintado del mapa.
+        this.velocidadX = 0;
+        this.velocidadY = 0;
     }
 
     // -------------------------------------------------------------------------
@@ -330,6 +346,7 @@ const sectionVerMapa = document.getElementById('ver-mapa');
 const mapa = document.getElementById('mapa');
 let lienzo = mapa.getContext("2d"); // vamos a trabajar en 2 dimensiones
 // el lienzo nos permite dibujar dentro del canvas
+let intervalo; // guarda el setInterval que repinta el mapa constantemente
 
 const btnPersonaje  = document.getElementById('btn-personaje');
 const btnReiniciar  = document.getElementById('btn-reiniciar');
@@ -611,22 +628,9 @@ function prepararPantallaArena() {
     seccionReiniciar.classList.remove('oculto');
     sectionVerMapa.style.display = 'flex';
 
-    // Primera prueba del canvas: un rectángulo en x=5, y=15, de 20 de ancho y 40 de alto
-    //lienzo.fillRect(5, 15, 20, 40);
-
-    // Dibujamos la imagen del personaje elegido dentro del canvas.
-    // Esperamos al onload para que la imagen esté cargada antes de dibujarla.
-    let imagenDelPersonaje = new Image();
-    imagenDelPersonaje.onload = () => {
-        lienzo.drawImage(
-            imagenDelPersonaje,
-            20,   // x
-            40,   // y
-            100,  // ancho
-            100   // alto
-        );
-    };
-    imagenDelPersonaje.src = jugador.imagen;
+    // Repintamos el mapa cada 50 milisegundos para ver el movimiento
+    clearInterval(intervalo);
+    intervalo = setInterval(pintarPersonaje, 50);
 
     // Reset visual de vidas/barras al entrar a la arena
     textoResultado.innerHTML = "¡La batalla ha comenzado!";
@@ -687,6 +691,7 @@ function volverAJugar() {
     seccionMensajes.classList.add('oculto');
     seccionReiniciar.classList.add('oculto');
     sectionVerMapa.style.display = 'none';
+    clearInterval(intervalo); // dejamos de repintar el mapa
     lienzo.clearRect(0, 0, mapa.width, mapa.height);
 
     const seccionCrear = document.getElementById('seccion-crear');
@@ -822,6 +827,62 @@ function verificarEstadoFinal() {
             textoResultado.innerHTML = "👑 <strong>¡VICTORIA! Sos el verdadero maestro elemental.</strong>";
         }
     }
+}
+
+// =============================================================================
+// MAPA DE ENCUENTRO: DIBUJO Y MOVIMIENTO DEL PERSONAJE
+// =============================================================================
+
+/**
+ * Se ejecuta constantemente (setInterval). Actualiza la posición del jugador
+ * según su velocidad, limpia el canvas y lo vuelve a dibujar.
+ */
+function pintarPersonaje() {
+    jugador.x = jugador.x + jugador.velocidadX; // actualizamos según la velocidad
+    jugador.y = jugador.y + jugador.velocidadY;
+
+    lienzo.clearRect(0, 0, mapa.width, mapa.height); // limpiamos el canvas
+
+    // Si el personaje no tiene foto (creado a mano), dibujamos un rectángulo
+    if (!jugador.imagen) {
+        lienzo.fillRect(jugador.x, jugador.y, jugador.ancho, jugador.alto);
+        return;
+    }
+
+    lienzo.drawImage(
+        jugador.mapaFoto,
+        jugador.x,
+        jugador.y,
+        jugador.ancho,
+        jugador.alto
+    );
+}
+
+// Las funciones de movimiento solo cambian la velocidad; el que mueve y
+// dibuja al personaje es pintarPersonaje(), que se ejecuta cada 50 ms.
+function moverDerecha() {
+    jugador.velocidadX = 5;
+}
+
+function moverIzquierda() {
+    jugador.velocidadX = -5;
+}
+
+function moverAbajo() {
+    jugador.velocidadY = 5;
+}
+
+function moverArriba() {
+    jugador.velocidadY = -5;
+}
+
+/**
+ * Se ejecuta al soltar el botón: pasa la velocidad a cero y el personaje
+ * se queda quieto.
+ */
+function detenerMovimiento() {
+    jugador.velocidadX = 0;
+    jugador.velocidadY = 0;
 }
 
 // =============================================================================
