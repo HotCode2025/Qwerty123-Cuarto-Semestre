@@ -179,3 +179,59 @@ Termina esta parte abriendo web-server en VS Code con
 consultar la API se desarrolla en las siguientes partes.
 
 La carpeta env queda excluida del repositorio mediante .gitignore.
+
+## 11.6 Commiteamos todo el trabajo en las diferentes ramas — Issue #222
+
+### Recorrido del profesor
+
+El profesor registra y publica el trabajo en ariel22, lo integra en
+second y publica esa rama. Luego crea y fusiona un Pull Request de
+second hacia main.
+
+Después actualiza main localmente, integra sus cambios en profe,
+publica esa rama y vuelve a ariel22.
+
+### Entrega en nuestro repositorio
+
+El equipo trabaja en respaldo-main. Cada Issue se registra y se
+publica por separado. La integración hacia main queda a cargo del
+compañero responsable de esa tarea.
+
+| Issue | Trabajo realizado | Commit publicado |
+| --- | --- | --- |
+| #217 | Archivo requirements.txt e instrucciones de uso. | 84c3099 |
+| #218 | Comandos de trabajo profesional y GitHub. | 03ffd1d |
+| #219 | Preparación de web-server con Requests. | d007f43 |
+| #220 | Creación de main.py y store.py; reproducción del error del video. | 3c29a28 |
+| #221 | Ajuste del endpoint y del recorrido; pruebas sin errores. | 713bda3 |
+
+### Resultado de la última prueba
+
+Desde web-server, con el entorno virtual activo:
+
+```powershell
+python main.py
+```
+
+Resultado obtenido:
+
+```text
+200
+Raza de los perritos: australian
+Raza de los perritos: s
+```
+
+La salida coincide con la prueba final del profesor.
+El índice 5 obtiene la sexta raza de la lista y, al procesar el valor
+"success", obtiene su sexto carácter: "s".
+
+### Verificación de Git
+
+Se comprobó que respaldo-main estaba sincronizada con
+origin/respaldo-main y que el árbol de trabajo estaba limpio.
+
+Se ejecutó git fetch origin y se comparó el historial de las ramas.
+Los cinco commits de esta clase están publicados en respaldo-main
+y pendientes de integración hacia main por el compañero responsable.
+
+Esta Issue documenta el cierre y la entrega para revisión.
