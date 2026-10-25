@@ -57,3 +57,77 @@ python -m pip check
 ```
 
 Resultado obtenido: No broken requirements found.
+
+
+## 11.2 Comandos de trabajo profesional y GitHub — Issue #218
+
+Después de crear requirements.txt y actualizar el README, el profesor
+registra los cambios con Git y los comparte mediante GitHub.
+
+### Comandos utilizados
+
+| Comando | Función |
+| --- | --- |
+| `deactivate` | Desactiva el entorno virtual en la terminal actual. |
+| `git status` | Muestra la rama actual y el estado de los archivos. |
+| `git branch` | Lista las ramas locales y señala la rama actual. |
+| `git add` | Prepara cambios para incluirlos en el próximo commit. |
+| `git commit -m "mensaje"` | Registra los cambios preparados en la rama actual. |
+| `git push origin rama` | Envía los commits de la rama al repositorio remoto. |
+| `git checkout rama` | Cambia a otra rama. |
+| `git merge otra_rama` | Integra otra rama en la rama actual. |
+| `git pull origin rama` | Descarga e integra la rama remota indicada en la rama actual. |
+
+En el video, el profesor utiliza `git add .` para preparar los cambios.
+En nuestro trabajo seleccionamos los archivos de cada Issue mediante
+sus rutas.
+
+### Recorrido del profesor
+
+Los siguientes comandos corresponden a las ramas de su repositorio.
+
+Primero registra y sube los cambios desde ariel22:
+
+```bash
+git status
+git add .
+git branch
+git commit -m "Creación del archivo requirements.txt para la instalación de dependencias"
+git push origin ariel22
+```
+
+Después integra esos cambios en second y publica esa rama:
+
+```bash
+git checkout second
+git merge ariel22
+git push origin second
+git checkout main
+```
+
+En GitHub crea un Pull Request desde second hacia main.
+Revisa los cambios y completa la fusión.
+
+Luego actualiza main en su computadora, integra sus cambios en profe
+y publica esa rama:
+
+```bash
+git pull origin main
+git checkout profe
+git merge main
+git push origin profe
+git checkout ariel22
+```
+
+Un Pull Request permite proponer y revisar cambios antes de integrarlos
+en la rama de destino.
+
+### Aplicación en nuestro repositorio
+
+Trabajamos en la rama respaldo-main y realizamos un commit y una subida
+por cada Issue.
+
+La Issue #217 incorporó requirements.txt y las instrucciones de uso.
+La Issue #218 documenta los comandos de Git y el recorrido por GitHub.
+
+El entorno virtual env permanece excluido mediante .gitignore.
