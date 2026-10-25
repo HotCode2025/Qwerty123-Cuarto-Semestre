@@ -131,3 +131,51 @@ La Issue #217 incorporó requirements.txt y las instrucciones de uso.
 La Issue #218 documenta los comandos de Git y el recorrido por GitHub.
 
 El entorno virtual env permanece excluido mediante .gitignore.
+
+## 11.3 Pasamos a la librería Requests — Issue #219
+
+Requests es una librería de Python que permite realizar peticiones HTTP.
+
+En el video se explora Dog API y su respuesta en formato JSON.
+El endpoint seleccionado para listar las razas es:
+
+https://dog.ceo/api/breeds/list/all
+
+### Preparación de web-server
+
+Se crea la carpeta web-server dentro de Clase8_Entorno_Profesional.
+Esta carpeta tiene su propio entorno virtual env y su requirements.txt.
+
+Desde la carpeta web-server, en PowerShell:
+
+```powershell
+py -3.13 -m venv env
+.\env\Scripts\Activate.ps1
+python -m pip install requests
+python -m pip freeze
+python -m pip freeze | Set-Content -Encoding utf8 requirements.txt
+Get-Content .\requirements.txt
+```
+
+El archivo requirements.txt registra Requests y sus dependencias
+con las versiones instaladas en el entorno.
+
+Para instalar las dependencias registradas, con el entorno activo:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+### Verificación
+
+```powershell
+python -m pip check
+```
+
+Resultado obtenido: No broken requirements found.
+
+Termina esta parte abriendo web-server en VS Code con
+`code . -r`. Hasta aquí queda preparado el entorno; el código para
+consultar la API se desarrolla en las siguientes partes.
+
+La carpeta env queda excluida del repositorio mediante .gitignore.
