@@ -49,8 +49,11 @@ class Avatar {
      *                               emoji del elemento en su lugar)
      * @param {string} elemento    - Elemento dominado: "fuego" | "agua" | "aire" | "tierra"
      * @param {string} alias       - Subtítulo descriptivo (ej: "Maestro Fuego")
+     * @param {string} fotoMapa    - Imagen que se dibuja en el mapa (canvas)
+     * @param {number} [x=10]      - Posición horizontal inicial en el mapa
+     * @param {number} [y=10]      - Posición vertical inicial en el mapa
      */
-    constructor(id, nombre, rutaImagen, elemento, alias) {
+    constructor(id, nombre, rutaImagen, elemento, alias, fotoMapa, x = 10, y = 10) {
         // "this" apunta al objeto puntual que se está creando en este momento.
         // Guardamos cada parámetro recibido como una propiedad propia del objeto.
         this.id       = id;
@@ -65,23 +68,50 @@ class Avatar {
         // leyendo el catálogo estático de la propia clase (Avatar.ATAQUES_POR_ELEMENTO).
         // Si el elemento no existe en el catálogo, usamos "tierra" como resguardo
         // para que el juego nunca se rompa por datos faltantes.
-        this.ataques  = Avatar.ATAQUES_POR_ELEMENTO[elemento] ?? Avatar.ATAQUES_POR_ELEMENTO["tierra"];
+        // Usamos una COPIA del array ([...]) para que, si a un personaje se le
+        // agregan ataques (como a los enemigos del mapa), no se modifique el
+        // catálogo compartido por todos los del mismo elemento.
+        this.ataques  = [...(Avatar.ATAQUES_POR_ELEMENTO[elemento] ?? Avatar.ATAQUES_POR_ELEMENTO["tierra"])];
 
         // Posición y tamaño del personaje dentro del mapa (canvas).
-        // Guardamos x e y para poder actualizarlas cuando se mueve.
-        this.x     = 20;  // valores por defecto
-        this.y     = 30;
+        // x e y llegan por parámetro (por defecto 10) y se actualizan al moverse.
+        this.x     = x;
+        this.y     = y;
         this.ancho = 80;
         this.alto  = 80;
 
         // Imagen que se dibuja en el mapa (si el personaje tiene foto)
         this.mapaFoto = new Image();
-        if (rutaImagen) this.mapaFoto.src = rutaImagen;
+        // Todos miden lo mismo de alto; el ancho se calcula cuando carga la
+        // imagen, según su proporción, para que el personaje no se deforme.
+        this.mapaFoto.onload = () => {
+            this.ancho = Math.round(this.alto * this.mapaFoto.naturalWidth / this.mapaFoto.naturalHeight);
+        };
+        if (fotoMapa) this.mapaFoto.src = fotoMapa;
 
         // Velocidad de movimiento: mientras sea distinta de 0, el personaje
         // se sigue desplazando en cada repintado del mapa.
         this.velocidadX = 0;
         this.velocidadY = 0;
+    }
+
+    /**
+     * Dibuja al personaje dentro del mapa usando su propia posición y tamaño.
+     * Si no tiene foto (personaje creado a mano), dibuja un rectángulo.
+     */
+    pintarAvatares() {
+        if (!this.mapaFoto.src) {
+            lienzo.fillRect(this.x, this.y, this.ancho, this.alto);
+            return;
+        }
+
+        lienzo.drawImage(
+            this.mapaFoto,
+            this.x,
+            this.y,
+            this.ancho,
+            this.alto
+        );
     }
 
     // -------------------------------------------------------------------------
@@ -186,7 +216,7 @@ class Avatar {
      * @returns {Avatar[]} Array de instancias de Avatar, listas para usar
      */
     static generarDesdedatos(datos) {
-        return datos.map(d => new Avatar(d.id, d.nombre, d.imagen, d.elemento, d.alias));
+        return datos.map(d => new Avatar(d.id, d.nombre, d.imagen, d.elemento, d.alias, d.fotoMapa));
     }
 }
 
@@ -199,10 +229,11 @@ class Avatar {
 // =============================================================================
 
 const CATALOGO_PERSONAJES = [
-    { id: "zuko",   nombre: "Zuko",   imagen: "./imagenes/Zuko.jpg",   elemento: "fuego",  alias: "Maestro Fuego"   },
-    { id: "katara", nombre: "Katara", imagen: "./imagenes/Katara.jpg", elemento: "agua",   alias: "Maestra Agua"    },
-    { id: "aang",   nombre: "Aang",   imagen: "./imagenes/Ang.jpg",    elemento: "aire",   alias: "Avatar (Aire)"   },
-    { id: "toph",   nombre: "Toph",   imagen: "./imagenes/toph.jpg",   elemento: "tierra", alias: "Maestra Tierra"  },
+    // fotoMapa: versión sin fondo (PNG) que se dibuja en el mapa
+    { id: "zuko",   nombre: "Zuko",   imagen: "./imagenes/Zuko.jpg",   fotoMapa: "./imagenes/mapa/Zuko.png",   elemento: "fuego",  alias: "Maestro Fuego"   },
+    { id: "katara", nombre: "Katara", imagen: "./imagenes/Katara.jpg", fotoMapa: "./imagenes/mapa/Katara.png", elemento: "agua",   alias: "Maestra Agua"    },
+    { id: "aang",   nombre: "Aang",   imagen: "./imagenes/Ang.jpg",    fotoMapa: "./imagenes/mapa/Ang.png",    elemento: "aire",   alias: "Avatar (Aire)"   },
+    { id: "toph",   nombre: "Toph",   imagen: "./imagenes/toph.jpg",   fotoMapa: "./imagenes/mapa/toph.png",   elemento: "tierra", alias: "Maestra Tierra"  },
     // Para agregar más personajes, simplemente añadí líneas aquí:
     // { id: "sokka", nombre: "Sokka", imagen: "./imagenes/Sokka.jpg", elemento: "agua", alias: "Guerrero del Agua" },
 ];
@@ -213,6 +244,58 @@ const CATALOGO_PERSONAJES = [
 // Este array se sigue modificando durante toda la partida (push cuando se crea
 // un personaje nuevo, reset cuando se reinicia el catálogo).
 const personajesDisponibles = Avatar.generarDesdedatos(CATALOGO_PERSONAJES);
+
+// =============================================================================
+// ENEMIGOS DEL MAPA
+// Son los personajes que se dibujan quietos en el mapa. Al chocar con uno de
+// ellos, ese pasa a ser el rival del combate. Lo único que cambia respecto
+// de los personajes del catálogo es su posición (x, y) dentro del canvas.
+// =============================================================================
+
+let zukoEnemigo   = new Avatar("zuko",   "Zuko",   "./imagenes/Zuko.jpg",   "fuego",  "Maestro Fuego",  "./imagenes/mapa/Zuko.png",   120, 170);
+let kataraEnemigo = new Avatar("katara", "Katara", "./imagenes/Katara.jpg", "agua",   "Maestra Agua",   "./imagenes/mapa/Katara.png", 220, 130);
+let aangEnemigo   = new Avatar("aang",   "Aang",   "./imagenes/Ang.jpg",    "aire",   "Avatar (Aire)",  "./imagenes/mapa/Ang.png",    280, 255);
+let tophEnemigo   = new Avatar("toph",   "Toph",   "./imagenes/toph.jpg",   "tierra", "Maestra Tierra", "./imagenes/mapa/toph.png",   320, 150);
+
+// Cada enemigo suma ataques extra para tener un ataque favorito: al elegir al
+// azar entre más copias de un mismo ataque, es más probable que lo use.
+// Posiciones en ATAQUES_POR_ELEMENTO: [0] = puño, [1] = patada, [2] = barrida
+const ataquesFuego  = Avatar.ATAQUES_POR_ELEMENTO.fuego;
+const ataquesAgua   = Avatar.ATAQUES_POR_ELEMENTO.agua;
+const ataquesAire   = Avatar.ATAQUES_POR_ELEMENTO.aire;
+const ataquesTierra = Avatar.ATAQUES_POR_ELEMENTO.tierra;
+
+zukoEnemigo.ataques.push(   // favorito: puño
+    ataquesFuego[0],
+    ataquesFuego[0],
+    ataquesFuego[0],
+    ataquesFuego[1],
+    ataquesFuego[2],
+);
+
+kataraEnemigo.ataques.push( // favorito: barrida
+    ataquesAgua[2],
+    ataquesAgua[2],
+    ataquesAgua[2],
+    ataquesAgua[1],
+    ataquesAgua[0],
+);
+
+aangEnemigo.ataques.push(   // favorito: patada
+    ataquesAire[1],
+    ataquesAire[1],
+    ataquesAire[1],
+    ataquesAire[0],
+    ataquesAire[2],
+);
+
+tophEnemigo.ataques.push(   // favorito: puño
+    ataquesTierra[0],
+    ataquesTierra[0],
+    ataquesTierra[0],
+    ataquesTierra[1],
+    ataquesTierra[2],
+);
 
 // Variables de estado de la partida actual.
 // Se completan recién cuando el jugador confirma su selección
@@ -565,10 +648,10 @@ modalReglas.addEventListener('click', e => {
 
 /**
  * Se ejecuta al hacer clic en "Confirmar Selección".
- * Busca en el catálogo los datos del personaje elegido en el <select> y
- * crea DOS instancias nuevas de Avatar (jugador y enemigo), cada una con
- * sus propias 3 vidas de arranque. El enemigo se sortea al azar entre
- * todo el catálogo disponible (puede coincidir con el del jugador).
+ * Busca en el catálogo los datos del personaje elegido en el <select>,
+ * crea una instancia nueva de Avatar para el jugador (con sus 3 vidas de
+ * arranque) y muestra el mapa. El enemigo ya no se sortea: se elige al
+ * chocar con uno de los enemigos del mapa (ver revisarColision).
  */
 function seleccionarPersonajeJugador() {
     const seleccionID = document.getElementById('select-personaje').value;
@@ -590,9 +673,26 @@ function seleccionarPersonajeJugador() {
     // vidas de una partida anterior.
     jugador = new Avatar(baseJ.id, baseJ.nombre, baseJ.imagen, baseJ.elemento, baseJ.alias);
 
-    // Enemigo aleatorio (puede repetirse con el del jugador; es parte del juego)
-    const baseE = personajesDisponibles[Math.floor(Math.random() * personajesDisponibles.length)];
-    enemigo = new Avatar(baseE.id, baseE.nombre, baseE.imagen, baseE.elemento, baseE.alias);
+    seccionSeleccionar.classList.add('oculto');
+    const seccionCrear = document.getElementById('seccion-crear');
+    if (seccionCrear) seccionCrear.classList.add('oculto');
+    seccionReiniciar.classList.remove('oculto');
+
+    // Mostramos el mapa para buscar al enemigo
+    sectionVerMapa.style.display = 'flex';
+
+    iniciarMapa();
+}
+
+/**
+ * Se ejecuta al chocar con un enemigo en el mapa: ese enemigo pasa a ser el
+ * rival del combate. Le devolvemos sus 3 vidas por si ya peleó antes.
+ *
+ * @param {Avatar} enemigoMapa - Enemigo del mapa con el que se chocó
+ */
+function seleccionarPersonajeEnemigo(enemigoMapa) {
+    enemigo = enemigoMapa;
+    enemigo.vidas = 3;
 
     prepararPantallaArena();
 }
@@ -619,23 +719,13 @@ function renderizarSprite(contenedor, personaje) {
 }
 
 /**
- * Oculta la pantalla de selección/creación y muestra la arena de combate,
+ * Muestra la arena de combate (después de chocar con un enemigo en el mapa),
  * dejando todo listo visualmente: sprites, nombres, vidas al 100% y las
  * etiquetas de los 3 botones de ataque acordes al elemento del jugador.
  */
 function prepararPantallaArena() {
-    seccionSeleccionar.classList.add('oculto');
-    const seccionCrear = document.getElementById('seccion-crear');
-    if (seccionCrear) seccionCrear.classList.add('oculto');
-    // Por ahora, en lugar de la arena de combate mostramos el mapa
-    //seccionCombate.classList.remove('oculto');
-    //seccionMensajes.classList.remove('oculto');
-    seccionReiniciar.classList.remove('oculto');
-    // Recién acá (con jugador y enemigo ya elegidos) mostramos e iniciamos el
-    // mapa, así las variables no quedan en undefined
-    sectionVerMapa.style.display = 'flex';
-
-    iniciarMapa();
+    seccionCombate.classList.remove('oculto');
+    seccionMensajes.classList.remove('oculto');
 
     // Reset visual de vidas/barras al entrar a la arena
     textoResultado.innerHTML = "¡La batalla ha comenzado!";
@@ -843,13 +933,13 @@ function verificarEstadoFinal() {
  * personaje elegido, arranca el repintado cada 50 ms y escucha el teclado.
  */
 function iniciarMapa() {
-    mapa.width = 320;  // ancho del canvas
-    mapa.height = 240; // alto del canvas
+    mapa.width = 480;  // ancho del canvas
+    mapa.height = 360; // alto del canvas
 
     personajeJugadorObjeto = obtenerObjetoPersonaje();
     // Lo ubicamos en la posición inicial y quieto (por si ya se usó antes)
-    personajeJugadorObjeto.x = 20;
-    personajeJugadorObjeto.y = 30;
+    personajeJugadorObjeto.x = 15;
+    personajeJugadorObjeto.y = 15;
     personajeJugadorObjeto.velocidadX = 0;
     personajeJugadorObjeto.velocidadY = 0;
 
@@ -876,7 +966,8 @@ function obtenerObjetoPersonaje() {
 /**
  * Se ejecuta constantemente (setInterval). Actualiza la posición del
  * personaje según su velocidad, limpia el canvas y vuelve a dibujar todo:
- * primero el fondo del mapa y encima el personaje.
+ * primero el fondo del mapa, encima el personaje y los enemigos. Si el
+ * personaje se está moviendo, revisa si chocó con algún enemigo.
  */
 function pintarCanvas() {
     personajeJugadorObjeto.x = personajeJugadorObjeto.x + personajeJugadorObjeto.velocidadX; // actualizamos según la velocidad
@@ -895,19 +986,64 @@ function pintarCanvas() {
         );
     }
 
-    // Si el personaje no tiene foto (creado a mano), dibujamos un rectángulo
-    if (!personajeJugadorObjeto.imagen) {
-        lienzo.fillRect(personajeJugadorObjeto.x, personajeJugadorObjeto.y, personajeJugadorObjeto.ancho, personajeJugadorObjeto.alto);
+    personajeJugadorObjeto.pintarAvatares();
+
+    zukoEnemigo.pintarAvatares();
+    kataraEnemigo.pintarAvatares();
+    aangEnemigo.pintarAvatares();
+    tophEnemigo.pintarAvatares();
+
+    if (personajeJugadorObjeto.velocidadX !== 0 || personajeJugadorObjeto.velocidadY !== 0) {
+        revisarColision(zukoEnemigo);
+        revisarColision(aangEnemigo);
+        revisarColision(kataraEnemigo);
+        revisarColision(tophEnemigo);
+    }
+}
+
+/**
+ * Compara los bordes del personaje con los del enemigo. Si NO se tocan
+ * (uno está totalmente arriba, abajo, a la derecha o a la izquierda del
+ * otro), no pasa nada. Si se tocan, hay colisión: se detiene el mapa y se
+ * pasa al combate contra ese enemigo.
+ *
+ * @param {Avatar} enemigo - Enemigo del mapa a revisar
+ */
+function revisarColision(enemigo) {
+    // Si ya hubo un choque en este mismo repintado (el personaje quedó
+    // quieto), no revisamos al resto para no elegir dos enemigos a la vez.
+    if (personajeJugadorObjeto.velocidadX === 0 && personajeJugadorObjeto.velocidadY === 0) return;
+
+    const arribaEnemigo = enemigo.y; // acá se comienza a pintar al enemigo
+    const abajoEnemigo = enemigo.y + enemigo.alto;
+    const derechaEnemigo = enemigo.x + enemigo.ancho;
+    const izquierdaEnemigo = enemigo.x;
+
+    const arribaPersonaje =
+        personajeJugadorObjeto.y;
+    const abajoPersonaje =
+        personajeJugadorObjeto.y + personajeJugadorObjeto.alto;
+    const derechaPersonaje =
+        personajeJugadorObjeto.x + personajeJugadorObjeto.ancho;
+    const izquierdaPersonaje =
+        personajeJugadorObjeto.x;
+
+    if (
+        abajoPersonaje < arribaEnemigo ||
+        arribaPersonaje > abajoEnemigo ||
+        derechaPersonaje < izquierdaEnemigo ||
+        izquierdaPersonaje > derechaEnemigo
+    ) {
         return;
     }
 
-    lienzo.drawImage(
-        personajeJugadorObjeto.mapaFoto,
-        personajeJugadorObjeto.x,
-        personajeJugadorObjeto.y,
-        personajeJugadorObjeto.ancho,
-        personajeJugadorObjeto.alto
-    );
+    detenerMovimiento();
+    clearInterval(intervalo); // dejamos de repintar el mapa
+
+    // Ocultamos el mapa y pasamos al combate contra el enemigo del choque
+    sectionVerMapa.style.display = 'none';
+    seleccionarPersonajeEnemigo(enemigo);
+    // alert("Hay colisión con " + enemigo.nombre);
 }
 
 // Las funciones de movimiento solo cambian la velocidad; el que mueve y

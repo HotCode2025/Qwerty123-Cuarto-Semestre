@@ -421,6 +421,7 @@ h3 {
 
 #mapa {
   border: 2px solid white;
+  max-width: 100%; /* en pantallas angostas el mapa se achica para entrar */
 }
 
 .botones-movimiento {
