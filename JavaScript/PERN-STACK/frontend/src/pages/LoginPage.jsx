@@ -2,13 +2,17 @@ import { Link } from "react-router-dom"
 import {Card, Input, Button, Label} from "../components/ui"
 import { useForm } from 'react-hook-form'
 import { required } from "zod/mini";
+import axios from "axios";
 
 function LoginPage() {
   const { register, handleSubmit} = useForm();
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async(data) => {
     console.log(data);
-  }
-  )
+    const res = await axios.post("http://localhost:3000/api/signin", data, {
+      withCredentials: true,
+    });
+    console.log(res);
+  });
 
   return (
     <div className="h-[calc(100vh-64px)] flex items-center justify-center">
