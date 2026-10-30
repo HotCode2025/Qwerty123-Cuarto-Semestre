@@ -44,3 +44,6 @@ el cual representa el proceso de Node.js que se está ejecutando en ese preciso 
 
 //console.log(__dirname)
 console.log(__filename)
+
+global.miVariable = "Mi variable global";
+console.log(miVariable);
