@@ -1,19 +1,19 @@
 import { Button, Card, Input, Label } from '../components/ui'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom';
-import axios from 'axios'
+import { Link,useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function RegisterPage() {
   
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const navigate = useNavigate()
+  const {signup} = useAuth()
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-    const res = await axios.post('http://localhost:3000/api/signup', data, {
-      withCredentials: true,
+      await signup(data)
+      navigate("/perfil")
     });
-    console.log(res);
-  });
+  };
 
 
   return (
@@ -53,6 +53,6 @@ function RegisterPage() {
       </Card>
     </div>
   )
-}
+
 
 export default RegisterPage
