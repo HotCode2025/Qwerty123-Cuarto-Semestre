@@ -1,17 +1,20 @@
-//this === global = true
-
 // Mostrar algo en consola
-console.log();
+// console.log();
 
-//Mostrar un mensaje de error
+// Mostrar un mensaje de error
+// console.error();
 
-console.error();
+// Ejecutar un código después de un intervalo de tiempo
+// setTimeout(() => {});
 
-//Ejecutar un codigo después de un intervalo de tiempo
-seTimeout(() => {});
+// Ejecutar un código de manera repetida
+// setInterval(() => {});
 
-//Ejecutar un codigo de manera repetida
-setInterval(() => {});
+// Programar una función para la fase check del bucle de eventos
+// setImmediate(() => {});
 
-//Da prioridad de ejecución a una función asincrónica
-SetImmediate(() => {});
+// Prueba del objeto global realizada durante la clase
+// console.log(global);
+
+// Mostrar la función setInterval
+console.log(setInterval);
