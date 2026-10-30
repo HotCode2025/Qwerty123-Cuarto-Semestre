@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: planificadorTareas
+  datasource:
+    # createDatabaseIfNotExist evita tener que crear el esquema a mano la primera vez
+    url: jdbc:mysql://localhost:3306/db_planificador_tareas?createDatabaseIfNotExist=true&serverTimezone=America/Argentina/Buenos_Aires
+    # Las credenciales vienen de variables de entorno para no dejarlas escritas en el código
+    # Los valores por defecto evitan que los tests fallen si las variables no están definidas
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:}
+  jpa:
+    hibernate:
+      # update crea/ajusta las tablas sin borrar datos
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
