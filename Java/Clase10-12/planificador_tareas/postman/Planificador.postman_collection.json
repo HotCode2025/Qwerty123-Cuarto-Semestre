@@ -1,0 +1,202 @@
+{
+  "info": {
+    "name": "Planificador de tareas",
+    "description": "Pruebas de la API. Ejecutar en orden: 'Crear tarea' guarda el id en la variable tareaId, que usan las demás.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1/tareas" },
+    { "key": "tareaId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Crear tarea (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Devuelve 201', () => pm.response.to.have.status(201));",
+              "const tarea = pm.response.json();",
+              "pm.test('Se creó pendiente', () => pm.expect(tarea.finalizada).to.eql(false));",
+              "pm.collectionVariables.set('tareaId', tarea.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Estudiar Spring Boot\",\n  \"descripcion\": \"Repasar Service y Controller\",\n  \"fecha\": \"2030-01-15\",\n  \"hora\": \"18:30\",\n  \"prioridad\": \"ALTA\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      }
+    },
+    {
+      "name": "Listar todas (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
+              "pm.test('Es una lista', () => pm.expect(pm.response.json()).to.be.an('array'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      }
+    },
+    {
+      "name": "Listar pendientes de prioridad ALTA (200)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}?finalizada=false&prioridad=ALTA",
+          "host": ["{{baseUrl}}"],
+          "query": [
+            { "key": "finalizada", "value": "false" },
+            { "key": "prioridad", "value": "ALTA" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Obtener por id (200)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/{{tareaId}}", "host": ["{{baseUrl}}"], "path": ["{{tareaId}}"] }
+      }
+    },
+    {
+      "name": "Editar tarea (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
+              "pm.test('Se actualizó el título', () => pm.expect(pm.response.json().titulo).to.eql('Estudiar JPA'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Estudiar JPA\",\n  \"descripcion\": null,\n  \"fecha\": \"2030-01-16\",\n  \"hora\": \"10:00\",\n  \"prioridad\": \"MEDIA\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/{{tareaId}}", "host": ["{{baseUrl}}"], "path": ["{{tareaId}}"] }
+      }
+    },
+    {
+      "name": "Marcar como finalizada (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
+              "pm.test('Quedó finalizada', () => pm.expect(pm.response.json().finalizada).to.eql(true));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/{{tareaId}}/finalizada/true",
+          "host": ["{{baseUrl}}"],
+          "path": ["{{tareaId}}", "finalizada", "true"]
+        }
+      }
+    },
+    {
+      "name": "ERROR - crear sin título (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Devuelve 400', () => pm.response.to.have.status(400));",
+              "pm.test('Informa los mensajes', () => pm.expect(pm.response.json().mensajes).to.be.an('array').that.is.not.empty);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"\",\n  \"fecha\": \"2030-01-15\",\n  \"hora\": \"18:30\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      }
+    },
+    {
+      "name": "ERROR - prioridad inválida en filtro (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Devuelve 400', () => pm.response.to.have.status(400));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}?prioridad=URGENTE",
+          "host": ["{{baseUrl}}"],
+          "query": [{ "key": "prioridad", "value": "URGENTE" }]
+        }
+      }
+    },
+    {
+      "name": "ERROR - tarea inexistente (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Devuelve 404', () => pm.response.to.have.status(404));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/999999", "host": ["{{baseUrl}}"], "path": ["999999"] }
+      }
+    },
+    {
+      "name": "Eliminar tarea (204)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Devuelve 204', () => pm.response.to.have.status(204));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "{{baseUrl}}/{{tareaId}}", "host": ["{{baseUrl}}"], "path": ["{{tareaId}}"] }
+      }
+    }
+  ]
+}
