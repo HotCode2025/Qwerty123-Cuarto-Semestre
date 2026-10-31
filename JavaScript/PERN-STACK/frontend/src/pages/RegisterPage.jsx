@@ -13,9 +13,7 @@ function RegisterPage() {
       await signup(data)
       navigate("/perfil")
     });
-  };
-
-
+  
   return (
     <div className='h-[calc(100vh-64px)] flex items-center justify-center'>
       
@@ -52,7 +50,8 @@ function RegisterPage() {
         </div>
       </Card>
     </div>
-  )
+  );
+}
 
 
 export default RegisterPage
