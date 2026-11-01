@@ -1,0 +1,10 @@
+services:
+  web-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "while true;do sleep 1;done"
+    volumes:
+      -.:/app
+    ports:
+      - "80:80"
