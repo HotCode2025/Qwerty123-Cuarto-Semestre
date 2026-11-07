@@ -1,5 +1,6 @@
-import { createContext, useState, useContext } from "react";
-import axios from "axios"
+import { createContext, useState, useContext, useEffect } from "react";
+import Cookie from "js-cookie";
+import clientes from "../api/axios";
 
 export const AuthContext = createContext();
 
@@ -19,21 +20,56 @@ export function AuthProvider({ children }) {
 
   //INGRESAR
   const signin = async(data) => {
-    const res = await axios.post("http://localhost:3000/api/signin",data,{
-        withCredentials: true
-    })
-    console.log(res)
-    setUser(res.data)
-  }
+    try { 
+      const res = await clientes.post("/signin", data);
+      setUser(res.data);
+      setIsAuth(true);
+    return res.data;
+      
+    } catch (error) {
+      console.log(error);
+      if(Array.isArray(error.response.data)){
+        return setErrors(error.response.data)
+
+    } 
+    setErrors([error.response.data.message]);
+    }
+
+  };
 
   //REGISTRARSE
   const signup = async (data) => {
-    const res = await axios.post("http://localhost:3000/api/signup", data, {
-      withCredentials: true,
-    });
-    console.log(res.data)
-    setUser(res.data)
+    try {
+          const res = await clientes.post("/signup", data);
+                  setUser(res.data);
+                  setIsAuth(true);
+                return res.data;
+        
+    } catch (error) {
+
+      console.log(error);
+      if(Array.isArray(error.response.data)){
+        return setErrors(error.response.data)
+
+    } 
+    setErrors([error.response.data.message]);
+      
+    }  
   }; 
+
+  useEffect(() => {
+    if(Cookie.get("token")) {
+      clientes.get("/profile", {
+      }).then((res) => {
+        setUser(res.data);
+        setIsAuth(true);
+      }).catch((error) => {
+        setUser(null);
+        setIsAuth(false);
+        console.log(error);
+      });
+      }
+  }, []);
 
   return (
     <AuthContext.Provider

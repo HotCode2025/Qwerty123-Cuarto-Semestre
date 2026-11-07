@@ -7,17 +7,25 @@ function RegisterPage() {
   
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate()
-  const {signup} = useAuth()
+  const {signup , errors: setUserErrors} = useAuth()
 
   const onSubmit = handleSubmit(async (data) => {
-      await signup(data)
-      navigate("/perfil")
-    });
+    const user = await signup(data);
+    if (user) {
+      navigate("/perfil");
+    }
+  });
   
   return (
     <div className='h-[calc(100vh-64px)] flex items-center justify-center'>
       
       <Card>
+
+        {setUserErrors &&
+          setUserErrors.map((error) => (
+            <p className="bg-red-500 text-white p-2" key={error}>{error}</p>
+          ))}
+
       <h3 className='text-4xl font-bold my-2' > Registro </h3>
 
         <form onSubmit={onSubmit} className='flex flex-col gap-4 mt-4'>
