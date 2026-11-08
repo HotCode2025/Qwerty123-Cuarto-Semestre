@@ -20,20 +20,20 @@ export function AuthProvider({ children }) {
 
 
   //INGRESAR
-  const signin = async(data) => {
-    try { 
+  const signin = async (data) => {
+    try {
       const res = await clientes.post("/signin", data);
       setUser(res.data);
       setIsAuth(true);
-    return res.data;
-      
+      return res.data;
+
     } catch (error) {
       console.log(error);
-      if(Array.isArray(error.response.data)){
+      if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data)
 
-    } 
-    setErrors([error.response.data.message]);
+      }
+      setErrors([error.response.data.message]);
     }
 
   };
@@ -41,22 +41,22 @@ export function AuthProvider({ children }) {
   //REGISTRARSE
   const signup = async (data) => {
     try {
-          const res = await clientes.post("/signup", data);
-                  setUser(res.data);
-                  setIsAuth(true);
-                return res.data;
-        
+      const res = await clientes.post("/signup", data);
+      setUser(res.data);
+      setIsAuth(true);
+      return res.data;
+
     } catch (error) {
 
       console.log(error);
-      if(Array.isArray(error.response.data)){
+      if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data)
 
-    } 
-    setErrors([error.response.data.message]);
-      
-    }  
-  }; 
+      }
+      setErrors([error.response.data.message]);
+
+    }
+  };
 
   //SALIR
   const signout = async () => {
@@ -66,19 +66,19 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    if(Cookie.get("token")) {
-      clientes.get("/profile", {
-      }).then((res) => {
+    setLoading(true);
+    if (Cookie.get("token")) {
+      axios.get("/profile").then((res) => {
         setUser(res.data);
         setIsAuth(true);
       }).catch((error) => {
         setUser(null);
         setIsAuth(false);
+        setLoading(false);
         console.log(error);
-      }).finally(() => setLoading(false));
-    } else {
-      setLoading(false);
+      });
     }
+    setLoading(false);
   }, []);
 
   return (

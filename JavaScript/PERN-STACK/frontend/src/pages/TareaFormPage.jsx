@@ -1,4 +1,4 @@
-import { Button, Card, Input, Label, TextArea } from "../components/ui";
+import { Button, Card, Input, Label, Textarea } from "../components/ui";
 import { useForm } from "react-hook-form";
 import { useTareas } from "../context/TareasContext";
 import { useEffect } from "react";
@@ -65,7 +65,7 @@ function TareaFormPage() {
             <p className="text-red-500">El titulo es requerido</p>
           )}
           <Label htmlFor="descripcion">Descripcion</Label>
-          <TextArea
+          <Textarea
             type="text"
             placeholder="Descripcion"
             rows={3}
