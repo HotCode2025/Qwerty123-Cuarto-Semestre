@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const [errors, setErrors] = useState(null);
+  const [loading, setLoading] = useState(true);
 
 
   //INGRESAR
@@ -57,6 +58,13 @@ export function AuthProvider({ children }) {
     }  
   }; 
 
+  //SALIR
+  const signout = async () => {
+    await clientes.post("/signout");
+    setUser(null);
+    setIsAuth(false);
+  };
+
   useEffect(() => {
     if(Cookie.get("token")) {
       clientes.get("/profile", {
@@ -67,8 +75,10 @@ export function AuthProvider({ children }) {
         setUser(null);
         setIsAuth(false);
         console.log(error);
-      });
-      }
+      }).finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   return (
@@ -76,10 +86,12 @@ export function AuthProvider({ children }) {
       value={{
         user,
         isAuth,
+        loading,
         errors,
         signup,
         setUser,
         signin,
+        signout,
       }}
     >
       {children}
