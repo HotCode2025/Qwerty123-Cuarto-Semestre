@@ -1,7 +1,7 @@
 import { Link, useLocation} from "react-router-dom";
 import { PrivateRoutes, PublicRoutes } from "./navigation";
-import { Container } from "../Container";
-import { useAuth } from "../../../context/AuthContext";
+import { Container } from "../ui/Container";
+import { useAuth } from "../../context/AuthContext";
 
 function Navbar() {
   const location = useLocation();
