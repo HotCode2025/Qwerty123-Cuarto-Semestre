@@ -71,6 +71,7 @@ export function AuthProvider({ children }) {
       axios.get("/profile").then((res) => {
         setUser(res.data);
         setIsAuth(true);
+        setLoading(false);
       }).catch((error) => {
         setUser(null);
         setIsAuth(false);
@@ -80,6 +81,13 @@ export function AuthProvider({ children }) {
     }
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setErrors(null);
+    }, 4000);
+    return () => clearTimeout(timeout);
+  }, [errors]);
 
   return (
     <AuthContext.Provider
