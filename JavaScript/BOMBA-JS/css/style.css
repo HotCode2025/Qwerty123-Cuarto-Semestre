@@ -1,0 +1,172 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: #151515;
+}
+    
+.base {
+    background: #cacaca;
+    width: 20vmin;
+    border-radius: 27vmin;
+    box-shadow: 0 6vmin 0.15vmin 0vmin #777, 0 4vmin 0.15vmin 0vmin #777, 0 2vmin 0.15vmin 0vmin #777;
+    padding: 0vmin 2vmin 2vmin 2vmin;
+    z-index: 1;
+    transform: rotateX(60deg) rotateZ(0deg);
+    margin-top: -4.5vmin;
+    height: 22vmin;
+}
+
+button#activate {
+    background: #d60505;
+    border: 0;
+    width: 20vmin;
+    height: 19vmin;
+    border-radius: 100%;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    z-index: 2;
+    box-shadow: 0 4vmin 0.15vmin 0vmin #af0000, 0 2vmin 0.15vmin 0vmin #af0000;
+    top: -2.5vmin;
+    border: 0.5vmin solid #af0000a1;
+    transition: all 0.25s ease 0s;
+}
+
+button#activate:hover {
+    box-shadow: 0 3vmin 0.15vmin 0vmin #af0000, 0 1vmin 0.15vmin 0vmin #af0000;
+    top: -1.5vmin;
+    transition: all 0.5s ease 0s;
+}
+button#activate:active, button#activate.pushed {
+    box-shadow: 0 1vmin 0.15vmin 0vmin #af0000, 0 1vmin 0.15vmin 0vmin #af0000;
+    top: 0.5vmin;
+    transition: all 0.25s ease 0s;
+}
+button#activate.pushed {
+    box-shadow: 0 0 20px 10px #ff3c3c, 0 0 100px 50px #ff2828;
+    background: #ff0000;
+    border-bottom: 3px solid #00000020;
+}
+
+.box div {
+    position: absolute;
+    width: 45vmin;
+    height: 45vmin;
+    background: #00bcd47d;
+    opacity: 0.5;
+    border: 3px solid #00a4b9;
+    border-radius: 3px;
+    box-sizing: border-box;
+    box-shadow: 0 0 3px 0 #00bcd48a;
+}
+    
+.box > div:nth-child(1) {
+    opacity: 0;
+}
+.box > div:nth-child(2) {
+    transform: rotateX(90deg) translate3d(0px, 5vmin, 5vmin);
+    height: 10vmin;
+}
+.box > div:nth-child(3) {
+    transform: rotateX(0deg) translate3d(0, 0, 10vmin);
+}
+.box > div:nth-child(4) {
+    transform: rotateX(270deg) translate3d(0px, -5vmin, 40vmin);
+    height: 10vmin;
+}
+.box > div:nth-child(5) {
+    transform: rotateY(90deg) translate3d(-5vmin, 0, 40vmin);
+    width: 10vmin;
+}
+.box > div:nth-child(6) {
+    transform: rotateY(-90deg) translate3d(5vmin, 0vmin, 5vmin);
+    width: 10vmin;
+}
+
+.grid {
+    background:repeating-linear-gradient(150deg, rgba(255,255,255,0) 0, rgba(255,255,255,0) 49px, rgb(255 255 255 / 10%) 50px ,rgb(0 0 0 / 30%) 51px , rgba(255,255,255,0) 55px ), repeating-linear-gradient(30deg, rgba(255,255,255,0) 0, rgba(255,255,255,0) 49px, rgb(255 255 255 / 10%) 50px ,rgb(0 0 0 / 30%) 51px , rgba(255,255,255,0) 55px );
+    position: fixed;
+    width: 200vw;
+    height: 150vh;
+}
+
+.warning {
+    position: absolute;
+    z-index: 0;
+    width: 45vmin;
+    height: 45vmin;
+    background: repeating-linear-gradient(-45deg, black, black 3vmin, yellow 3vmin, yellow 6vmin);
+    transform: rotateX(-35deg) rotateY(45deg) rotateZ(0deg) rotate3d(1, 0, 0, 90deg);
+    box-shadow: 0 0 0 3vmin #af0000;
+}
+
+.warning:before {
+    content: "";
+    width: 80%;
+    height: 80%;
+    background: linear-gradient(45deg, #000000 0%, #414141 74%);
+    float: left;
+    margin-top: 10%;
+    margin-left: 10%;
+    border: 1vmin solid yellow;
+    border-radius: 1vmin;
+    box-sizing: border-box;
+}
+
+.warning:after {
+    content: "WARNING:\2009 DANGER";
+    color: white;
+    transform: rotate(90deg);
+    float: left;
+    background: #af0000;
+    position: absolute;
+    bottom: 18.5vmin;
+    left: -35vmin;
+    font-size: 5vmin;
+    font-family: Arial, Helvetica, serif;
+    width: 49vmin;
+    text-align: center;
+    padding: 1vmin;
+    text-shadow: 0 0 1px #000, 0 0 1px #000, 0 0 1px #000;
+}
+
+.hinges {
+    position: absolute;
+    z-index: 3;
+    transform: rotateX(-35deg) rotateY(45deg) rotateZ(0deg) rotate3d(1, 0, 0, 90deg);
+}
+
+.hinges:before, .hinges:after {
+    content: "";
+    background: #2b2b2b;
+    width: 5vmin;
+    height: 1.5vmin;
+    position: absolute;
+    margin-top: -24.5vmin;
+    z-index: 5;
+    border: 2px solid #00000010;
+    border-radius: 5px 5px 0 0;
+    box-sizing: border-box;
+    margin-left: -16.25vmin;
+}
+
+.hinges:after {
+    margin-left: 13.75vmin;
+    margin-top: -24.5vmin;
+}
+
+.box > span:before, .box > span:after {
+    content: "";
+    width: 5vmin;
+    height: 1.5vmin;
+    background: #103e4480;
+    position: absolute;
+    margin-left: 6vmin;
+    border-radius: 0 0 5px 5px;
+}
