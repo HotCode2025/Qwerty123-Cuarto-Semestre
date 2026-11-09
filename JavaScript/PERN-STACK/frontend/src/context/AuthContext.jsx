@@ -1,5 +1,4 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import Cookie from "js-cookie";
 import clientes from "../api/axios";
 
 export const AuthContext = createContext();
@@ -65,21 +64,21 @@ export function AuthProvider({ children }) {
     setIsAuth(false);
   };
 
-  useEffect(() => {
-    setLoading(true);
-    if (Cookie.get("token")) {
-      axios.get("/profile").then((res) => {
+    useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await clientes.get("/profile");
         setUser(res.data);
         setIsAuth(true);
-        setLoading(false);
-      }).catch((error) => {
+      } catch {
         setUser(null);
         setIsAuth(false);
+      } finally {
         setLoading(false);
-        console.log(error);
-      });
-    }
-    setLoading(false);
+      }
+    };
+
+    checkSession();
   }, []);
 
   useEffect(() => {
