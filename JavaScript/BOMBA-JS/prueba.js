@@ -49,7 +49,7 @@ var abort = document.getElementById("abort");
 abort.addEventListener("click", function (){
     btn.classList.remove("pushed");
     panel.classList.remove("show");
-    clearInterval(thisCount);
+    clearInterval(theCount);
     time.innerText = 9;
     alarm.pause();
     alarm.currentTime = 10;
@@ -66,7 +66,7 @@ reload.addEventListener("click", function (){
     cover.classList.remove("opened");
     btn.classList.remove("pushed");
     this.classList.remove("show");
-    time.classList.remove("crone");
+    time.classList.remove("crono");
     time.innerText = 9;
 });
 
