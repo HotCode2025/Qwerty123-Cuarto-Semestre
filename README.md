@@ -1,6 +1,12 @@
 # Qwerty123-Cuarto-Semestre
 
-Repositorio del grupo Qwerty123 para el cuarto semestre de la tecnicatura.
+Repositorio del grupo Qwerty123 para la materia **Programación IV** del cuarto semestre de la tecnicatura, dictada por el profesor **Ariel Betancud** ([GitHub](https://github.com/ArielBetancud22)).
+
+## Enlaces rápidos
+
+- [Wiki del repositorio](https://github.com/HotCode2025/Qwerty123-Cuarto-Semestre/wiki) — teoría y detalle de cada proyecto.
+- [Proyecto integrador Golden Point](https://github.com/HotCode2025/Qwerty123-ProyectoIntegrador-Ecommerce-CuartoSemestre) — e-commerce final del semestre.
+- [Versiones y tags](https://github.com/HotCode2025/Qwerty123-Cuarto-Semestre/wiki/Versiones-y-tags) — hitos y etiquetas del repositorio.
 
 ## Integrantes
 
