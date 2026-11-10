@@ -1,15 +1,15 @@
 # Java
 
-Prácticas de la materia Java de la tecnicatura: desde CRUD por consola con JDBC hasta una API REST con frontend web. Dictadas por el tutor Matías Carballo ([GitHub](https://github.com/lokywolf2295)); el planificador se basa en su repositorio [ToDo_Front_-_API](https://github.com/lokywolf2295/ToDo_Front_-_API).
+Prácticas de la materia Java de la tecnicatura: desde CRUD por consola con JDBC hasta una API REST con frontend web. Dictadas por los tutores Matías Carballo ([GitHub](https://github.com/lokywolf2295)) y Ariel Betancud ([GitHub](https://github.com/ArielBetancud22)); el planificador se basa en el repositorio [ToDo_Front_-_API](https://github.com/lokywolf2295/ToDo_Front_-_API) de Matías Carballo.
 
 ## Índice de proyectos
 
 | Carpeta | Tema | Proyecto |
 | ------- | ---- | -------- |
-| `Clase 1` | CRUD por consola con JDBC puro | estudiante |
-| `Leccion01` | CRUD por consola con Spring Data JPA | estudiantes |
-| `Leccion03` | CRUD con ventana Swing | tienda_libros |
-| `Clase10-12` | API REST por capas + frontend web | planificador_tareas |
+| [Clase 1](Clase%201/) | CRUD por consola con JDBC puro | [estudiante](Clase%201/estudiante/) |
+| [Leccion01](Leccion01/) | CRUD por consola con Spring Data JPA | [estudiantes](Leccion01/estudiantes/) |
+| [Leccion03](Leccion03/) | CRUD con ventana Swing | [tienda_libros](Leccion03/tienda_libros/) |
+| [Clase10-12](Clase10-12/) | API REST por capas + frontend web | [planificador_tareas](Clase10-12/planificador_tareas/) |
 
 ## Clase 1 — Sistema de Estudiantes (JDBC)
 
