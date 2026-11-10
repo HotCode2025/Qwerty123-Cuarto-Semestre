@@ -410,6 +410,26 @@ h3 {
   margin: 0 auto;
 }
 
+/* ============================================================
+   MAPA DE ENCUENTRO (canvas)
+   ============================================================ */
+#ver-mapa {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#mapa {
+  border: 2px solid white;
+  max-width: 100%; /* en pantallas angostas el mapa se achica para entrar */
+}
+
+.botones-movimiento {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
 .formulario-crear {
   background: var(--card-bg);
   border: 3px solid #334155;

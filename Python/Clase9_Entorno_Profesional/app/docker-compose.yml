@@ -1,0 +1,22 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: qwerty123-population-api:1.0
+    container_name: qwerty123-app
+    ports:
+      - "8000:80"
+    volumes:
+      - ./imgs:/app/imgs
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:80/health')"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

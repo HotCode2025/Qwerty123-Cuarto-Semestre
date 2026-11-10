@@ -1,0 +1,20 @@
+services:
+  web-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: qwerty123-web-server:1.0
+    container_name: qwerty123-web-server
+    ports:
+      - "8001:80"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:80/')"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

@@ -1,0 +1,713 @@
+/* ---------- Variables ----------
+   Cada rol de color existe en ambos temas con el mismo nombre, así el resto
+   del CSS nunca necesita saber qué tema está activo. */
+:root {
+    --fondo: #f1f5f9;
+    --tarjeta: #ffffff;
+    --superficie: #f8fafc;
+    --texto: #0f172a;
+    --texto-suave: #475569;
+    --borde: #e2e8f0;
+
+    --primario: #4f46e5;
+    --primario-hover: #4338ca;
+    --sobre-primario: #ffffff;
+    --exito: #059669;
+    --sobre-exito: #ffffff;
+    --peligro: #dc2626;
+
+    --alta: #dc2626;
+    --media: #b45309;
+    --baja: #2563eb;
+
+    --sombra: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.05);
+    --radio: 12px;
+    --radio-chico: 8px;
+    --transicion: 150ms ease;
+
+    --fuente: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+:root[data-tema="oscuro"] {
+    --fondo: #0f172a;
+    --tarjeta: #1e293b;
+    --superficie: #0f172a;
+    --texto: #e2e8f0;
+    --texto-suave: #94a3b8;
+    --borde: #334155;
+
+    --primario: #818cf8;
+    --primario-hover: #a5b4fc;
+    --sobre-primario: #0f172a;
+    --exito: #34d399;
+    --sobre-exito: #0f172a;
+    --peligro: #f87171;
+
+    --alta: #f87171;
+    --media: #fbbf24;
+    --baja: #60a5fa;
+
+    --sombra: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Base ---------- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--fuente);
+    font-size: 1rem;
+    line-height: 1.5;
+    background: var(--fondo);
+    color: var(--texto);
+    transition: background-color var(--transicion), color var(--transicion);
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+}
+
+/* En pantallas chicas y medianas todo va en una columna; en escritorio, formulario a la izquierda y lista a la derecha */
+.disposicion {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0 16px;
+    align-items: start;
+}
+
+.columna-principal {
+    min-width: 0;
+}
+
+.icono {
+    display: inline-flex;
+    flex: none;
+}
+
+/* ---------- Encabezado ---------- */
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    transition: background-color var(--transicion), border-color var(--transicion);
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.logo {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radio);
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
+}
+
+.subtitulo {
+    margin: 2px 0 0;
+    font-size: 0.875rem;
+    color: var(--texto-suave);
+}
+
+/* Selector de tema: dos botones, el activo se resalta con el color principal */
+.selector-tema {
+    display: inline-flex;
+    gap: 2px;
+    padding: 4px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 999px;
+}
+
+.selector-tema button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 36px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--texto-suave);
+    cursor: pointer;
+    transition: background-color var(--transicion), color var(--transicion);
+}
+
+.selector-tema button:hover {
+    color: var(--texto);
+}
+
+.selector-tema button[aria-pressed="true"] {
+    background: var(--primario);
+    color: var(--sobre-primario);
+}
+
+/* ---------- Indicadores de resumen ---------- */
+.indicadores {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.indicador {
+    --color: var(--primario);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    transition: background-color var(--transicion), border-color var(--transicion);
+}
+
+.ind-pendientes { --color: var(--media); }
+.ind-completadas { --color: var(--exito); }
+.ind-vencidas { --color: var(--peligro); }
+
+.indicador-icono {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--color);
+    background: color-mix(in srgb, var(--color) 15%, transparent);
+}
+
+.indicador p {
+    margin: 0;
+}
+
+.indicador-nombre {
+    font-size: 0.8125rem;
+    color: var(--texto-suave);
+}
+
+.indicador-valor {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--color);
+}
+
+/* ---------- Tarjetas ---------- */
+.tarjeta {
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: background-color var(--transicion), border-color var(--transicion);
+}
+
+.titulo-seccion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    font-size: 1.05rem;
+}
+
+.icono-circulo {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--primario);
+    color: var(--sobre-primario);
+}
+
+/* ---------- Formularios ---------- */
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+    margin-bottom: 16px;
+}
+
+input,
+textarea,
+select {
+    font: inherit;
+    font-weight: 400;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-chico);
+    background: var(--superficie);
+    color: var(--texto);
+    transition: border-color var(--transicion), box-shadow var(--transicion),
+        background-color var(--transicion);
+}
+
+textarea {
+    resize: vertical;
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+    border-color: var(--texto-suave);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--primario);
+    outline-offset: 2px;
+}
+
+.req {
+    color: var(--peligro);
+}
+
+/* Grilla de 6 columnas: título y descripción a mitades, fecha/hora/prioridad en tercios */
+.grilla-form {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0 12px;
+}
+
+.campo-titulo,
+.campo-descripcion {
+    grid-column: span 3;
+}
+
+.campo-fecha,
+.campo-hora,
+.campo-prioridad {
+    grid-column: span 2;
+}
+
+/* Validación: borde, ícono y texto, para no depender solo del color */
+input[aria-invalid="true"] {
+    border-color: var(--peligro);
+}
+
+.error {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--peligro);
+}
+
+.error[hidden] {
+    display: none;
+}
+
+.fila {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.fila label {
+    flex: 1 1 140px;
+}
+
+/* ---------- Botones ---------- */
+button {
+    font: inherit;
+}
+
+.btn-primario,
+.btn-secundario,
+.btn-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    border-radius: var(--radio-chico);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transicion), border-color var(--transicion),
+        color var(--transicion), transform var(--transicion);
+}
+
+.btn-primario {
+    width: 100%;
+    padding: 10px 16px;
+    border: 0;
+    background: var(--primario);
+    color: var(--sobre-primario);
+}
+
+.btn-primario:hover {
+    background: var(--primario-hover);
+}
+
+.btn-secundario {
+    padding: 10px 16px;
+    border: 1px solid var(--borde);
+    background: var(--tarjeta);
+    color: var(--texto);
+}
+
+.btn-secundario:hover {
+    border-color: var(--primario);
+    color: var(--primario);
+}
+
+.btn-icono {
+    min-height: 36px;
+    padding: 6px 12px;
+    border: 1px solid var(--borde);
+    background: transparent;
+    color: var(--texto-suave);
+    font-size: 0.875rem;
+}
+
+.btn-icono:hover {
+    border-color: var(--primario);
+    color: var(--primario);
+}
+
+.btn-icono.destructivo:hover {
+    border-color: var(--peligro);
+    color: var(--peligro);
+}
+
+.btn-primario:active,
+.btn-secundario:active,
+.btn-icono:active {
+    transform: translateY(1px);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ---------- Filtros y contador ---------- */
+.filtros {
+    align-items: flex-end;
+}
+
+.filtros label {
+    margin-bottom: 0;
+}
+
+.contador {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin: 0;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+/* ---------- Lista de tareas ---------- */
+.lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tarea {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 14px;
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-left-width: 5px;
+    border-radius: var(--radio-chico);
+    margin-bottom: 10px;
+    transition: background-color var(--transicion), border-color var(--transicion);
+}
+
+.tarea.ALTA { border-left-color: var(--alta); }
+.tarea.MEDIA { border-left-color: var(--media); }
+.tarea.BAJA { border-left-color: var(--baja); }
+
+.tarea.finalizada {
+    background: color-mix(in srgb, var(--exito) 8%, var(--tarjeta));
+}
+
+.tarea.finalizada .titulo {
+    text-decoration: line-through;
+    opacity: 0.65;
+}
+
+.tarea.vencida {
+    background: color-mix(in srgb, var(--peligro) 8%, var(--tarjeta));
+}
+
+.tarea .info {
+    flex: 1 1 140px;
+    min-width: 0;
+}
+
+.titulo {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.detalle {
+    font-size: 0.875rem;
+    color: var(--texto-suave);
+    overflow-wrap: anywhere;
+}
+
+.meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 14px;
+    margin-top: 6px;
+    font-size: 0.8125rem;
+    color: var(--texto-suave);
+}
+
+.dato {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Etiquetas: llevan texto (y a veces ícono), el color solo refuerza */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.badge-ALTA {
+    color: var(--alta);
+    background: color-mix(in srgb, var(--alta) 14%, transparent);
+}
+
+.badge-MEDIA {
+    color: var(--media);
+    background: color-mix(in srgb, var(--media) 16%, transparent);
+}
+
+.badge-BAJA {
+    color: var(--baja);
+    background: color-mix(in srgb, var(--baja) 14%, transparent);
+}
+
+.badge-completada {
+    color: var(--exito);
+    background: color-mix(in srgb, var(--exito) 14%, transparent);
+}
+
+.badge-vencida {
+    color: var(--peligro);
+    background: color-mix(in srgb, var(--peligro) 14%, transparent);
+}
+
+/* Casilla circular que marca la tarea como finalizada o pendiente */
+.check {
+    appearance: none;
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    border: 2px solid var(--texto-suave);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.check:hover {
+    border-color: var(--exito);
+}
+
+.check:checked {
+    background: var(--exito);
+    border-color: var(--exito);
+}
+
+.check:checked::after {
+    content: "";
+    width: 6px;
+    height: 12px;
+    margin-bottom: 2px;
+    border: solid var(--sobre-exito);
+    border-width: 0 2.5px 2.5px 0;
+    transform: rotate(45deg);
+}
+
+.acciones {
+    display: flex;
+    gap: 8px;
+}
+
+.vacio {
+    margin: 0;
+    padding: 16px 0;
+    text-align: center;
+    color: var(--texto-suave);
+}
+
+/* ---------- SweetAlert2 con los colores del tema activo ----------
+   El prefijo "body" sube la especificidad: los estilos de la librería se
+   inyectan después de este archivo y, si no, ganarían ellos. */
+body .swal2-popup {
+    background: var(--tarjeta);
+    color: var(--texto);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+}
+
+body .swal2-title,
+body .swal2-html-container {
+    color: var(--texto);
+}
+
+body .swal2-input,
+body .swal2-select {
+    background: var(--superficie);
+    color: var(--texto);
+    border: 1px solid var(--borde);
+    box-shadow: none;
+}
+
+body .swal2-validation-message {
+    background: var(--superficie);
+    color: var(--peligro);
+}
+
+body .swal2-styled.swal2-confirm {
+    background-color: var(--primario);
+    color: var(--sobre-primario);
+}
+
+body .swal2-styled.swal2-cancel {
+    background-color: var(--superficie);
+    color: var(--texto);
+    border: 1px solid var(--borde);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+    .indicadores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .campo-titulo,
+    .campo-descripcion,
+    .campo-prioridad {
+        grid-column: span 6;
+    }
+
+    .campo-fecha,
+    .campo-hora {
+        grid-column: span 3;
+    }
+}
+
+@media (max-width: 480px) {
+    .acciones {
+        width: 100%;
+    }
+
+    .acciones .btn-icono {
+        flex: 1;
+    }
+}
+
+/* Escritorio: dos columnas. La lista queda fija a la vista y hace scroll por dentro */
+@media (min-width: 900px) {
+    .disposicion {
+        grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr);
+    }
+
+    /* La tarjeta queda fija a la vista y, si hay muchas tareas, hace scroll por dentro */
+    .tarjeta-lista {
+        position: sticky;
+        top: 16px;
+        max-height: calc(100vh - 32px);
+        overflow-y: auto;
+    }
+}
+
+/* Con la columna izquierda angosta, los 4 indicadores no entran en fila */
+@media (min-width: 900px) and (max-width: 1199px) {
+    .indicadores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    .contenedor {
+        padding: 16px 12px 40px;
+    }
+
+    .tarjeta,
+    .encabezado {
+        padding: 16px;
+    }
+}
+
+/* Celulares muy angostos (320 px): el ícono del indicador pasa arriba del texto */
+@media (max-width: 360px) {
+    .campo-fecha,
+    .campo-hora {
+        grid-column: span 6;
+    }
+
+    .indicador {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}
